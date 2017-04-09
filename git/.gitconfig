@@ -1,0 +1,5 @@
+[user]
+	name = Vighnesh Iyer
+	email = vighnesh.iyer@berkeley.edu
+[core]
+	autocrlf = input
