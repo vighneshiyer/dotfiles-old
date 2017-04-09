@@ -1,0 +1,15 @@
+.*.swp
+.bundle
+vendor/bundle
+.DS_Store
+*.pyc
+*.nfs*
+*.asy
+*.gise
+*.ngc
+*.veo
+*.cgc
+*.cgp
+*.o
+*.elf
+*.asmdump
