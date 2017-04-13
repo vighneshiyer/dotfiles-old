@@ -1,8 +1,8 @@
-# Create a SSH tunnel to local port 5901 from remote port 5902 (which binds to VNC server)
+# Create a SSH tunnel to local port 5901 from remote port 5901 (which binds to VNC server)
 function vnc_tunnel {
 	cd ~
 	ssh -S vnc-tunnel-socket -O exit bwrcrdsl-2.eecs.berkeley.edu
-	ssh -f -N -M -S vnc-tunnel-socket -l vighnesh.iyer -L 5901:bwrcrdsl-2.eecs.berkeley.edu:5902 bwrcrdsl-2.eecs.berkeley.edu 
+	ssh -f -N -M -S vnc-tunnel-socket -l vighnesh.iyer -L 5901:bwrcrdsl-2.eecs.berkeley.edu:5901 bwrcrdsl-2.eecs.berkeley.edu 
 }
 
 function vnc_tunnel_close {
@@ -32,6 +32,9 @@ function unmount_eecs151 {
 	sudo umount /home/vighnesh/eecs151
 }
 
+# alias vim to nvim
+alias vim='nvim'
+
 # cd aliases on local machine
 alias e_books='cd /media/sf_sync/E-Books/'
 alias college='cd /media/sf_sync/College/'
@@ -43,4 +46,4 @@ alias ee241b='cd /media/sf_sync/College/Berkeley_Spring_2017/EE_241B'
 alias ee123='cd /media/sf_sync/College/Berkeley_Spring_2017/EE_123'
 
 # repair wallpaper when changing monitors/resolutions
-alias wallpaper='feh --bg-center /media/sf_sync/College/Wallpapers/golden_dawn.png'
+alias wallpaper='feh --bg-center /media/sf_sync/College/Wallpapers/fascist_league.png'
