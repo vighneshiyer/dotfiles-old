@@ -1,20 +1,13 @@
+#### ASSUME THAT ALL BASH SCRIPT SOURCING IS DONE BEFORE MOVING INTO INIT FISH
+
+# Fish theme options (bobthefish)
 set -g theme_color_scheme solarized
+set -g theme_display_user yes
 set -g theme_display_git no 
 set -g theme_display_git_untracked no
 set -g theme_display_git_ahead_verbose no
 set -g theme_git_worktree_support yes
 set -g default_user root
-set -g theme_display_user yes
-
-function rsync_eecs151
-    rsync -rtuvPa eecs151-tab@c125m-13.eecs.berkeley.edu:~/class/ ~/eecs151_rsync/
-    rsync -rtuvPa ~/eecs151_rsync/ eecs151-tab@c125m-13.eecs.berkeley.edu:~/class/
-end
-
-function rsync_ee241b
-    rsync -rtuvPa cs199-ban@hpse-11.eecs.berkeley.edu:~/class/ ~/ee241b_rsync/
-    rsync -rtuvPa ~/ee241b_rsync/ cs199-ban@hpse-11.eecs.berkeley.edu:~/class/
-end
 
 ### General Aliases
 ## rm
@@ -41,7 +34,7 @@ alias u5 'cd ../../../../..'
 ## bash
 alias s 'omf reload'
 alias rc 'vim ~/.bashrc'
-alias rca 'vim ~/.config/omf/fish.init'
+alias rca 'vim ~/.config/omf/init.fish'
 alias vi 'vim'
 alias c 'clear'
 
@@ -53,20 +46,79 @@ alias gpull 'git pull'
 alias gfetch 'git fetch'
 alias gpush 'git push'
 
-# Used for Xorg forwarding
-#set -xg DISPLAY 0.0
+## Tool Aliases
+alias vivado 'vivado -nolog -nojournal'
 
 # For launching (usually graphical) applications that produce lots of junk printed out
 function silent 
     nohup $argv </dev/null >/dev/null 2>&1 &
 end
 
-# SSH to various servers
+### VNC
+function vnc
+    vncserver -geometry 2560x1440 2>&1 | grep ^New | awk '{print \$6;}' | tee .vivnc2 | awk -F: '{print \$1\":\"5900+\$2\" `whoami`@\"\$1}' > .vivnc2
+end
+alias vncnum 'ps -fu `whoami` | grep -i vnc | head -n1 | awk '"'"'{print $9;}'"'"
+alias vnckill "cat ~/.vivnc2 | xargs vncserver -kill"
+alias bwrcvnc 'ssh -L 5901:`ssh vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu "cat ~/.vivnc2"`'
+
+## VNC resolution adjustment
+alias fixcols 'shopt -s checkwinsize'
+alias big 'xrandr -s 1920x1200; fixcols'
+alias vbig 'xrandr -s 2560x1440; fixcols'
+alias s1080 'xrandr -s 1920x1080; fixcols'
+alias s1024 'xrandr -s 1024x768; fixcols'
+alias small 'xrandr -s 1280x800; fixcols'
+
+## SSH Aliases 
 alias ssh_ramnode 'ssh vighnesh@23.226.231.82'
 alias ssh_ee241b 'ssh hpse-11.eecs.berkeley.edu -l cs199-ban -Y'
 alias ssh_eecs151 'ssh c125m-15.eecs.berkeley.edu -l eecs151-tab -Y'
 alias ssh_bwrc 'ssh bwrcrdsl-2.eecs.berkeley.edu -l vighnesh.iyer -Y'
-alias ssh_dp690 'ssh dp690-12.eecs.berkeley.edu -l vighnesh.iyer -Y'
+alias ssh_rdsl1 'ssh -X vighnesh.iyer@bwrcrdsl-1.eecs.berkeley.edu'
+alias ssh_rdsl2 'ssh -X vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu'
+alias ssh_rdsl3 'ssh -X vighnesh.iyer@bwrcrdsl-3.eecs.berkeley.edu'
+alias ssh_rdsl6 'ssh -X vighnesh.iyer@bwrcrdsl-6.eecs.berkeley.edu'
+alias ssh_dp690 'ssh vighnesh.iyer@dp690-12.eecs.berkeley.edu'
+alias ssh_241 'ssh root@192.168.192.241'
+alias ssh_240 'ssh root@192.168.192.240'
+
+## LSF Aliases
+alias noemail "set -gx LSB_JOB_REPORT_MAIL n"
+alias yesemail "set -gx LSB_JOB_REPORT_MAIL y"
+
+## Directory Aliases
+alias hurricane_zc706='cd /tools/projects/vighneshiyer/hurricane-zc706/zc706'
+alias hurricane_fesvr='cd /tools/projects/vighneshiyer/hurricane-fesvr'
+alias hurricane_riscv_tests='cd /tools/projects/vighneshiyer/hurricane-riscv-tests/xhbwif'
+alias splash_tests='cd /tools/projects/vighneshiyer/splash2-testing'
+alias hurricane_testing='cd /tools/projects/vighneshiyer/hurricane-testing-host'
+
+# Hurricane ZC706 Aliases (converted from hurricane-zc706 repo to fish compatiable version)
+alias power_on_241 'curl -u admin:bwrc "http://192.168.192.230/outlet.cgi?outlet=2&command=1" > /dev/null'
+alias power_off_241 'curl -u admin:bwrc "http://192.168.192.230/outlet.cgi?outlet=2&command=0" > /dev/null'
+alias power_toggle_241 'curl -u admin:bwrc "http://192.168.192.230/outlet.cgi?outlet=2&command=2" > /dev/null'
+alias power_cycle_241 'curl -u admin:bwrc "http://192.168.192.230/outlet.cgi?outlet=2&command=3" > /dev/null'
+
+alias power_on_240 'curl -u admin:bwrc "http://192.168.192.230/outlet.cgi?outlet=1&command=1" > /dev/null'
+alias power_off_240 'curl -u admin:bwrc "http://192.168.192.230/outlet.cgi?outlet=1&command=0" > /dev/null'
+alias power_toggle_240 'curl -u admin:bwrc "http://192.168.192.230/outlet.cgi?outlet=1&command=2" > /dev/null'
+alias power_cycle_240 'curl -u admin:bwrc "http://192.168.192.230/outlet.cgi?outlet=1&command=3" > /dev/null'
+
+# The native fish version of this function doesn't fork off the reverse ssh tunnel properly
+function launch_hw_server
+    echo 'source ~/.bashrc; launch_hw_server &' | bash
+end
+
+function kill_hw_server
+    killall hw_server
+    set who (whoami);
+    printf "
+        source ~/.bashrc
+        killall hw_server
+        ssh -S hw-server-socket -O exit bwrcrdsl-2
+    " | ssh -T $who@dp690-12.eecs.berkeley.edu
+end
 
 # Internet utilities
 alias myip 'curl ipinfo.io/ip'
