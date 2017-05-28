@@ -9,9 +9,6 @@ source /tools/flexlm/flexlm.sh
 # Source hurricane-zc706 specific aliases
 source /tools/projects/vighneshiyer/hurricane-zc706/sourceme.sh
 
-# Source aliases on this user account
-source ~/.bash_aliases
-
 #### Prompt
 PS1="{\u@\h:\w}\n\t $ "
 
