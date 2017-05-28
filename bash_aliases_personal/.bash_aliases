@@ -12,24 +12,34 @@ function vnc_tunnel_close {
 
 function mount_bwrc {
 	cd ~
-	sudo umount /home/vighnesh/bwrcrdsl-2
+	fusermount -u /home/vighnesh/bwrcrdsl-2
 	sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu:/tools/projects/vighneshiyer/ ~/bwrcrdsl-2
 	cd ~/bwrcrdsl-2
 }
 
 function unmount_bwrc {
-	sudo umount /home/vighnesh/bwrcrdsl-2
+	fusermount -u /home/vighnesh/bwrcrdsl-2
 }
 
 function mount_eecs151 {
 	cd ~
-	sudo umount /home/vighnesh/eecs151
+	fusermount -u /home/vighnesh/eecs151
 	sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa eecs151-tab@c125m-15.eecs.berkeley.edu:/home/cc/eecs151/sp17/staff/eecs151-tab ~/eecs151
 	cd ~/eecs151
 }
 
 function unmount_eecs151 {
-	sudo umount /home/vighnesh/eecs151
+	fusermount -u /home/vighnesh/eecs151
+}
+
+function mount_ee241b {
+	cd ~
+	fusermount -u /home/vighnesh/ee241b
+	sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa,Ciphers=arcfour,Compression=no cs199-ban@hpse-13.eecs.berkeley.edu:/home/cc/cs199/fa13/class/cs199-ban ~/ee241b
+}
+
+function unmount_ee241b {
+	fusermount -u /home/vighnesh/ee241b
 }
 
 # alias vim to nvim
@@ -47,3 +57,4 @@ alias ee123='cd /media/sf_sync/College/Berkeley_Spring_2017/EE_123'
 
 # repair wallpaper when changing monitors/resolutions
 alias wallpaper='feh --bg-center /media/sf_sync/College/Wallpapers/fascist_league.png'
+

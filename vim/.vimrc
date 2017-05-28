@@ -1,3 +1,6 @@
+set nocompatible
+filetype off
+
 " activates filetype detection
 filetype plugin indent on
 
@@ -19,6 +22,12 @@ set softtabstop=4
 set expandtab
 set smarttab
 
+"if (has("termguicolors"))
+"    set termguicolors
+"endif
+"syntax enable
+
+"colorscheme OceanicNext 
 colorscheme solarized
 set number
 
