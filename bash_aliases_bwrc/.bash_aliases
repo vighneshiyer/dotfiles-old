@@ -1,22 +1,4 @@
-#### Originally from .bashrc
-# Prompt
-PS1="{\u@\h:\w}\n\t $ "
-
-# Environment
-export TERM=xterm-color
-export FTP_PASSIVE_MODE=yes
-export PATH=$PATH:/tools/xilinx/Vivado/2016.4/Vivado/2016.4/bin
-export PATH=$PATH:/tools/xilinx/Vivado/2016.4/SDK/2016.4/bin
-export PATH=$PATH:~/bin
-export PATH=$PATH:/tools/xilinx/SDK/2016.2/gnu/arm/lin/bin
-
-# Simulation envvars that need to be declared for Modelsim to work
-## These values are old and should be updated for the hurricane-zc706 repo
-export MODELSIM=/tools/designs/vighneshiyer/fpga-zynq/zc706/src/tcl/myproj/project_1.cache/compile_simlib/modelsim.ini
-export WD_MGC=/tools/designs/vighneshiyer/fpga-zynq/zc706/src/tcl/myproj/project_1.cache/compile_simlib/
-
-# Source Vivado envvars
-source /tools/xilinx/Vivado/2016.4/Vivado/2016.4/settings64.sh
+#### Sourcing bash scripts
 
 # Source LSF envvars and commands
 source /tools/support/lsf/conf/profile.lsf
@@ -27,15 +9,38 @@ source /tools/flexlm/flexlm.sh
 # Source hurricane-zc706 specific aliases
 source /tools/projects/vighneshiyer/hurricane-zc706/sourceme.sh
 
-# Turn LSF emails off
-export LSB_JOB_REPORT_MAIL=n
+# Source aliases on this user account
+source ~/.bash_aliases
 
-# Envvars and riscv toolchain binaries for hurricane-riscv-tests build
+#### Prompt
+PS1="{\u@\h:\w}\n\t $ "
+
+#### Envvars
+export TERM=xterm-color
+export FTP_PASSIVE_MODE=yes
+export LSB_JOB_REPORT_MAIL=n    # Turn LSF emails off
+
+#### PATH
+# Vivado Build Tools
+export PATH=$PATH:/tools/xilinx/Vivado/2016.4/Vivado/2016.4/bin
+
+# Vivado SDK (hw_server)
+export PATH=$PATH:/tools/xilinx/Vivado/2016.4/SDK/2016.4/bin
+
+# Xilinx ARM toolchain
+export PATH=$PATH:/tools/xilinx/SDK/2016.2/gnu/arm/lin/bin
+
+# Riscv toolchain for hurricane-riscv-tests
 export RISCV=/tools/designs/hurricane/riscv-tools-5/install
 export PATH=$PATH:$RISCV/bin
 
 # Anaconda3 (Python3 and utilities)
 export PATH=/users/vighnesh.iyer/anaconda3/bin:$PATH
+
+# Linuxbrew (local package manager)
+export PATH="$HOME/.linuxbrew/bin:$PATH"
+export MANPATH="$HOME/.linuxbrew/share/man:$MANPATH"
+export INFOPATH="$HOME/.linuxbrew/share/info:$INFOPATH"
 
 #### BWRC Aliases
 
@@ -124,4 +129,4 @@ alias hurricane_zc706='cd /tools/projects/vighneshiyer/hurricane-zc706/zc706'
 alias hurricane_fesvr='cd /tools/projects/vighneshiyer/hurricane-fesvr'
 alias hurricane_riscv_tests='cd /tools/projects/vighneshiyer/hurricane-riscv-tests/xhbwif'
 alias splash_tests='cd /tools/projects/vighneshiyer/splash2-testing'
-alias hurricane_clk='cd /tools/projects/vighneshiyer/hurricane_serdes_clk_setup'
+alias hurricane_testing='cd /tools/projects/vighneshiyer/hurricane-testing-host'
