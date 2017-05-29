@@ -1,5 +1,4 @@
 #### ASSUME THAT ALL BASH SCRIPT SOURCING IS DONE BEFORE MOVING INTO INIT FISH
-
 # Fish theme options (bobthefish)
 set -g theme_color_scheme solarized
 set -g theme_display_user yes

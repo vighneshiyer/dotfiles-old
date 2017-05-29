@@ -1,3 +1,9 @@
+call plug#begin('~/.local/share/nvim/plugged')
+
+Plug 'morhetz/gruvbox'
+
+call plug#end()
+
 set nocompatible
 filetype off
 
@@ -24,7 +30,7 @@ set smarttab
 
 set termguicolors
 set background=dark
-colorscheme solarized
+colorscheme gruvbox
 set number
 
 " this turns off physical line wrapping (automatic insertion of newlines)
