@@ -1,6 +1,9 @@
 call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'morhetz/gruvbox'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-syntastic/syntastic'
+Plug 'nvie/vim-flake8'
 
 call plug#end()
 
@@ -43,6 +46,5 @@ set tw=0
 set formatoptions-=t " do not automatically wrap text when typing
 
 " this highlights text that exceeds 80 columns in length to evaluate breaking more text into new lines
-highlight ColorColumn ctermbg=235 guibg=#2c2d27
-let &colorcolumn=join(range(81,999),",")
+highlight ColorColumn ctermbg=0 guibg=#282828
 let &colorcolumn="80,".join(range(120,999),",")
