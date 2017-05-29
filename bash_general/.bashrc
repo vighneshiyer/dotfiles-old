@@ -53,6 +53,3 @@ alias ssh_dp690='ssh dp690-12.eecs.berkeley.edu -l vighnesh.iyer -Y'
 # Internet utilities
 alias myip='curl ipinfo.io/ip'
 alias speedtest='curl -s  https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -'
-
-#### Load external scripts/functions that may be useful
-source ~/scripts/Extract/extract.sh

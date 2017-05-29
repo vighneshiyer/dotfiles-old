@@ -1,6 +1,0 @@
-[submodule "vim/.vim/vim-colorschemes"]
-	path = vim/.vim/vim-colorschemes
-	url = git@github.com:flazz/vim-colorschemes.git
-[submodule "bash_general/scripts/Extract"]
-	path = bash_general/scripts/Extract
-	url = git@github.com:xvoland/Extract
