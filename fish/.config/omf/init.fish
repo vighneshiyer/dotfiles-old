@@ -2,7 +2,7 @@
 # Fish theme options (bobthefish)
 set -g theme_color_scheme solarized
 set -g theme_display_user yes
-set -g theme_display_git no 
+set -g theme_display_git no
 set -g theme_display_git_untracked no
 set -g theme_display_git_ahead_verbose no
 set -g theme_git_worktree_support yes
@@ -36,6 +36,7 @@ alias rc 'vim ~/.bashrc'
 alias rca 'vim ~/.config/omf/init.fish'
 alias vi 'vim'
 alias c 'clear'
+alias r 'tput reset'
 
 ## git
 alias gitdiff 'git difftool --tool=vimdiff --no-prompt'
@@ -49,9 +50,10 @@ alias gpush 'git push'
 alias vivado 'vivado -nolog -nojournal'
 
 # For launching (usually graphical) applications that produce lots of junk printed out
-function silent 
+function silent
     nohup $argv </dev/null >/dev/null 2>&1 &
 end
+alias pdf 'silent qpdfview'
 
 ### VNC
 function vnc
@@ -69,8 +71,9 @@ alias s1080 'xrandr -s 1920x1080; fixcols'
 alias s1024 'xrandr -s 1024x768; fixcols'
 alias small 'xrandr -s 1280x800; fixcols'
 
-## SSH Aliases 
+## SSH Aliases
 alias ssh_ramnode 'ssh vighnesh@23.226.231.82'
+alias ssh_intovps='ssh www@184.75.242.173 -p 33322'
 alias ssh_ee241b 'ssh hpse-11.eecs.berkeley.edu -l cs199-ban -Y'
 alias ssh_eecs151 'ssh c125m-15.eecs.berkeley.edu -l eecs151-tab -Y'
 alias ssh_bwrc 'ssh bwrcrdsl-2.eecs.berkeley.edu -l vighnesh.iyer -Y'
@@ -124,47 +127,51 @@ alias myip 'curl ipinfo.io/ip'
 alias speedtest 'curl -s  https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -'
 
 # Create a SSH tunnel to local port 5901 from remote port 5901 (which binds to VNC server)
-function vnc_tunnel 
-	cd ~
-	ssh -S vnc-tunnel-socket -O exit bwrcrdsl-2.eecs.berkeley.edu
-	ssh -f -N -M -S vnc-tunnel-socket -l vighnesh.iyer -L 5901:bwrcrdsl-2.eecs.berkeley.edu:5901 bwrcrdsl-2.eecs.berkeley.edu 
+function vnc_tunnel
+    cd ~
+    ssh -S vnc-tunnel-socket -O exit bwrcrdsl-2.eecs.berkeley.edu
+    ssh -f -N -M -S vnc-tunnel-socket -l vighnesh.iyer -L 5901:bwrcrdsl-2.eecs.berkeley.edu:5901 bwrcrdsl-2.eecs.berkeley.edu
 end
 
-function vnc_tunnel_close 
-	cd ~
-	ssh -S vnc-tunnel-socket -O exit bwrcrdsl-2.eecs.berkeley.edu
+function vnc_tunnel_close
+    cd ~
+    ssh -S vnc-tunnel-socket -O exit bwrcrdsl-2.eecs.berkeley.edu
 end
 
-function mount_bwrc 
-	cd ~
-	fusermount -u /home/vighnesh/bwrc
-	sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa,Ciphers=arcfour,Compression=no vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu:/tools/projects/vighneshiyer/ ~/bwrc
-	cd ~/bwrc
+function mount_bwrc
+    cd ~
+    if mount | grep /home/vighnesh/bwrc > /dev/null;
+        fusermount -u /home/vighnesh/bwrc
+    end
+    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa,Ciphers=arcfour,Compression=no vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu:/tools/projects/vighneshiyer/ ~/bwrc
+    cd ~/bwrc
 end
 
 function unmount_bwrc
-	fusermount -u /home/vighnesh/bwrc
+    if mount | grep /home/vighnesh/bwrc > /dev/null;
+        fusermount -u /home/vighnesh/bwrc
+    end
 end
 
 function mount_eecs151
-	cd ~
-	fusermount -u /home/vighnesh/eecs151
-	sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa eecs151-tab@c125m-15.eecs.berkeley.edu:/home/cc/eecs151/sp17/staff/eecs151-tab ~/eecs151
-	cd ~/eecs151
+    cd ~
+    fusermount -u /home/vighnesh/eecs151
+    sshfs -o allow_other,uid=1000,gid=1000,identityfile=/home/vighnesh/.ssh/id_rsa eecs151-tab@c125m-15.eecs.berkeley.edu:/home/cc/eecs151/sp17/staff/eecs151-tab ~/eecs151
+    cd ~/eecs151
 end
 
 function unmount_eecs151
-	fusermount -u /home/vighnesh/eecs151
+    fusermount -u /home/vighnesh/eecs151
 end
 
 function mount_ee241b
-	cd ~
-	fusermount -u /home/vighnesh/ee241b
-	sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa,Ciphers=arcfour,Compression=no cs199-ban@hpse-13.eecs.berkeley.edu:/home/cc/cs199/fa13/class/cs199-ban ~/ee241b
+    cd ~
+    fusermount -u /home/vighnesh/ee241b
+    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa,Ciphers=arcfour,Compression=no cs199-ban@hpse-13.eecs.berkeley.edu:/home/cc/cs199/fa13/class/cs199-ban ~/ee241b
 end
 
 function unmount_ee241b
-	fusermount -u /home/vighnesh/ee241b
+    fusermount -u /home/vighnesh/ee241b
 end
 
 # alias vim to nvim
