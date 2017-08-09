@@ -46,6 +46,11 @@ alias gpull 'git pull'
 alias gfetch 'git fetch'
 alias gpush 'git push'
 
+## taskwarrior
+alias tl 'task list'
+alias t 'task'
+alias ts 'task sync'
+
 ## Tool Aliases
 alias vivado 'vivado -nolog -nojournal'
 
@@ -188,5 +193,5 @@ alias ee241b 'cd /media/sf_sync/College/Berkeley_Spring_2017/EE_241B'
 alias ee123 'cd /media/sf_sync/College/Berkeley_Spring_2017/EE_123'
 
 # repair wallpaper when changing monitors/resolutions
-alias wallpaper 'feh --bg-center /media/sf_sync/College/Wallpapers/fascist_league.png'
+alias wallpaper 'feh --bg-center /media/sf_sync/College/Notebooks/Wallpapers/fascist_league.png'
 

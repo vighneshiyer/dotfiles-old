@@ -1,5 +1,5 @@
 [options]
-font = Source Code Pro 10
+font = Source Code Pro 8.5
 scrollback_lines = 10000
 clickable_url    = true
 browser          = google-chrome

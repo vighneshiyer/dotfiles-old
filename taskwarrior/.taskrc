@@ -9,6 +9,7 @@
 #   #variable=foo  -- By commenting out the line, or deleting it, this uses the default
 
 # Use the command 'task show' to see all defaults and overrides
+report.list.sort=due+,project+,start-,urgency-
 
 # Files
 data.location=~/.task

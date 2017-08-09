@@ -170,4 +170,4 @@ bar {
 bindsym $mod+Shift+y exec --no-startup-id pactl set-sink-volume 0 +5% && killall -SIGUSR1 i3status
 bindsym $mod+Shift+t exec --no-startup-id pactl set-sink-volume 0 -5% && killall -SIGUSR1 i3status
 
-exec --no-startup-id feh --bg-center /media/sf_sync/College/Wallpapers/fascist_league.png
+exec --no-startup-id feh --bg-center /media/sf_sync/College/Notebooks/Wallpapers/fascist_league.png
