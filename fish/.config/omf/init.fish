@@ -50,6 +50,7 @@ alias gpush 'git push'
 alias tl 'task list'
 alias t 'task'
 alias ts 'task sync'
+alias taskbackup 'cd ~/.task; and tar czf ~/sensitive-dotfiles/task_backups/task-backup-(date +'%Y%m%d').tar.gz *'
 
 ## Tool Aliases
 alias vivado 'vivado -nolog -nojournal'
