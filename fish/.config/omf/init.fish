@@ -79,7 +79,7 @@ alias small 'xrandr -s 1280x800; fixcols'
 
 ## SSH Aliases
 alias ssh_ramnode 'ssh vighnesh@23.226.231.82'
-alias ssh_intovps='ssh www@184.75.242.173 -p 33322'
+alias ssh_intovps='ssh www@184.75.242.173'
 alias ssh_ee241b 'ssh hpse-11.eecs.berkeley.edu -l cs199-ban -Y'
 alias ssh_eecs151 'ssh c125m-15.eecs.berkeley.edu -l eecs151-tab -Y'
 alias ssh_bwrc 'ssh bwrcrdsl-2.eecs.berkeley.edu -l vighnesh.iyer -Y'
