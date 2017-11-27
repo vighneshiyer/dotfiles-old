@@ -36,7 +36,7 @@ alias gfetch='git fetch'
 alias gpush='git push'
 
 # Used for Xorg forwarding
-export DISPLAY=:0.0
+#export DISPLAY=:0.0
 
 # For launching (usually graphical) applications that produce lots of junk printed out
 function silent () {
