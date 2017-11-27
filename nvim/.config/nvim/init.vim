@@ -1,35 +1,72 @@
+set shell=/bin/bash
 call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'morhetz/gruvbox'
 Plug 'vim-airline/vim-airline'
 "Plug 'vim-syntastic/syntastic'
 Plug 'nvie/vim-flake8'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-sleuth'
+Plug 'ctrlpvim/ctrlp.vim'
 
 call plug#end()
+" Use spacebar as leader key
+let mapleader="\<SPACE>"
+" Don't clear Ctrl-P cache between vim sessions (use F5 to refresh cache)
+let g:ctrlp_clear_cache_on_exit = 0
+" Ctrl-p should ignore files/folders specified in the repo's .gitignore
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
 
 set nocompatible
-filetype off
 
 " activates filetype detection
 filetype plugin indent on
 
 " activates syntax highlighting among other things
 syntax on
+syntax enable
 
 " allows you to deal with multiple unsaved
 " buffers simultaneously without resorting
 " to misusing tabs
 set hidden
 
-" just hit backspace without this one and
-" see for yourself
+set autoindent
 set backspace=indent,eol,start
-
+set complete-=i
+set smarttab
+set expandtab
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
-set expandtab
-set smarttab
+
+set showcmd         " Show command in statusline
+set showmatch       " Show matching brackets
+set showmode        " Show current mode
+set splitbelow      " Hori split on bottom
+set splitright      " Vert split on right
+
+if !&scrolloff
+  set scrolloff=3   " Show next 3 lines when scrolling
+endif
+if !&sidescrolloff
+  set sidescrolloff=5 " Show next 5 columns when side-scrolling
+endif
+set nostartofline   " Don't jump to first character with page commands
+
+set incsearch
+" Use <C-L> to clear the highlighting of :set hlsearch.
+if maparg('<C-L>', 'n') ==# ''
+  nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+endif
+set ignorecase      " Make searching case insensitive
+set smartcase       " ... unless the query has capital letters
+set gdefault        " use global flag by default when search/replace
+set magic           " extended regex when searching
+
+set laststatus=2
+set ruler
+set wildmenu
 
 set termguicolors
 set background=dark
@@ -48,3 +85,50 @@ set formatoptions-=t " do not automatically wrap text when typing
 " this highlights text that exceeds 80 columns in length to evaluate breaking more text into new lines
 highlight ColorColumn ctermbg=0 guibg=#282828
 let &colorcolumn="80,".join(range(120,999),",")
+
+" Tell Vim which characters to show for expanded TABs,
+" trailing whitespace, and end-of-lines. VERY useful!
+if &listchars ==# 'eol:$'
+  set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
+endif
+set list                " Show problematic characters.
+
+" Also highlight all tabs and trailing whitespace characters.
+highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
+match ExtraWhitespace /\s\+$\|\t/
+
+" Use relative numbering
+function! NumberToggle()
+  if(&relativenumber == 1)
+    set nornu
+    set number
+  else
+    set rnu
+  endif
+endfunc
+
+"""" Special commands/shortcuts
+nmap <Leader>s :%s//g<Left><Left>
+nnoremap <Leader>r :call NumberToggle()<cr>
+nnoremap ; :
+nnoremap <Leader>w :w<CR>
+nnoremap <Leader>q :wq<CR>
+
+vmap <Leader>y "+y
+vmap <Leader>d "+d
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
+
+"nmap <Leader>l :bnext<CR>
+"nmap <Leader>h :bprevious<CR>
+
+nmap <Leader>h <C-w>h
+nmap <Leader>j <C-w>j
+nmap <Leader>k <C-w>k
+nmap <Leader>l <C-w>l
+
+nnoremap <Leader>o :CtrlP<CR>
+nnoremap <Leader>b :CtrlPBuffer<CR>
+nnoremap <Leader>f :CtrlPMRUFiles<CR>
