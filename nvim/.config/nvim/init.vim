@@ -14,8 +14,10 @@ let mapleader="\<SPACE>"
 let g:ctrlp_clear_cache_on_exit = 0
 " Ctrl-p should ignore files/folders specified in the repo's .gitignore
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
-
+" Use Latex indenting style
+let g:tex_flavor='latex'
 set nocompatible
+set mouse=a
 
 " activates filetype detection
 filetype plugin indent on
@@ -130,3 +132,5 @@ nmap <Leader>l <C-w>l
 nnoremap <Leader>o :CtrlP<CR>
 nnoremap <Leader>b :CtrlPBuffer<CR>
 nnoremap <Leader>f :CtrlPMRUFiles<CR>
+
+nnoremap <F5> :make<CR>

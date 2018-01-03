@@ -52,6 +52,9 @@ alias t 'task'
 alias ts 'task sync'
 alias taskbackup 'cd ~/.task; and tar czf ~/sensitive-dotfiles/task_backups/task-backup-(date +'%Y%m%d').tar.gz *'
 
+## tree
+alias treea 'tree -a -I .git'
+
 ## Tool Aliases
 alias vivado 'vivado -nolog -nojournal'
 
@@ -81,7 +84,9 @@ alias small 'xrandr -s 1280x800; fixcols'
 alias ssh_ramnode 'ssh vighnesh@23.226.231.82'
 alias ssh_intovps='ssh www@184.75.242.173'
 alias ssh_ee241b 'ssh hpse-11.eecs.berkeley.edu -l cs199-ban -Y'
-alias ssh_eecs151 'ssh c125m-15.eecs.berkeley.edu -l eecs151-tab -Y'
+#alias ssh_ee241b 'ssh cory.eecs.berkeley.edu -l cs199-ban -Y'
+alias ssh_ee142 'ssh hpse-13.eecs.berkeley.edu -l ee142-aay -Y'
+alias ssh_eecs151 'ssh c125m-13.eecs.berkeley.edu -l eecs151-tab -Y'
 alias ssh_bwrc 'ssh bwrcrdsl-2.eecs.berkeley.edu -l vighnesh.iyer -Y'
 alias ssh_rdsl1 'ssh -X vighnesh.iyer@bwrcrdsl-1.eecs.berkeley.edu'
 alias ssh_rdsl2 'ssh -X vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu'
@@ -134,50 +139,75 @@ alias speedtest 'curl -s  https://raw.githubusercontent.com/sivel/speedtest-cli/
 
 # Create a SSH tunnel to local port 5901 from remote port 5901 (which binds to VNC server)
 function vnc_tunnel
-    cd ~
     ssh -S vnc-tunnel-socket -O exit bwrcrdsl-2.eecs.berkeley.edu
-    ssh -f -N -M -S vnc-tunnel-socket -l vighnesh.iyer -L 5901:bwrcrdsl-2.eecs.berkeley.edu:5901 bwrcrdsl-2.eecs.berkeley.edu
+    ssh -f -N -M -S vnc-tunnel-socket -l vighnesh.iyer -L 5903:bwrcrdsl-2.eecs.berkeley.edu:5903 bwrcrdsl-2.eecs.berkeley.edu
 end
 
 function vnc_tunnel_close
-    cd ~
     ssh -S vnc-tunnel-socket -O exit bwrcrdsl-2.eecs.berkeley.edu
 end
 
 function mount_bwrc
-    cd ~
-    if mount | grep /home/vighnesh/bwrc > /dev/null;
-        fusermount -u /home/vighnesh/bwrc
+    if mount | grep /home/vighnesh/mount/bwrc > /dev/null;
+        fusermount -u /home/vighnesh/mount/bwrc
     end
-    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa,Ciphers=arcfour,Compression=no vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu:/tools/projects/vighneshiyer/ ~/bwrc
-    cd ~/bwrc
+    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa,Ciphers=arcfour,Compression=no vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu:/tools/projects/vighneshiyer/ ~/mount/bwrc
 end
 
 function unmount_bwrc
-    if mount | grep /home/vighnesh/bwrc > /dev/null;
-        fusermount -u /home/vighnesh/bwrc
+    if mount | grep /home/vighnesh/mount/bwrc > /dev/null;
+        fusermount -u /home/vighnesh/mount/bwrc
+    end
+end
+
+function mount_ee241b_scratch
+    if mount | grep /home/vighnesh/mount/ee241b_scratch > /dev/null;
+        fusermount -u /home/vighnesh/mount/ee241b_scratch
+    end
+    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa,Ciphers=arcfour,Compression=no cs199-ban@hpse-13.eecs.berkeley.edu:/scratch/cs199-ban ~/mount/ee241b_scratch
+end
+
+function unmount_ee241b_scratch
+    if mount | grep /home/vighnesh/mount/ee241b_scratch > /dev/null;
+        fusermount -u /home/vighnesh/mount/ee241b_scratch
+    end
+end
+
+function mount_ee241b
+    if mount | grep /home/vighnesh/mount/ee241b > /dev/null;
+        fusermount -u /home/vighnesh/mount/ee241b
+    end
+    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa,Ciphers=arcfour,Compression=no cs199-ban@hpse-13.eecs.berkeley.edu:/home/cc/cs199/fa13/class/cs199-ban ~/mount/ee241b
+end
+
+function unmount_ee241b
+    if mount | grep /home/vighnesh/mount/ee241b > /dev/null;
+        fusermount -u /home/vighnesh/mount/ee241b
     end
 end
 
 function mount_eecs151
-    cd ~
-    fusermount -u /home/vighnesh/eecs151
-    sshfs -o allow_other,uid=1000,gid=1000,identityfile=/home/vighnesh/.ssh/id_rsa eecs151-tab@c125m-15.eecs.berkeley.edu:/home/cc/eecs151/sp17/staff/eecs151-tab ~/eecs151
-    cd ~/eecs151
+    fusermount -u /home/vighnesh/mount/eecs151
+    sshfs -o allow_other,uid=1000,gid=1000,identityfile=/home/vighnesh/.ssh/id_rsa eecs151-tab@c125m-15.eecs.berkeley.edu:/home/cc/eecs151/fa17/staff/eecs151-tab ~/mount/eecs151
 end
 
 function unmount_eecs151
-    fusermount -u /home/vighnesh/eecs151
+    if mount | grep /home/vighnesh/mount/eecs151 > /dev/null;
+        fusermount -u /home/vighnesh/mount/eecs151
+    end
 end
 
-function mount_ee241b
-    cd ~
-    fusermount -u /home/vighnesh/ee241b
-    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa,Ciphers=arcfour,Compression=no cs199-ban@hpse-13.eecs.berkeley.edu:/home/cc/cs199/fa13/class/cs199-ban ~/ee241b
+function mount_ee142
+    if mount | grep /home/vighnesh/mount/ee142 > /dev/null;
+        fusermount -u /home/vighnesh/mount/ee142
+    end
+    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa,Ciphers=arcfour,Compression=no ee142-aay@hpse-13.eecs.berkeley.edu:/home/cc/ee142/fa17/class/ee142-aay ~/mount/ee142
 end
 
-function unmount_ee241b
-    fusermount -u /home/vighnesh/ee241b
+function unmount_ee142
+    if mount | grep /home/vighnesh/mount/ee142 > /dev/null;
+        fusermount -u /home/vighnesh/mount/ee142
+    end
 end
 
 # alias vim to nvim
@@ -188,10 +218,12 @@ alias e_books 'cd /media/sf_sync/E-Books/'
 alias college 'cd /media/sf_sync/College/'
 alias websites 'cd /media/sf_sync/WEBSITES'
 
-alias astro7b 'cd /media/sf_sync/College/Berkeley_Spring_2017/Astro_7B'
-alias eecs151 'cd /media/sf_sync/College/Berkeley_Spring_2017/EECS_151'
-alias ee241b 'cd /media/sf_sync/College/Berkeley_Spring_2017/EE_241B'
-alias ee123 'cd /media/sf_sync/College/Berkeley_Spring_2017/EE_123'
+alias astro7b 'cd /media/sf_sync/College/Astro_7B'
+alias eecs151 'cd /media/sf_sync/College/EECS_151'
+alias ee241b 'cd /media/sf_sync/College/EE_241B'
+alias ee123 'cd /media/sf_sync/College/EE_123'
+alias ee142 'cd /media/sf_sync/College/EE_142'
+alias hurricane 'cd /media/sf_sync/Research/Hurricane_1'
 
 # repair wallpaper when changing monitors/resolutions
 alias wallpaper 'feh --bg-center /media/sf_sync/College/Notebooks/Wallpapers/fascist_league.png'

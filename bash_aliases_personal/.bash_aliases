@@ -58,3 +58,4 @@ alias ee123='cd /media/sf_sync/College/Berkeley_Spring_2017/EE_123'
 # repair wallpaper when changing monitors/resolutions
 alias wallpaper='feh --bg-center /media/sf_sync/College/Wallpapers/fascist_league.png'
 
+export PATH=$PATH:/usr/local/bin/
