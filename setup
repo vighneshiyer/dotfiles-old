@@ -33,3 +33,5 @@ rm ~/.config/fish/config.fish
 stow fish
 # tmux
 stow tmux
+# Switch shell to fish
+chsh
