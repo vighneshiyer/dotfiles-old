@@ -228,6 +228,8 @@ alias hurricane 'cd /media/sf_sync/Research/Hurricane_1'
 # repair wallpaper when changing monitors/resolutions
 alias wallpaper 'feh --bg-center /media/sf_sync/College/Notebooks/Wallpapers/fascist_league.png'
 
-alias ssh_jetson 'ssh ubuntu@10.31.95.21 -X'
-alias ssh_farm 'ssh vighneshi@sc-xterm.nvidia.com -X'
+alias ssh_jetson 'ssh -X ubuntu@crg-lab-jetson1.nvidia.com -X'
+alias ssh_farm 'ssh vighneshi@dc1-xterm-02.nvidia.com -X'
 alias ssh_workstation 'ssh vighneshi@crg-lab-1.nvidia.com -X'
+
+set -gx PATH /home/vighneshi/firrtl/utils/bin $PATH
