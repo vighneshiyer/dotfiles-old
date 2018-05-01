@@ -3,11 +3,10 @@ call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'morhetz/gruvbox'
 Plug 'vim-airline/vim-airline'
-"Plug 'vim-syntastic/syntastic'
-Plug 'nvie/vim-flake8'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-sleuth'
 Plug 'ctrlpvim/ctrlp.vim'
+Plug 'scrooloose/nerdtree'
 
 call plug#end()
 " Use spacebar as leader key
@@ -15,7 +14,13 @@ let mapleader="\<SPACE>"
 " Don't clear Ctrl-P cache between vim sessions (use F5 to refresh cache)
 let g:ctrlp_clear_cache_on_exit = 0
 " Ctrl-p should ignore files/folders specified in the repo's .gitignore
-let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
+let g:ctrlp_user_command = {
+  \ 'types': {
+    \ 1: ['.git', 'cd %s && git ls-files . -co --exclude-standard'],
+    \ 2: ['.rc18', 'find -O3 cmod vmod fpga vlib stand_sim/RC18_CHIP_TOP'],
+    \ },
+  \ 'fallback': 'find %s -type f'
+  \ }
 " Use Latex indenting style
 let g:tex_flavor='latex'
 set nocompatible
@@ -123,9 +128,6 @@ nmap <Leader>P "+P
 vmap <Leader>p "+p
 vmap <Leader>P "+P
 
-"nmap <Leader>l :bnext<CR>
-"nmap <Leader>h :bprevious<CR>
-
 nmap <Leader>h <C-w>h
 nmap <Leader>j <C-w>j
 nmap <Leader>k <C-w>k
@@ -135,4 +137,7 @@ nnoremap <Leader>o :CtrlP<CR>
 nnoremap <Leader>b :CtrlPBuffer<CR>
 nnoremap <Leader>f :CtrlPMRUFiles<CR>
 
+nnoremap <Leader>n :NERDTreeToggle<CR>
+
 nnoremap <F5> :make<CR>
+autocmd BufRead,BufNewFile *.v set syntax=verilog
