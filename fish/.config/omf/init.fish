@@ -231,3 +231,5 @@ alias wallpaper 'feh --bg-center /media/sf_sync/College/Notebooks/Wallpapers/fas
 alias ssh_jetson 'ssh ubuntu@10.31.95.21 -X'
 alias ssh_farm 'ssh vighneshi@sc-xterm.nvidia.com -X'
 alias ssh_workstation 'ssh vighneshi@crg-lab-1.nvidia.com -X'
+
+set -gx PATH /home/vighnesh/firrtl/utils/bin $PATH
