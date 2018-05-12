@@ -210,6 +210,19 @@ function unmount_ee142
     end
 end
 
+function mount_jetson
+    if mount | grep ~/mount/jetson > /dev/null;
+        fusermount -u ~/mount/jetson
+    end
+    sshfs -o allow_other,uid=1000,gid=1000 ubuntu@crg-lab-jetson1.nvidia.com:/home/ubuntu ~/mount/jetson
+end
+
+function unmount_jetson
+    if mount | grep ~/mount/jetson > /dev/null;
+        fusermount -u ~/mount/jetson
+    end
+end
+
 # alias vim to nvim
 alias vim 'nvim'
 
@@ -232,4 +245,4 @@ alias ssh_jetson 'ssh -X ubuntu@crg-lab-jetson1.nvidia.com -X'
 alias ssh_farm 'ssh vighneshi@dc1-xterm-02.nvidia.com -X'
 alias ssh_workstation 'ssh vighneshi@crg-lab-1.nvidia.com -X'
 
-set -gx PATH /home/vighneshi/firrtl/utils/bin $PATH
+set -gx PATH /home/vighneshi/firrtl/utils/bin /home/vighneshi/pycharm-community-2018.1.2/bin $PATH
