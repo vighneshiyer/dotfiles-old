@@ -223,6 +223,20 @@ function unmount_jetson
     end
 end
 
+function mount_scratch
+    if mount | grep ~/mount/scratch > /dev/null;
+        fusermount -u ~/mount/scratch
+    end
+    sshfs -o allow_other,uid=1000,gid=1000 vighneshi@dc1-xterm-02.nvidia.com:/home/scratch.vighneshi_nvresearch ~/mount/scratch
+end
+
+function unmount_scratch
+    if mount | grep ~/mount/scratch> /dev/null;
+        fusermount -u ~/mount/scratch
+    end
+end
+alias crg-nc-vnc 'ssh -L 5901:127.0.0.1:5901 crg-nclab-1'
+
 # alias vim to nvim
 alias vim 'nvim'
 
@@ -238,11 +252,15 @@ alias ee123 'cd /media/sf_sync/College/EE_123'
 alias ee142 'cd /media/sf_sync/College/EE_142'
 alias hurricane 'cd /media/sf_sync/Research/Hurricane_1'
 
+alias proposal 'cd /media/sf_NVIDIA/internship-2018/proposal'
+alias scratch 'cd /home/vighneshi/mount/scratch'
+
 # repair wallpaper when changing monitors/resolutions
 alias wallpaper 'feh --bg-center /media/sf_sync/College/Notebooks/Wallpapers/fascist_league.png'
 
 alias ssh_jetson 'ssh -X ubuntu@crg-lab-jetson1.nvidia.com -X'
 alias ssh_farm 'ssh vighneshi@dc1-xterm-02.nvidia.com -X'
+#alias mount_scratch 'sudo mount -t cifs -v -o user=vighneshi,domain=NVIDIA.COM,uid=1000,gid=1000,vers=3.0 //dc2-netapp92/scratch.vighneshi_nvresearch /home/vighneshi/mount/scratch'
 alias ssh_workstation 'ssh vighneshi@crg-lab-1.nvidia.com -X'
 
 set -gx PATH /home/vighneshi/firrtl/utils/bin /home/vighneshi/pycharm-community-2018.1.2/bin $PATH
