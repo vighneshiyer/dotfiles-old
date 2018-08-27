@@ -30,6 +30,9 @@ font pango:Source Code Pro Regular 9
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
+# Limit floating window (like Save As... dialog for Chrome) dimensions
+floating_minimum_size 75x75
+floating_maximum_size 800x800
 
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal

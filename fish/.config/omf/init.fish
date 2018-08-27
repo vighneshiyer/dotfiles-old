@@ -87,7 +87,7 @@ alias ssh_ee241b 'ssh hpse-11.eecs.berkeley.edu -l cs199-ban -Y'
 #alias ssh_ee241b 'ssh cory.eecs.berkeley.edu -l cs199-ban -Y'
 alias ssh_ee142 'ssh hpse-13.eecs.berkeley.edu -l ee142-aay -Y'
 alias ssh_eecs151 'ssh c125m-13.eecs.berkeley.edu -l eecs151-tab -Y'
-alias ssh_bwrc 'ssh bwrcrdsl-2.eecs.berkeley.edu -l vighnesh.iyer -Y'
+alias ssh_bwrc 'ssh bwrcrdsl-4.eecs.berkeley.edu -l vighnesh.iyer -Y'
 alias ssh_rdsl1 'ssh -X vighnesh.iyer@bwrcrdsl-1.eecs.berkeley.edu'
 alias ssh_rdsl2 'ssh -X vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu'
 alias ssh_rdsl3 'ssh -X vighnesh.iyer@bwrcrdsl-3.eecs.berkeley.edu'
@@ -160,56 +160,6 @@ function unmount_bwrc
     end
 end
 
-function mount_ee241b_scratch
-    if mount | grep /home/vighnesh/mount/ee241b_scratch > /dev/null;
-        fusermount -u /home/vighnesh/mount/ee241b_scratch
-    end
-    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa,Ciphers=arcfour,Compression=no cs199-ban@hpse-13.eecs.berkeley.edu:/scratch/cs199-ban ~/mount/ee241b_scratch
-end
-
-function unmount_ee241b_scratch
-    if mount | grep /home/vighnesh/mount/ee241b_scratch > /dev/null;
-        fusermount -u /home/vighnesh/mount/ee241b_scratch
-    end
-end
-
-function mount_ee241b
-    if mount | grep /home/vighnesh/mount/ee241b > /dev/null;
-        fusermount -u /home/vighnesh/mount/ee241b
-    end
-    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa,Ciphers=arcfour,Compression=no cs199-ban@hpse-13.eecs.berkeley.edu:/home/cc/cs199/fa13/class/cs199-ban ~/mount/ee241b
-end
-
-function unmount_ee241b
-    if mount | grep /home/vighnesh/mount/ee241b > /dev/null;
-        fusermount -u /home/vighnesh/mount/ee241b
-    end
-end
-
-function mount_eecs151
-    fusermount -u /home/vighnesh/mount/eecs151
-    sshfs -o allow_other,uid=1000,gid=1000,identityfile=/home/vighnesh/.ssh/id_rsa eecs151-tab@c125m-15.eecs.berkeley.edu:/home/cc/eecs151/fa17/staff/eecs151-tab ~/mount/eecs151
-end
-
-function unmount_eecs151
-    if mount | grep /home/vighnesh/mount/eecs151 > /dev/null;
-        fusermount -u /home/vighnesh/mount/eecs151
-    end
-end
-
-function mount_ee142
-    if mount | grep /home/vighnesh/mount/ee142 > /dev/null;
-        fusermount -u /home/vighnesh/mount/ee142
-    end
-    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa,Ciphers=arcfour,Compression=no ee142-aay@hpse-13.eecs.berkeley.edu:/home/cc/ee142/fa17/class/ee142-aay ~/mount/ee142
-end
-
-function unmount_ee142
-    if mount | grep /home/vighnesh/mount/ee142 > /dev/null;
-        fusermount -u /home/vighnesh/mount/ee142
-    end
-end
-
 # alias vim to nvim
 alias vim 'nvim'
 
@@ -231,5 +181,3 @@ alias wallpaper 'feh --bg-center /media/sf_sync/College/Notebooks/Wallpapers/fas
 alias ssh_jetson 'ssh -X ubuntu@crg-lab-jetson1.nvidia.com -X'
 alias ssh_farm 'ssh vighneshi@dc1-xterm-02.nvidia.com -X'
 alias ssh_workstation 'ssh vighneshi@crg-lab-1.nvidia.com -X'
-
-set -gx PATH ~/firrtl/utils/bin $PATH
