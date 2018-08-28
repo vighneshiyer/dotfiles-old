@@ -30,7 +30,7 @@ alias u3 'cd ../../..'
 alias u4 'cd ../../../..'
 alias u5 'cd ../../../../..'
 
-## bash
+## bash/fish
 alias s 'omf reload'
 alias rc 'vim ~/.bashrc'
 alias rca 'vim ~/.config/omf/init.fish'
@@ -181,3 +181,6 @@ alias wallpaper 'feh --bg-center /media/sf_sync/College/Notebooks/Wallpapers/fas
 alias ssh_jetson 'ssh -X ubuntu@crg-lab-jetson1.nvidia.com -X'
 alias ssh_farm 'ssh vighneshi@dc1-xterm-02.nvidia.com -X'
 alias ssh_workstation 'ssh vighneshi@crg-lab-1.nvidia.com -X'
+
+# PATH manipulation
+set -gx PATH ~/miniconda3/bin $PATH
