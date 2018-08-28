@@ -24,7 +24,13 @@ HOMEBREW_NO_AUTO_UPDATE=1 brew install gcc
 Use Linuxbrew to install modern versions of useful tools like `git`, `gcc`, `clang`, `tmux`, `neovim`, `stow`. Unfortunately, `docker` and `vagrant` can't be used without `sudo` access.
 
 ## Configure Shell
-Bash is alright... fish is much better!
+Bash is alright... fish is much better! But the `fish` formula in Homebrew seems to specifically point to `/usr/bin/sed` when running `./configure`. If you try running `brew install fish` on a BWRC machine, you'll notice a failure with message `/usr/bin/sed not found`.
+
+I have tracked down the responsible commit (in Homebrew/homebrew-core) to e72ab4a98adbef1b734f7773e49fcf9b207a2398. This commit ought to be more intelligent and use `env sed` (or just `sed`) instead of exactly pointing to `/usr/bin/sed` which is actually located at `/bin/sed` on both the BWRC machines (CentOS 6) and my local Ubuntu 18.04. But `sed` in in `/usr/bin/sed` on OSX.
+
+Anyways, to fix it, run `brew edit fish`, manually change `/usr/bin/sed` to `/bin/sed`, save the file, then rerun `brew install fish`.
+
+**TODO:** Upstream formula fix
 
 # Base dotfiles
 - Use `.bashrc`, `.bash_alises`, and `.bash_profile` from Github (vighneshiyer/dotfiles)
