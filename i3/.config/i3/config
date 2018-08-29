@@ -19,7 +19,7 @@ set $mod Mod1
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 #font pango:DejaVu Sans Mono 7.5
 #font pango:Iosevka Medium 8
-font pango:Source Code Pro Regular 9
+font pango:Source Code Pro Regular 8
 
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
@@ -32,7 +32,7 @@ font pango:Source Code Pro Regular 9
 floating_modifier $mod
 # Limit floating window (like Save As... dialog for Chrome) dimensions
 floating_minimum_size 75x75
-floating_maximum_size 800x800
+floating_maximum_size 1500x1500
 
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
