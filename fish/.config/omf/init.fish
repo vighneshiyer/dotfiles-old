@@ -58,6 +58,10 @@ alias treea 'tree -a -I .git'
 ## Tool Aliases
 alias vivado 'vivado -nolog -nojournal'
 
+## t480 specific
+alias touchpad_on 'xinput set-prop "13" "Device Enabled" 1'
+alias touchpad_off 'xinput set-prop "13" "Device Enabled" 0'
+
 # For launching (usually graphical) applications that produce lots of junk printed out
 function silent
     nohup $argv </dev/null >/dev/null 2>&1 &
@@ -183,4 +187,6 @@ alias ssh_farm 'ssh vighneshi@dc1-xterm-02.nvidia.com -X'
 alias ssh_workstation 'ssh vighneshi@crg-lab-1.nvidia.com -X'
 
 # PATH manipulation
-set -gx PATH ~/miniconda3/bin $PATH
+set -gx PATH ~/dotty-0.9.0-RC1/bin /opt/cisco/anyconnect/bin ~/miniconda3/bin ~/firrtl/utils/bin $PATH
+set -gx ROCKETCHIP ~/rocket-chip
+set -gx RISCV ~/rocket-chip/riscv-tools

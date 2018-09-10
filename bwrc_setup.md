@@ -38,6 +38,9 @@ Try running `fish`.
 
 # Install Miniconda
 
+## TigerVNC Server
+I had to perform `brew install --force-bottle systemd` to force `brew` to install `systemd`. I don't think it actually worked, but `systemd` shouldn't an actualdependency of tiger-vnc (`brew install tiger-vnc`).
+
 # Install Dotfiles
 Clone this repo.
 - Use `.bashrc`, `.bash_alises`, and `.bash_profile` from Github (vighneshiyer/dotfiles)

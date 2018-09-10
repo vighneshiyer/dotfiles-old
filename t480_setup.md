@@ -47,3 +47,54 @@ echo auto | sudo tee /sys/bus/pci/devices/0000:01:00.0/power/control
 ```
 
 Where the PCI device identifier of the NVIDIA card can be found with `lspci | grep 3D`. After running this, the NVIDIA card is actually powered off. Verify with `sudo powertop` which should report 7W consumption. You need to be on battery power for `powertop` to display power consumption.
+
+# Screen Brightness
+I had to add a file in `/etc/X11/xorg.conf` with the following:
+
+```
+Section "Device"
+Identifier "Card0"
+Driver "intel"
+Option "Backlight" "/sys/devices/pci0000:00/0000:00:02.0/drm/card0/card0-eDP-1/intel_backlight/brightness"
+EndSection
+```
+
+and then `xbacklight` works after logout and back in.
+
+# Wifi
+I'm trying to use `nmcli` only. It works easily to connect to unsecured or WPA2 access points.
+
+To list APs: `nmcli d wifi`
+
+## Connecting to EECS-Secure
+EECS-Secure is a WPA2 Enterprise (802.1X) secured network.
+
+### EECS-Secure Details from IRIS
+These settings should be used to connect to EECS-Secure:
+
+- Wireless Security: WPA2 Enterprise, AES encryption
+- EAP Method: PEAP
+- Key Type: Automatic
+- Phase2 Type: MSCHAPV2
+- Identity: Your EECS username
+- Password: Your EECS Active Directory (Windows) Password
+
+During the connection process, your wireless client may indicate that the server certificate for EECS-Secure is presented by clearpass.EECS.Berkeley.EDU and issued by InCommon Certification Authority (2048).
+
+### Setting up the connection
+```
+nmcli con # Check if a EECS-Secure connection already exists
+nmcli d # Find your wifi device ifname (wlp3s0 on T480)
+nmcli con add type wifi con-name "EECS-Secure" ifname wlp3s0 ssid "EECS-Secure"
+nmcli con edit EECS-Secure # Enter interactive connection edit session
+nmcli> set wifi-sec.key-mgmt wpa-eap
+nmcli> set 802-1x.eap peap
+nmcli> set 802-1x.identity "vighnesh.iyer"
+nmcli> set 802-1x.phase2-auth mschapv2
+nmcli> quit
+```
+
+### Using the connection
+```
+nmcli con up EECS-Secure --ask # Enter your password once and nmcli will store it without it showing up in shell history
+```

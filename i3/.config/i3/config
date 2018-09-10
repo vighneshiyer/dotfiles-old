@@ -19,7 +19,7 @@ set $mod Mod1
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 #font pango:DejaVu Sans Mono 7.5
 #font pango:Iosevka Medium 8
-font pango:Source Code Pro Regular 8
+font pango:Source Code Pro Regular 8.5
 
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
@@ -49,12 +49,6 @@ bindsym $mod+d exec dmenu_run
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
-# These are the i3 defaults (not used in my config)
-#bindsym $mod+j focus left
-#bindsym $mod+k focus down
-#bindsym $mod+l focus up
-#bindsym $mod+semicolon focus right
-
 # bind to vim default keys
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -170,9 +164,16 @@ bar {
         status_command i3status
         tray_output primary
 }
-bindsym $mod+Shift+y exec --no-startup-id pactl set-sink-volume 0 +5% && killall -SIGUSR1 i3status
-bindsym $mod+Shift+t exec --no-startup-id pactl set-sink-volume 0 -5% && killall -SIGUSR1 i3status
+# increase sound volume
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl -- set-sink-volume `pacmd list-sinks | grep "* index" | tr -d -c 0-9` +5%
+# decrease sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl -- set-sink-volume `pacmd list-sinks | grep "* index" | tr -d -c 0-9` -5%
+# toggle mute
+bindsym XF86AudioMute exec --no-startup-id pactl -- set-sink-mute `pacmd list-sinks | grep "* index" | tr -d -c 0-9` toggle
+# toggle internal mic mute
+bindsym XF86AudioMicMute exec --no-startup-id pactl -- set-source-mute `pacmd list-sources | grep "* index" | tr -d -c 0-9` toggle
 
-exec --no-startup-id feh --bg-center /media/sf_sync/College/Notebooks/Wallpapers/fascist_league.png
-exec --no-startup-id clipit
-exec --no-startup-id /usr/bin/VBoxClient-all
+bindsym XF86MonBrightnessUp exec xbacklight -inc 10
+bindsym XF86MonBrightnessDown exec xbacklight -dec 10
+
+exec --no-startup-id "xrandr --dpi 180"
