@@ -3,7 +3,7 @@ Install Ubuntu 18.04.1 LTS from a USB drive. Use Rufus to create a bootable USB 
 
 I'm not using Ubuntu 16.04 due to issues with it working with the latest NVIDIA proprietary driver (for the MX150).
 
-This document will cover T480 specific stuff I had to configure.
+This document will cover T480 specific stuff I had to configure. Note that suspend on lid close worked without any settings to tweak.
 
 # Trackpoint
 libinput has regressed from Ubuntu 16.04 which causes poor functionality of the Thinkpad trackpoint.
