@@ -26,10 +26,17 @@ Now, use the standard GNOME mouse settings dialog to push the trackpoint speed t
 ```
 cd /sys/devices/platform/i8042/serio1/serio2/
 echo 255 | sudo tee sensitivity
-echo 255 | sudo tee speed # optional
 ```
 
-Now things are back to normal, like with Ubuntu 16.04.
+Now things are back to normal, like with Ubuntu 16.04. To make this permanent (across reboots):
+
+Add this:
+
+```
+SUBSYSTEM=="serio", DRIVERS=="psmouse", DEVPATH=="/sys/devices/platform/i8042/serio1/serio2", ATTR{sensitivity}="255", ATTR{speed}="97"
+```
+
+in the file `/etc/udev/rules.d/trackpoint.rules`
 
 # NVIDIA Driver
 Using the GNOME drivers dialog, enable all repo sources (including closed-source stuff) and install the stable NVIDIA proprietary driver (nvidia-390). Reboot.
