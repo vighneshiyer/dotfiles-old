@@ -30,13 +30,15 @@ echo 255 | sudo tee sensitivity
 
 Now things are back to normal, like with Ubuntu 16.04. To make this permanent (across reboots):
 
-Add this:
+Add this line to `/etc/tmpfiles.d/tpoint.conf`:
 
 ```
-SUBSYSTEM=="serio", DRIVERS=="psmouse", DEVPATH=="/sys/devices/platform/i8042/serio1/serio2", ATTR{sensitivity}="255", ATTR{speed}="97"
+w /sys/devices/platform/i8042/serio1/sensitivity - - - - 255
 ```
 
-in the file `/etc/udev/rules.d/trackpoint.rules`
+To create this tmpfile before the next reboot, run `sudo systemd-tmpfiles --prefix=/sys --create`.
+
+The udev technique doesn't seem to work with Ubuntu 18.04 on T480.
 
 # NVIDIA Driver
 Using the GNOME drivers dialog, enable all repo sources (including closed-source stuff) and install the stable NVIDIA proprietary driver (nvidia-390). Reboot.
