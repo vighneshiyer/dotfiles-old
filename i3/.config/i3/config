@@ -176,4 +176,8 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl -- set-source-mute `pacmd li
 bindsym XF86MonBrightnessUp exec xbacklight -inc 10
 bindsym XF86MonBrightnessDown exec xbacklight -dec 10
 
-exec --no-startup-id "xrandr --dpi 180"
+exec --no-startup-id "xrandr --dpi 184"
+# When only 1 window exists in a workspace, remove the borders, add borders only when there are multiple windows
+hide_edge_borders smart
+
+bindsym $mod+m move workspace to output left

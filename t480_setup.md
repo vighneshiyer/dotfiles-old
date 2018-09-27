@@ -107,3 +107,46 @@ nmcli> quit
 ```
 nmcli con up EECS-Secure --ask # Enter your password once and nmcli will store it without it showing up in shell history
 ```
+
+# Displays
+The DPI for the T480 laptop display should be around 184.
+
+To set the DPI for Xorg apps and most Gtk+ apps, add this line in `~/.Xresources`
+
+```
+Xft.dpi: 184
+```
+
+Then add an exec line in your i3 config to set it also using `xrandr`:
+
+```
+exec --no-startup-id "xrandr --dpi 184"
+```
+
+Logout and back in and verify the DPI is set correctly:
+```
+xrdb -query
+xdpyinfo | grep -B 1 resolution
+```
+
+Now when I added an external monitor which wasn't HiDPI, I had to scale up its internal framebuffer resolution, and then scale down the framebuffer delivered to the output. The issue is that the resampling uses bilinear filtering: see `xrandr --verbose` (look for transforms). This causes slightly blurry text.
+
+Recently a nearest neighbor interpolation scheme was added to `xrandr`'s master, so going to try and build it from source.
+
+```
+git clone git://anongit.freedesktop.org/xorg/app/xrandr
+sudo apt install xutils-dev
+./autogen.sh
+sudo make install
+xrandr --output DP1 --filter nearest
+```
+
+OK, so this doesn't help my situation since this is for upscaling interpolation (not for downscaling). It looks very bad when used to downscale.
+
+# Redshift
+Use `stow redshift` to place the redshift config file and a systemd user unit file in the right `~/.config` place.
+
+```
+systemctl --user start redshift # to start
+systemctl --user enable redshift # to enable autostart on boot
+```

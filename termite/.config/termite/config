@@ -2,7 +2,7 @@
 font = Source Code Pro 10
 scrollback_lines = 10000
 clickable_url    = true
-browser          = google-chrome
+browser          = chromium-browser
 allow_bold       = true
 allow_italic     = true
 visible_bell     = false

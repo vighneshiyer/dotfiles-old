@@ -61,6 +61,12 @@ alias vivado 'vivado -nolog -nojournal'
 ## t480 specific
 alias touchpad_on 'xinput set-prop "13" "Device Enabled" 1'
 alias touchpad_off 'xinput set-prop "13" "Device Enabled" 0'
+alias hdmi_left 'xrandr --output eDP1 --auto --output HDMI2 --auto --left-of eDP1'
+alias hdmi_right 'xrandr --output eDP1 --auto --output HDMI2 --auto --right-of eDP1'
+alias hdmi_off 'xrandr --output HDMI2 --off'
+alias dp_left 'xrandr --output eDP1 --auto --output DP1 --auto --left-of eDP1'
+alias dp_left_scale 'xrandr --fb 6400x2400 --output eDP1 --mode 2560x1440 --pos 3840x0 --output DP1 --mode 1920x1200 --pos 0x0 --scale 1.2x1.2 --filter bilinear'
+alias nvidia_auto 'echo auto | sudo tee /sys/bus/pci/devices/0000:01:00.0/power/control'
 
 # For launching (usually graphical) applications that produce lots of junk printed out
 function silent
@@ -167,26 +173,8 @@ end
 # alias vim to nvim
 alias vim 'nvim'
 
-# cd aliases on local machine
-alias e_books 'cd /media/sf_sync/E-Books/'
-alias college 'cd /media/sf_sync/College/'
-alias websites 'cd /media/sf_sync/WEBSITES'
-
-alias astro7b 'cd /media/sf_sync/College/Astro_7B'
-alias eecs151 'cd /media/sf_sync/College/EECS_151'
-alias ee241b 'cd /media/sf_sync/College/EE_241B'
-alias ee123 'cd /media/sf_sync/College/EE_123'
-alias ee142 'cd /media/sf_sync/College/EE_142'
-alias hurricane 'cd /media/sf_sync/Research/Hurricane_1'
-
-# repair wallpaper when changing monitors/resolutions
-alias wallpaper 'feh --bg-center /media/sf_sync/College/Notebooks/Wallpapers/fascist_league.png'
-
-alias ssh_jetson 'ssh -X ubuntu@crg-lab-jetson1.nvidia.com -X'
-alias ssh_farm 'ssh vighneshi@dc1-xterm-02.nvidia.com -X'
-alias ssh_workstation 'ssh vighneshi@crg-lab-1.nvidia.com -X'
-
 # PATH manipulation
-set -gx PATH ~/dotty-0.9.0-RC1/bin /opt/cisco/anyconnect/bin ~/miniconda3/bin ~/firrtl/utils/bin $PATH
+set -gx PATH ~/dotty-0.9.0-RC1/bin /opt/cisco/anyconnect/bin ~/miniconda3/bin ~/firrtl/utils/bin /opt/diff-so-fancy $PATH
 set -gx ROCKETCHIP ~/rocket-chip
 set -gx RISCV ~/rocket-chip/riscv-tools
+set -gx PATH $RISCV/bin $PATH
