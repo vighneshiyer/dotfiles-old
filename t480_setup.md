@@ -111,6 +111,20 @@ nmcli con up EECS-Secure --ask # Enter your password once and nmcli will store i
 # Displays
 The DPI for the T480 laptop display should be around 184.
 
+## Calculation
+Internal display: (31x17 cm) (2560x1440)
+    - divide by 2.54 to get inches
+    x_dpi = 2560 / x_in = 209.75
+    y_dpi = 1440 / y_in = 215.15
+    Using DPI = 212 which divides by 2 and 4 seems to be a good fit
+
+External display: (52x33 cm) (1920x1200)
+    x_dpi = 1920 / x_in = 93.78
+    y_dpi = 1200 / y_in = 92.36
+
+The best match seems to be a native DPI of 184, and scaling by 2x2 for the external monitor.
+
+## Implementation
 To set the DPI for Xorg apps and most Gtk+ apps, add this line in `~/.Xresources`
 
 ```

@@ -61,11 +61,13 @@ alias vivado 'vivado -nolog -nojournal'
 ## t480 specific
 alias touchpad_on 'xinput set-prop "13" "Device Enabled" 1'
 alias touchpad_off 'xinput set-prop "13" "Device Enabled" 0'
-alias hdmi_left 'xrandr --output eDP1 --auto --output HDMI2 --auto --left-of eDP1'
-alias hdmi_right 'xrandr --output eDP1 --auto --output HDMI2 --auto --right-of eDP1'
+alias hdmi_left 'xrandr --output eDP1 --auto --output HDMI2 --auto --primary --left-of eDP1'
+alias hdmi_right 'xrandr --output eDP1 --auto --output HDMI2 --auto --primary --right-of eDP1'
+alias hdmi_above 'xrandr --output eDP1 --auto --output HDMI2 --auto --primary --above eDP1'
 alias hdmi_off 'xrandr --output HDMI2 --off'
 alias dp_left 'xrandr --output eDP1 --auto --output DP1 --auto --left-of eDP1'
 alias dp_left_scale 'xrandr --fb 6400x2400 --output eDP1 --mode 2560x1440 --pos 3840x0 --output DP1 --mode 1920x1200 --pos 0x0 --scale 1.2x1.2 --filter bilinear'
+alias dp_off 'xrandr --output DP1 --off'
 alias nvidia_auto 'echo auto | sudo tee /sys/bus/pci/devices/0000:01:00.0/power/control'
 
 # For launching (usually graphical) applications that produce lots of junk printed out
@@ -174,7 +176,7 @@ end
 alias vim 'nvim'
 
 # PATH manipulation
-set -gx PATH ~/dotty-0.9.0-RC1/bin /opt/cisco/anyconnect/bin ~/miniconda3/bin ~/firrtl/utils/bin /opt/diff-so-fancy $PATH
+set -gx PATH ~/dotty-0.9.0-RC1/bin /opt/cisco/anyconnect/bin ~/miniconda3/bin ~/firrtl/utils/bin /opt/Xilinx/Vivado/2018.2/bin $PATH
 set -gx ROCKETCHIP ~/rocket-chip
 set -gx RISCV ~/rocket-chip/riscv-tools
 set -gx PATH $RISCV/bin $PATH
