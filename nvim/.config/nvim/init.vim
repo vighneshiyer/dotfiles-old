@@ -141,3 +141,4 @@ nnoremap <Leader>n :NERDTreeToggle<CR>
 
 nnoremap <F5> :make<CR>
 autocmd BufRead,BufNewFile *.v set syntax=verilog
+autocmd BufRead,BufNewFile *.sc set syntax=scala

@@ -65,8 +65,9 @@ alias hdmi_left 'xrandr --output eDP1 --auto --output HDMI2 --auto --primary --l
 alias hdmi_right 'xrandr --output eDP1 --auto --output HDMI2 --auto --primary --right-of eDP1'
 alias hdmi_above 'xrandr --output eDP1 --auto --output HDMI2 --auto --primary --above eDP1'
 alias hdmi_off 'xrandr --output HDMI2 --off'
-alias dp_left 'xrandr --output eDP1 --auto --output DP1 --auto --left-of eDP1'
-alias dp_left_scale 'xrandr --fb 6400x2400 --output eDP1 --mode 2560x1440 --pos 3840x0 --output DP1 --mode 1920x1200 --pos 0x0 --scale 1.2x1.2 --filter bilinear'
+alias dp_left 'xrandr --output eDP1 --auto --output DP1 --auto --primary --left-of eDP1'
+alias dp_left_scale 'xrandr --fb 6400x2400 --output eDP1 --mode 2560x1440 --pos 3840x0 --output DP1 --primary --mode 1920x1200 --pos 0x0 --scale 1.2x1.2 --filter bilinear'
+alias dp_right_scale 'xrandr --fb 5824x2400 --output eDP1 --mode 2560x1440 --pos 0x0 --output DP2 --primary --mode 1920x1200 --pos 3072x0 --scale 1.3x1.3 --filter bilinear'
 alias dp_off 'xrandr --output DP1 --off'
 alias nvidia_auto 'echo auto | sudo tee /sys/bus/pci/devices/0000:01:00.0/power/control'
 
@@ -93,10 +94,9 @@ alias s1024 'xrandr -s 1024x768; fixcols'
 alias small 'xrandr -s 1280x800; fixcols'
 
 ## SSH Aliases
-alias ssh_ramnode 'ssh vighnesh@23.226.231.82'
+alias ssh_ramnode 'ssh -i ~/repos/sensitive-dotfiles/ssh/.ssh/id_rsa vighnesh@23.226.231.82'
 alias ssh_intovps='ssh www@184.75.242.173'
 alias ssh_ee241b 'ssh hpse-11.eecs.berkeley.edu -l cs199-ban -Y'
-#alias ssh_ee241b 'ssh cory.eecs.berkeley.edu -l cs199-ban -Y'
 alias ssh_ee142 'ssh hpse-13.eecs.berkeley.edu -l ee142-aay -Y'
 alias ssh_eecs151 'ssh c125m-13.eecs.berkeley.edu -l eecs151-tab -Y'
 alias ssh_bwrc 'ssh bwrcrdsl-4.eecs.berkeley.edu -l vighnesh.iyer -Y'
@@ -176,7 +176,9 @@ end
 alias vim 'nvim'
 
 # PATH manipulation
-set -gx PATH ~/dotty-0.9.0-RC1/bin /opt/cisco/anyconnect/bin ~/miniconda3/bin ~/firrtl/utils/bin /opt/Xilinx/Vivado/2018.2/bin $PATH
+set -gx PATH /opt/cisco/anyconnect/bin ~/miniconda3/bin ~/repos/firrtl/utils/bin /opt/Xilinx/Vivado/2018.2/bin /usr/local/go/bin ~/.cargo/bin $PATH
 set -gx ROCKETCHIP ~/rocket-chip
-set -gx RISCV ~/rocket-chip/riscv-tools
+set -gx RISCV ~/firesim-dev/riscv-tools-install
+#set -gx RISCV ~/firesim-riscv-tools-prebuilt/distrib
 set -gx PATH $RISCV/bin $PATH
+set -gx LD_LIBRARY_PATH $RISCV/lib $LD_LIBRARY_PATH
