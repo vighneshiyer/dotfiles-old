@@ -36,6 +36,11 @@ Anyways, to fix it, run `brew edit fish`, manually change `/usr/bin/sed` to `/bi
 
 Try running `fish`.
 
+## Fish Don't Call Git on Remote Filesystems
+Modify `~/.local/share/omf/themes/default/fish_prompt.fish` on the line with the `git_is_repo` check (line 34) with this new condition:
+`if not pwd | grep "mount" > /dev/null; and git_is_repo`
+to prevent remote SSH mounted filesystems on ~/mount from checking `git status`.
+
 # Install Miniconda
 
 ## TigerVNC Server

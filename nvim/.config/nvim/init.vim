@@ -89,9 +89,9 @@ set wrapmargin=0
 set tw=0
 set formatoptions-=t " do not automatically wrap text when typing
 
-" this highlights text that exceeds 80 columns in length to evaluate breaking more text into new lines
+" this highlights text that exceeds 100 columns in length to evaluate breaking more text into new lines
 highlight ColorColumn ctermbg=0 guibg=#282828
-let &colorcolumn="80,".join(range(120,999),",")
+let &colorcolumn="100,".join(range(130,999),",")
 
 " Tell Vim which characters to show for expanded TABs,
 " trailing whitespace, and end-of-lines. VERY useful!

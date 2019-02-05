@@ -1,4 +1,6 @@
 #### ASSUME THAT ALL BASH SCRIPT SOURCING IS DONE BEFORE MOVING INTO INIT FISH
+# Enable vi mode
+fish_vi_key_bindings
 # Fish theme options (bobthefish)
 set -g theme_color_scheme solarized
 set -g theme_display_user yes
@@ -66,8 +68,10 @@ alias hdmi_right 'xrandr --output eDP1 --auto --output HDMI2 --auto --primary --
 alias hdmi_above 'xrandr --output eDP1 --auto --output HDMI2 --auto --primary --above eDP1'
 alias hdmi_off 'xrandr --output HDMI2 --off'
 alias dp_left 'xrandr --output eDP1 --auto --output DP1 --auto --primary --left-of eDP1'
+alias dp_right 'xrandr --output eDP1 --auto --output DP1 --auto --primary --right-of eDP1'
 alias dp_left_scale 'xrandr --fb 6400x2400 --output eDP1 --mode 2560x1440 --pos 3840x0 --output DP1 --primary --mode 1920x1200 --pos 0x0 --scale 1.2x1.2 --filter bilinear'
-alias dp_right_scale 'xrandr --fb 5824x2400 --output eDP1 --mode 2560x1440 --pos 0x0 --output DP2 --primary --mode 1920x1200 --pos 3072x0 --scale 1.3x1.3 --filter bilinear'
+alias dp_right_scale 'xrandr --fb 5824x2400 --output eDP1 --mode 2560x1440 --pos 0x0 --output DP1 --primary --mode 1920x1200 --pos 3072x0 --scale 1.3x1.3 --filter bilinear'
+alias dp_right_scale2 'xrandr --fb 6720x4000 --output eDP1 --mode 2560x1440 --pos 0x0 --output DP1 --primary --mode 1920x1200 --pos 3840x0 --scale 1.5x1.5'
 alias dp_off 'xrandr --output DP1 --off'
 alias nvidia_auto 'echo auto | sudo tee /sys/bus/pci/devices/0000:01:00.0/power/control'
 
@@ -172,6 +176,13 @@ function unmount_bwrc
     end
 end
 
+function mount_hpse
+    if mount | grep /home/vighnesh/mount/hpse > /dev/null;
+        fusermount -u /home/vighnesh/mount/hpse
+    end
+    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa cs199-ban@hpse-9.eecs.berkeley.edu:/home/cc/cs199/fa13/class/cs199-ban ~/mount/hpse
+end
+
 # alias vim to nvim
 alias vim 'nvim'
 
@@ -179,6 +190,5 @@ alias vim 'nvim'
 set -gx PATH /opt/cisco/anyconnect/bin ~/miniconda3/bin ~/repos/firrtl/utils/bin /opt/Xilinx/Vivado/2018.2/bin /usr/local/go/bin ~/.cargo/bin $PATH
 set -gx ROCKETCHIP ~/rocket-chip
 set -gx RISCV ~/firesim-dev/riscv-tools-install
-#set -gx RISCV ~/firesim-riscv-tools-prebuilt/distrib
 set -gx PATH $RISCV/bin $PATH
 set -gx LD_LIBRARY_PATH $RISCV/lib $LD_LIBRARY_PATH

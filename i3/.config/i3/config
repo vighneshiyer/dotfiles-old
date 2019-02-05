@@ -21,7 +21,7 @@ set $darkgray #1d2021
 
 set $mod Mod1
 
-font pango:Source Code Pro Regular 8.5
+font pango:Source Code Pro Regular 8
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -71,12 +71,13 @@ bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 
 # focus the parent container
-bindsym $mod+a focus parent
+#bindsym $mod+a focus parent
 
 # focus the child container
 #bindsym $mod+d focus child
 
 # switch to workspace
+#bindsym $mod+grave workspace 0
 bindsym $mod+1 workspace 1
 bindsym $mod+2 workspace 2
 bindsym $mod+3 workspace 3
@@ -157,13 +158,27 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl -- set-source-mute `pacmd li
 bindsym XF86MonBrightnessUp exec xbacklight -inc 10
 bindsym XF86MonBrightnessDown exec xbacklight -dec 10
 
-exec --no-startup-id "xrandr --dpi 184"
+exec --no-startup-id "xrandr --dpi 170"
 # When only 1 window exists in a workspace, remove the borders, add borders only when there are multiple windows
 hide_edge_borders smart
+new_window pixel 1
 
 bindsym $mod+m move workspace to output left
 
-#client.focused          $darkgray $blue $darkgray $purple $darkgray
-#client.focused_inactive $darkgray $darkgray $yellow $purple $darkgray
-#client.unfocused        $darkgray $darkgray $yellow $purple $darkgray
-#client.urgent           $red $red $white $red $red
+# Dropdown scratchpad terminal
+for_window [instance="dropdown"] floating enable
+for_window [instance="dropdown"] resize set 2000 1500
+for_window [instance="dropdown"] move scratchpad
+for_window [instance="dropdown"] border pixel 5
+exec --no-startup-id termite --name dropdown
+bindsym $mod+u [instance="dropdown"] scratchpad show; [instance="dropdown"] move position center
+bindsym $mod+Shift+u resize shrink height 10 px or 10 ppt
+
+# Arithmetic (Python) terminal
+for_window [instance="arithmetic"] floating enable
+for_window [instance="arithmetic"] resize set 2000 1500
+for_window [instance="arithmetic"] move scratchpad
+for_window [instance="arithmetic"] border pixel 5
+exec --no-startup-id termite --name arithmetic --exec /home/vighnesh/miniconda3/bin/python
+bindsym $mod+a [instance="arithmetic"] scratchpad show; [instance="arithmetic"] move position center
+bindsym $mod+Shift+a resize shrink height 10 px or 10 ppt
