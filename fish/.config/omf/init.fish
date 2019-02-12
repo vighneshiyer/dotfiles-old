@@ -26,6 +26,7 @@ alias .. 'cd ..'
 alias ... 'cd ../..'
 alias .... 'cd ../../..'
 alias ..... 'cd ../../../..'
+alias ...... 'cd ../../../../..'
 alias u1 'cd ..'
 alias u2 'cd ../..'
 alias u3 'cd ../../..'
@@ -181,6 +182,12 @@ function mount_hpse
         fusermount -u /home/vighnesh/mount/hpse
     end
     sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa cs199-ban@hpse-9.eecs.berkeley.edu:/home/cc/cs199/fa13/class/cs199-ban ~/mount/hpse
+end
+
+function unmount_hpse
+    if mount | grep /home/vighnesh/mount/hpse > /dev/null;
+        fusermount -u /home/vighnesh/mount/hpse
+    end
 end
 
 # alias vim to nvim
