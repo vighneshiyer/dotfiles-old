@@ -196,6 +196,9 @@ alias vim 'nvim'
 # PATH manipulation
 set -gx PATH /opt/cisco/anyconnect/bin ~/miniconda3/bin ~/repos/firrtl/utils/bin /opt/Xilinx/Vivado/2018.2/bin /usr/local/go/bin ~/.cargo/bin $PATH
 set -gx ROCKETCHIP ~/rocket-chip
-set -gx RISCV ~/firesim-dev/riscv-tools-install
+#set -gx RISCV ~/firesim-dev/riscv-tools-install
+set -gx RISCV /opt/riscv-esp-tools
+#set -gx RISCV /opt/riscv-master
 set -gx PATH $RISCV/bin $PATH
 set -gx LD_LIBRARY_PATH $RISCV/lib $LD_LIBRARY_PATH
+source ~/miniconda3/etc/fish/conf.d/conda.fish
