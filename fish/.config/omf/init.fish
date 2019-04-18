@@ -81,6 +81,7 @@ function silent
     nohup $argv </dev/null >/dev/null 2>&1 &
 end
 alias pdf 'silent qpdfview'
+abbr -a cpr rsync -ah --progress
 
 ### VNC
 function vnc
@@ -99,11 +100,8 @@ alias s1024 'xrandr -s 1024x768; fixcols'
 alias small 'xrandr -s 1280x800; fixcols'
 
 ## SSH Aliases
-alias ssh_ramnode 'ssh -i ~/repos/sensitive-dotfiles/ssh/.ssh/id_rsa vighnesh@23.226.231.82'
-alias ssh_intovps='ssh www@184.75.242.173'
-alias ssh_ee241b 'ssh hpse-11.eecs.berkeley.edu -l cs199-ban -Y'
-alias ssh_ee142 'ssh hpse-13.eecs.berkeley.edu -l ee142-aay -Y'
-alias ssh_eecs151 'ssh c125m-13.eecs.berkeley.edu -l eecs151-tab -Y'
+alias ssh_ramnode 'ssh -i ~/.ssh/ramnode_id_rsa vighnesh@23.226.231.82'
+alias ssh_hpse 'ssh hpse-11.eecs.berkeley.edu -l cs199-ban -Y'
 alias ssh_bwrc 'ssh bwrcrdsl-4.eecs.berkeley.edu -l vighnesh.iyer -Y'
 alias ssh_rdsl1 'ssh -X vighnesh.iyer@bwrcrdsl-1.eecs.berkeley.edu'
 alias ssh_rdsl2 'ssh -X vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu'
@@ -146,7 +144,7 @@ function kill_hw_server
     printf "
         source ~/.bashrc
         killall hw_server
-        ssh -S hw-server-socket -O exit bwrcrdsl-2
+        ssh -S hw-server-socket -O exit bwrcrdsl-4
     " | ssh -T $who@dp690-12.eecs.berkeley.edu
 end
 
@@ -156,37 +154,37 @@ alias speedtest 'curl -s  https://raw.githubusercontent.com/sivel/speedtest-cli/
 
 # Create a SSH tunnel to local port 5901 from remote port 5901 (which binds to VNC server)
 function vnc_tunnel
-    ssh -S vnc-tunnel-socket -O exit bwrcrdsl-2.eecs.berkeley.edu
-    ssh -f -N -M -S vnc-tunnel-socket -l vighnesh.iyer -L 5903:bwrcrdsl-2.eecs.berkeley.edu:5903 bwrcrdsl-2.eecs.berkeley.edu
+    ssh -S vnc-tunnel-socket -O exit bwrcrdsl-4.eecs.berkeley.edu
+    ssh -f -N -M -S vnc-tunnel-socket -l vighnesh.iyer -L 5903:bwrcrdsl-4.eecs.berkeley.edu:5903 bwrcrdsl-4.eecs.berkeley.edu
 end
 
 function vnc_tunnel_close
-    ssh -S vnc-tunnel-socket -O exit bwrcrdsl-2.eecs.berkeley.edu
+    ssh -S vnc-tunnel-socket -O exit bwrcrdsl-4.eecs.berkeley.edu
 end
 
 function mount_bwrc
-    if mount | grep /home/vighnesh/mount/bwrc > /dev/null;
-        fusermount -u /home/vighnesh/mount/bwrc
+    if mount | grep /mnt/bwrc > /dev/null;
+        fusermount -u /mnt/bwrc
     end
-    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa,Ciphers=arcfour,Compression=no vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu:/tools/projects/vighneshiyer/ ~/mount/bwrc
+    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa vighnesh.iyer@bwrcrdsl-4.eecs.berkeley.edu:/tools/B/vighneshiyer/ /mnt/bwrc
 end
 
 function unmount_bwrc
-    if mount | grep /home/vighnesh/mount/bwrc > /dev/null;
-        fusermount -u /home/vighnesh/mount/bwrc
+    if mount | grep /mnt/bwrc > /dev/null;
+        fusermount -u /mnt/bwrc
     end
 end
 
 function mount_hpse
-    if mount | grep /home/vighnesh/mount/hpse > /dev/null;
-        fusermount -u /home/vighnesh/mount/hpse
+    if mount | grep /mnt/hpse > /dev/null;
+        fusermount -u /mnt/hpse
     end
-    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa cs199-ban@hpse-9.eecs.berkeley.edu:/home/cc/cs199/fa13/class/cs199-ban ~/mount/hpse
+    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa cs199-ban@hpse-11.eecs.berkeley.edu:/home/cc/cs199/fa13/class/cs199-ban /mnt/hpse
 end
 
 function unmount_hpse
-    if mount | grep /home/vighnesh/mount/hpse > /dev/null;
-        fusermount -u /home/vighnesh/mount/hpse
+    if mount | grep /mnt/hpse > /dev/null;
+        fusermount -u /mnt/hpse
     end
 end
 
@@ -194,11 +192,14 @@ end
 alias vim 'nvim'
 
 # PATH manipulation
-set -gx PATH /opt/cisco/anyconnect/bin ~/miniconda3/bin ~/repos/firrtl/utils/bin /opt/Xilinx/Vivado/2018.2/bin /usr/local/go/bin ~/.cargo/bin $PATH
+set -gx PATH /opt/cisco/anyconnect/bin /opt/miniconda3/bin /opt/Xilinx/Vivado/2018.2/bin /usr/local/go/bin ~/.cargo/bin $PATH
 set -gx ROCKETCHIP ~/rocket-chip
 #set -gx RISCV ~/firesim-dev/riscv-tools-install
 set -gx RISCV /opt/riscv-esp-tools
 #set -gx RISCV /opt/riscv-master
 set -gx PATH $RISCV/bin $PATH
 set -gx LD_LIBRARY_PATH $RISCV/lib $LD_LIBRARY_PATH
-source ~/miniconda3/etc/fish/conf.d/conda.fish
+set -gx TERMINFO /lib/terminfo
+source /opt/miniconda3/etc/fish/conf.d/conda.fish
+
+alias uclid '/home/vighnesh/repos/uclid/target/universal/uclid-0.9.5/bin/uclid'
