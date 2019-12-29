@@ -7,6 +7,7 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-sleuth'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
+Plug 'lervag/vimtex'
 
 call plug#end()
 " Use spacebar as leader key
@@ -27,7 +28,7 @@ set nocompatible
 set mouse=a
 
 " activates filetype detection
-filetype plugin indent on
+"filetype plugin indent on
 
 " activates syntax highlighting among other things
 syntax on
@@ -115,7 +116,7 @@ function! NumberToggle()
 endfunc
 
 """" Special commands/shortcuts
-nmap <Leader>s :%s//g<Left><Left>
+nmap <Leader>s :%s//<Left>
 nnoremap <Leader>r :call NumberToggle()<cr>
 nnoremap ; :
 nnoremap <Leader>w :w<CR>
@@ -139,6 +140,8 @@ nnoremap <Leader>f :CtrlPMRUFiles<CR>
 
 nnoremap <Leader>n :NERDTreeToggle<CR>
 
-nnoremap <F5> :make<CR>
+nnoremap <Leader>m :make<CR>
 autocmd BufRead,BufNewFile *.v set syntax=verilog
+autocmd BufRead,BufNewFile *.vh set syntax=verilog
 autocmd BufRead,BufNewFile *.sc set syntax=scala
+autocmd BufRead,BufNewFile Makefrag set syntax=make

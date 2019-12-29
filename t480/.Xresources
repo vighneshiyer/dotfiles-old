@@ -1,1 +1,31 @@
 Xft.dpi: 170
+
+URxvt.font: xft:Source Code Pro:size=10
+URxvt.letterSpace: 1
+URxvt.scrollBar: false
+URxvt.background: #1d2021
+URxvt.foreground: #fbf1c7
+! Black + DarkGrey
+URxvt.color0:  #1d2021
+URxvt.color8:  #928374
+! DarkRed + Red
+URxvt.color1:  #cc241d
+URxvt.color9:  #fb4934
+! DarkGreen + Green
+URxvt.color2:  #98971a
+URxvt.color10: #b8bb26
+! DarkYellow + Yellow
+URxvt.color3:  #d79921
+URxvt.color11: #fabd2f
+! DarkBlue + Blue
+URxvt.color4:  #458588
+URxvt.color12: #83a598
+! DarkMagenta + Magenta
+URxvt.color5:  #b16286
+URxvt.color13: #d3869b
+! DarkCyan + Cyan
+URxvt.color6:  #689d6a
+URxvt.color14: #8ec07c
+! LightGrey + White
+URxvt.color7:  #a89984
+URxvt.color15: #ebdbb2

@@ -1,5 +1,7 @@
 #### ASSUME THAT ALL BASH SCRIPT SOURCING IS DONE BEFORE MOVING INTO INIT FISH
 # Enable vi mode
+set -U fish_cursor_insert line
+set -U fish_cursor_replace_one underscore
 fish_vi_key_bindings
 # Fish theme options (bobthefish)
 set -g theme_color_scheme solarized
@@ -12,9 +14,11 @@ set -g default_user root
 
 ### General Aliases
 ## rm
-alias rm 'rm -i'
+alias rm 'rm -i -r'
+alias mv 'mv -i'
 
 ## ls
+alias sl 'ls'
 alias l 'ls'
 alias ll 'ls -lFh'
 alias la 'ls -a'
@@ -38,6 +42,7 @@ alias s 'omf reload'
 alias rc 'vim ~/.bashrc'
 alias rca 'vim ~/.config/omf/init.fish'
 alias vi 'vim'
+alias vim 'nvim'
 alias c 'clear'
 alias r 'tput reset'
 
@@ -57,9 +62,14 @@ alias taskbackup 'cd ~/.task; and tar czf ~/sensitive-dotfiles/task_backups/task
 
 ## tree
 alias treea 'tree -a -I .git'
+alias newterm 'silent termite -d (pwd)'
 
 ## Tool Aliases
 alias vivado 'vivado -nolog -nojournal'
+
+function tp
+    xinput set-prop "TPPS/2 IBM TrackPoint" "libinput Accel Speed" 1;
+end
 
 ## t480 specific
 alias touchpad_on 'xinput set-prop "13" "Device Enabled" 1'
@@ -67,6 +77,7 @@ alias touchpad_off 'xinput set-prop "13" "Device Enabled" 0'
 alias hdmi_left 'xrandr --output eDP1 --auto --output HDMI2 --auto --primary --left-of eDP1'
 alias hdmi_right 'xrandr --output eDP1 --auto --output HDMI2 --auto --primary --right-of eDP1'
 alias hdmi_above 'xrandr --output eDP1 --auto --output HDMI2 --auto --primary --above eDP1'
+alias hdmi_dup 'xrandr --output eDP1 --auto --output HDMI2 --auto --same-as eDP1'
 alias hdmi_off 'xrandr --output HDMI2 --off'
 alias dp_left 'xrandr --output eDP1 --auto --output DP1 --auto --primary --left-of eDP1'
 alias dp_right 'xrandr --output eDP1 --auto --output DP1 --auto --primary --right-of eDP1'
@@ -81,6 +92,8 @@ function silent
     nohup $argv </dev/null >/dev/null 2>&1 &
 end
 alias pdf 'silent qpdfview'
+alias zpdf 'silent zathura'
+alias office 'silent libreoffice'
 abbr -a cpr rsync -ah --progress
 
 ### VNC
@@ -92,17 +105,17 @@ alias vnckill "cat ~/.vivnc2 | xargs vncserver -kill"
 alias bwrcvnc 'ssh -L 5901:`ssh vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu "cat ~/.vivnc2"`'
 
 ## VNC resolution adjustment
-alias fixcols 'shopt -s checkwinsize'
-alias big 'xrandr -s 1920x1200; fixcols'
-alias vbig 'xrandr -s 2560x1440; fixcols'
-alias s1080 'xrandr -s 1920x1080; fixcols'
-alias s1024 'xrandr -s 1024x768; fixcols'
-alias small 'xrandr -s 1280x800; fixcols'
+#alias fixcols 'shopt -s checkwinsize'
+#alias big 'xrandr -s 1920x1200; fixcols'
+#alias vbig 'xrandr -s 2560x1440; fixcols'
+#alias s1080 'xrandr -s 1920x1080; fixcols'
+#alias s1024 'xrandr -s 1024x768; fixcols'
+#alias small 'xrandr -s 1280x800; fixcols'
 
 ## SSH Aliases
 alias ssh_ramnode 'ssh -i ~/.ssh/ramnode_id_rsa vighnesh@23.226.231.82'
 alias ssh_hpse 'ssh hpse-11.eecs.berkeley.edu -l cs199-ban -Y'
-alias ssh_bwrc 'ssh bwrcrdsl-4.eecs.berkeley.edu -l vighnesh.iyer -Y'
+alias ssh_bwrc 'ssh bwrcrdsl-4.eecs.berkeley.edu -l vighnesh.iyer -X'
 alias ssh_rdsl1 'ssh -X vighnesh.iyer@bwrcrdsl-1.eecs.berkeley.edu'
 alias ssh_rdsl2 'ssh -X vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu'
 alias ssh_rdsl3 'ssh -X vighnesh.iyer@bwrcrdsl-3.eecs.berkeley.edu'
@@ -110,6 +123,8 @@ alias ssh_rdsl6 'ssh -X vighnesh.iyer@bwrcrdsl-6.eecs.berkeley.edu'
 alias ssh_dp690 'ssh vighnesh.iyer@dp690-12.eecs.berkeley.edu'
 alias ssh_241 'ssh root@192.168.192.241'
 alias ssh_240 'ssh root@192.168.192.240'
+alias ssh_151 'ssh eecs151-taa@c125m-12.eecs.berkeley.edu'
+alias ssh_151_master 'ssh eecs151@c125m-12.eecs.berkeley.edu'
 
 ## LSF Aliases
 alias noemail "set -gx LSB_JOB_REPORT_MAIL n"
@@ -121,6 +136,10 @@ alias hurricane_fesvr='cd /tools/projects/vighneshiyer/hurricane-fesvr'
 alias hurricane_riscv_tests='cd /tools/projects/vighneshiyer/hurricane-riscv-tests/xhbwif'
 alias splash_tests='cd /tools/projects/vighneshiyer/splash2-testing'
 alias hurricane_testing='cd /tools/projects/vighneshiyer/hurricane-testing-host'
+alias 151='cd /home/vighnesh/10-school/12-secondary/19-eecs151'
+alias 240='cd /home/vighnesh/10-school/13-graduate/06-ee240c'
+alias records='silent libreoffice /home/vighnesh/90-notes/notes/Records.ods'
+alias systolic='cd /home/vighnesh/20-research/23-projects/05-systolic'
 
 # Hurricane ZC706 Aliases (converted from hurricane-zc706 repo to fish compatiable version)
 alias power_on_241 'curl -u admin:bwrc "http://192.168.192.230/outlet.cgi?outlet=2&command=1" > /dev/null'
@@ -188,18 +207,23 @@ function unmount_hpse
     end
 end
 
-# alias vim to nvim
-alias vim 'nvim'
-
 # PATH manipulation
-set -gx PATH /opt/cisco/anyconnect/bin /opt/miniconda3/bin /opt/Xilinx/Vivado/2018.2/bin /usr/local/go/bin ~/.cargo/bin $PATH
-set -gx ROCKETCHIP ~/rocket-chip
-#set -gx RISCV ~/firesim-dev/riscv-tools-install
+set -gx PATH /opt/cisco/anyconnect/bin /opt/miniconda3/bin /opt/Xilinx/Vivado/2019.1/bin /usr/local/go/bin ~/.cargo/bin /opt/cabal/bin ~/.scripts $PATH
 set -gx RISCV /opt/riscv-esp-tools
 #set -gx RISCV /opt/riscv-master
+#set -gx RISCV /home/vighnesh/20-research/24-repos/firesim-riscv-tools-prebuilt/distrib
 set -gx PATH $RISCV/bin $PATH
 set -gx LD_LIBRARY_PATH $RISCV/lib $LD_LIBRARY_PATH
-set -gx TERMINFO /lib/terminfo
+set -gx EDITOR nvim
+
 source /opt/miniconda3/etc/fish/conf.d/conda.fish
 
 alias uclid '/home/vighnesh/repos/uclid/target/universal/uclid-0.9.5/bin/uclid'
+
+# This function is called every time Enter is hit when in a terminal
+# The working directory is written to a tempfile, which is read by i3 if you want a new terminal with the same working directory
+function dostuff --on-event fish_prompt
+    pwd > /tmp/whereami
+end
+
+set -gx TERMINFO /lib/terminfo

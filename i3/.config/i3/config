@@ -182,3 +182,6 @@ for_window [instance="arithmetic"] border pixel 5
 exec --no-startup-id termite --name arithmetic --exec /home/vighnesh/miniconda3/bin/python
 bindsym $mod+a [instance="arithmetic"] scratchpad show; [instance="arithmetic"] move position center
 bindsym $mod+Shift+a resize shrink height 10 px or 10 ppt
+
+exec --no-startup-id "feh --bg-fill ~/.config/wallpaper5.jpg"
+bindsym $mod+Shift+Return exec termite -d $(cat /tmp/whereami)
