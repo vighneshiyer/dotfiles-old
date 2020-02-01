@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # i3
 rm ~/.config/i3/config
-stow i3
+stow -t ~ i3
 # termite
-stow termite
+stow -t ~ termite
 git clone git@github.com:Corwind/termite-install
 cd termite-install && ./termite_install.sh
 # Install termite terminfo (to avoid the "unknown terminal type xterm-xtermite warnings")
@@ -17,7 +17,7 @@ unzip 1.050R-it.zip
 sudo cp source-code-pro-2.030R-ro-1.050R-it/OTF/*.otf /usr/local/share/fonts/.
 fc-cache -f -v
 # Neovim
-stow nvim
+stow -t ~ nvim
 sudo apt-get install software-properties-common
 sudo add-apt-repository ppa:neovim-ppa/stable
 sudo apt-get update
@@ -34,8 +34,8 @@ rm ~/.config/omf/bundle
 rm ~/.config/omf/channel
 rm ~/.config/omf/theme
 rm ~/.config/fish/config.fish
-stow fish
+stow -t ~ fish
 # tmux
-stow tmux
+stow -t ~ tmux
 # Switch shell to fish
 chsh

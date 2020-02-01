@@ -101,6 +101,7 @@ bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
+bindsym $mod+Shift+minus move container to workspace 11
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -183,5 +184,5 @@ exec --no-startup-id termite --name arithmetic --exec /home/vighnesh/miniconda3/
 bindsym $mod+a [instance="arithmetic"] scratchpad show; [instance="arithmetic"] move position center
 bindsym $mod+Shift+a resize shrink height 10 px or 10 ppt
 
-exec --no-startup-id "feh --bg-fill ~/.config/wallpaper5.jpg"
+exec --no-startup-id "feh --bg-fill ~/40-media/42-photos/03-pol/wallpapers/wallpaper5.jpg"
 bindsym $mod+Shift+Return exec termite -d $(cat /tmp/whereami)

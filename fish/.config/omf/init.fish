@@ -138,7 +138,8 @@ alias splash_tests='cd /tools/projects/vighneshiyer/splash2-testing'
 alias hurricane_testing='cd /tools/projects/vighneshiyer/hurricane-testing-host'
 alias 151='cd /home/vighnesh/10-school/12-secondary/19-eecs151'
 alias 240='cd /home/vighnesh/10-school/13-graduate/06-ee240c'
-alias records='silent libreoffice /home/vighnesh/90-notes/notes/Records.ods'
+alias records='silent libreoffice /home/vighnesh/90-notes/personal/Records.ods'
+alias log='silent libreoffice /home/vighnesh/90-notes/maxxing/Log.ods'
 alias systolic='cd /home/vighnesh/20-research/23-projects/05-systolic'
 
 # Hurricane ZC706 Aliases (converted from hurricane-zc706 repo to fish compatiable version)
@@ -208,7 +209,7 @@ function unmount_hpse
 end
 
 # PATH manipulation
-set -gx PATH /opt/cisco/anyconnect/bin /opt/miniconda3/bin /opt/Xilinx/Vivado/2019.1/bin /usr/local/go/bin ~/.cargo/bin /opt/cabal/bin ~/.scripts $PATH
+set -gx PATH /opt/cisco/anyconnect/bin /opt/miniconda3/bin /opt/Xilinx/Vivado/2019.1/bin /usr/local/go/bin /opt/cabal/bin ~/.scripts $PATH
 set -gx RISCV /opt/riscv-esp-tools
 #set -gx RISCV /opt/riscv-master
 #set -gx RISCV /home/vighnesh/20-research/24-repos/firesim-riscv-tools-prebuilt/distrib

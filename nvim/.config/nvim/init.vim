@@ -8,6 +8,7 @@ Plug 'tpope/vim-sleuth'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'lervag/vimtex'
+Plug 'plasticboy/vim-markdown'
 
 call plug#end()
 " Use spacebar as leader key
@@ -145,3 +146,10 @@ autocmd BufRead,BufNewFile *.v set syntax=verilog
 autocmd BufRead,BufNewFile *.vh set syntax=verilog
 autocmd BufRead,BufNewFile *.sc set syntax=scala
 autocmd BufRead,BufNewFile Makefrag set syntax=make
+
+" folding
+set foldmethod=syntax
+set foldnestmax=10
+set nofoldenable " don't enable folds after opening a file
+set foldlevel=2
+let g:markdown_folding = 1
