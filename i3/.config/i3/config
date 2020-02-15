@@ -151,6 +151,9 @@ bar {
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl -- set-sink-volume `pacmd list-sinks | grep "* index" | tr -d -c 0-9` +5%
 # decrease sound volume
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl -- set-sink-volume `pacmd list-sinks | grep "* index" | tr -d -c 0-9` -5%
+# 1% inc/dec variants
+bindsym Shift+XF86AudioRaiseVolume exec --no-startup-id pactl -- set-sink-volume `pacmd list-sinks | grep "* index" | tr -d -c 0-9` +1%
+bindsym Shift+XF86AudioLowerVolume exec --no-startup-id pactl -- set-sink-volume `pacmd list-sinks | grep "* index" | tr -d -c 0-9` -1%
 # toggle mute
 bindsym XF86AudioMute exec --no-startup-id pactl -- set-sink-mute `pacmd list-sinks | grep "* index" | tr -d -c 0-9` toggle
 # toggle internal mic mute
@@ -186,3 +189,4 @@ bindsym $mod+Shift+a resize shrink height 10 px or 10 ppt
 
 exec --no-startup-id "feh --bg-fill ~/40-media/42-photos/03-pol/wallpapers/wallpaper5.jpg"
 bindsym $mod+Shift+Return exec termite -d $(cat /tmp/whereami)
+bindsym $mod+Shift+p bar mode toggle

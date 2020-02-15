@@ -125,6 +125,7 @@ alias ssh_241 'ssh root@192.168.192.241'
 alias ssh_240 'ssh root@192.168.192.240'
 alias ssh_151 'ssh eecs151-taa@c125m-12.eecs.berkeley.edu'
 alias ssh_151_master 'ssh eecs151@c125m-12.eecs.berkeley.edu'
+alias ssh_290 'ssh ee290-2-aav@eda-1.eecs.berkeley.edu'
 
 ## LSF Aliases
 alias noemail "set -gx LSB_JOB_REPORT_MAIL n"
