@@ -210,17 +210,13 @@ function unmount_hpse
 end
 
 # PATH manipulation
-set -gx PATH /opt/cisco/anyconnect/bin /opt/miniconda3/bin /opt/Xilinx/Vivado/2019.1/bin /usr/local/go/bin /opt/cabal/bin ~/.scripts $PATH
-set -gx RISCV /opt/riscv-esp-tools
+#set -gx PATH /opt/cisco/anyconnect/bin /opt/miniconda3/bin /opt/Xilinx/Vivado/2019.1/bin /usr/local/go/bin /opt/cabal/bin ~/.scripts $PATH
+#set -gx RISCV /opt/riscv-esp-tools
 #set -gx RISCV /opt/riscv-master
 #set -gx RISCV /home/vighnesh/20-research/24-repos/firesim-riscv-tools-prebuilt/distrib
-set -gx PATH $RISCV/bin $PATH
-set -gx LD_LIBRARY_PATH $RISCV/lib $LD_LIBRARY_PATH
+#set -gx PATH $RISCV/bin $PATH
+#set -gx LD_LIBRARY_PATH $RISCV/lib $LD_LIBRARY_PATH
 set -gx EDITOR nvim
-
-source /opt/miniconda3/etc/fish/conf.d/conda.fish
-
-alias uclid '/home/vighnesh/repos/uclid/target/universal/uclid-0.9.5/bin/uclid'
 
 # This function is called every time Enter is hit when in a terminal
 # The working directory is written to a tempfile, which is read by i3 if you want a new terminal with the same working directory

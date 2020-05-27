@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+# messing with increasing trackpoint sensitivity (not sure if worked or not)
+#hacks:
+#https://www.laptopmag.com/articles/adjust-mouse-speed-windows
+#in registry editor: HKEY_CURRENT_USER/Control Panel/Mouse
+#Set mousespeed to 2 from 1
+#Set Mousethreshold1 from 6 to 0
+#Set Mousethreshold2 from 10 to 0
+#reboot
+
+# i3
+rm ~/.config/i3/config
+stow -t ~ i3
+# i3 install worked just fine, config files worked too
+
+# termite
+stow -t ~ termite
+git clone git@github.com:Corwind/termite-install
+cd termite-install && ./termite_install.sh
+# this script doesn't work out of the box
+# new technique
+# clone the termite-install repo
+# patch vte-ng by doing this: https://github.com/GNOME/vte/commit/53690d5cee51bdb7c3f7680d3c22b316b1086f2c
+# manually re-run autogen.sh, make, make install in vte-ng
+# then repeat the script steps in the termite repo to install it
+# also added these things to my ~/.bashrc, not sure if really required
+# export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
+# export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig"
+# export LIBRARY_PATH="/usr/include/gtk-3.0:$LIBRARY_PATH"
+
+# Install termite terminfo (to avoid the "unknown terminal type xterm-xtermite warnings")
+git clone git@github.com:thestinger/termite
+cd termite
+tic -x termite.terminfo
+
+# fonts (Source Code Pro)
+cd /tmp/
+wget https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip
+unzip 1.050R-it.zip
+sudo cp source-code-pro-2.030R-ro-1.050R-it/OTF/*.otf /usr/local/share/fonts/.
+fc-cache -f -v
+
+# font smoothing
+# https://superuser.com/questions/8824/bad-font-anti-aliasing-in-ubuntu
+# edit ~/.fonts.conf according to answer
+
+# Neovim
+stow -t ~ nvim
+sudo apt-get install software-properties-common
+sudo add-apt-repository ppa:neovim-ppa/stable
+sudo apt-get update
+sudo apt-get install neovim
+sudo apt-get install python-dev python-pip python3-dev python3-pip
+# Neovim (vim-plug)
+curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+# now manually nvim and :PlugInstall
+
+# fish
+sudo apt-get install fish
+curl -L https://get.oh-my.fish | fish
+rm ~/.config/omf/bundle
+rm ~/.config/omf/channel
+rm ~/.config/omf/theme
+rm ~/.config/fish/config.fish
+stow -t ~ fish
+# tmux
+stow -t ~ tmux
+# Switch shell to fish
+chsh

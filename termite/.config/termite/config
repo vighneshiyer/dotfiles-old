@@ -1,5 +1,5 @@
 [options]
-font = Source Code Pro 10
+font = Source Code Pro 12
 scrollback_lines = 10000
 clickable_url    = true
 browser          = firefox
