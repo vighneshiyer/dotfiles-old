@@ -1,5 +1,8 @@
 [options]
-font = Source Code Pro 12
+#font = Source Code Pro 12
+font = Jetbrains Mono NL 14
+cell_height_scale = 2.0
+
 scrollback_lines = 10000
 clickable_url    = true
 browser          = firefox

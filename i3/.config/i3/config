@@ -21,7 +21,8 @@ set $darkgray #1d2021
 
 set $mod Mod1
 
-font pango:Source Code Pro Regular 10
+#font pango:Source Code Pro Regular 10
+font pango:Jetbrains Mono NL 10
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod

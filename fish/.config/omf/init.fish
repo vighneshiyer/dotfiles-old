@@ -225,3 +225,5 @@ function dostuff --on-event fish_prompt
 end
 
 set -gx TERMINFO /lib/terminfo
+# 250ms delay, 60ms repeated action
+xset r rate 250 60

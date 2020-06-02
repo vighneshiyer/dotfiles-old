@@ -1,7 +1,13 @@
-Xft.dpi: 170
+Xft.antialias:  1
+Xft.dpi:        96
+Xft.hinting:    1
+Xft.hintstyle:  hintfull
+Xft.rgba:       none
 
-URxvt.font: xft:Source Code Pro:size=10
-URxvt.letterSpace: 1
+URxvt.font: xft:Jetbrains Mono NL:size=14
+URxvt.letterSpace: 0
+URxvt.lineSpace: 1.2
+
 URxvt.scrollBar: false
 URxvt.background: #1d2021
 URxvt.foreground: #fbf1c7

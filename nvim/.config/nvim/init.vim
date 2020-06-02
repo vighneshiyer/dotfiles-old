@@ -77,12 +77,15 @@ set laststatus=2
 set ruler
 set wildmenu
 
-set termguicolors
+"set termguicolors " (don't set this or 256 color palette won't be used)
+colorscheme gruvbox
+let g:gruvbox_termcolors=16
 set background=dark
+set t_Co=256
 let g:gruvbox_italic=1
 let g:gruvbox_contrast_dark='hard'
 let g:gruvbox_contrast_light='hard'
-colorscheme gruvbox
+
 set number
 
 " this turns off physical line wrapping (automatic insertion of newlines)
@@ -142,6 +145,7 @@ nnoremap <Leader>f :CtrlPMRUFiles<CR>
 nnoremap <Leader>n :NERDTreeToggle<CR>
 
 nnoremap <Leader>m :make<CR>
+set errorformat^=%-G%.%#Warning%.%#
 autocmd BufRead,BufNewFile *.v set syntax=verilog
 autocmd BufRead,BufNewFile *.vh set syntax=verilog
 autocmd BufRead,BufNewFile *.sc set syntax=scala
