@@ -227,3 +227,5 @@ end
 set -gx TERMINFO /lib/terminfo
 # 250ms delay, 60ms repeated action
 xset r rate 250 60
+alias mount_scratch "sudo mount -t cifs -v -o user=vighneshi,domain=NVIDIA.com,uid=1000,gid=1000 //dc2-netapp88/scratch.vighneshi_nvresearch /mnt/scratch.vighneshi_nvresearch"
+alias unmount_scratch "sudo umount /mnt/scratch.vighneshi_nvresearch"
