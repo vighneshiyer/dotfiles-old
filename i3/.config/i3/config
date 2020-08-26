@@ -176,7 +176,6 @@ for_window [instance="dropdown"] move scratchpad
 for_window [instance="dropdown"] border pixel 5
 exec --no-startup-id termite --name dropdown
 bindsym $mod+u [instance="dropdown"] scratchpad show; [instance="dropdown"] move position center
-bindsym $mod+Shift+u resize shrink height 10 px or 10 ppt
 
 # Arithmetic (Python) terminal
 for_window [instance="arithmetic"] floating enable
@@ -185,7 +184,6 @@ for_window [instance="arithmetic"] move scratchpad
 for_window [instance="arithmetic"] border pixel 5
 exec --no-startup-id termite --name arithmetic --exec /home/vighnesh/miniconda3/bin/python
 bindsym $mod+a [instance="arithmetic"] scratchpad show; [instance="arithmetic"] move position center
-bindsym $mod+Shift+a resize shrink height 10 px or 10 ppt
 
 exec --no-startup-id "feh --bg-fill ~/40-media/42-photos/03-pol/wallpapers/wallpaper5.jpg"
 bindsym $mod+Shift+Return exec termite -d $(cat /tmp/whereami)

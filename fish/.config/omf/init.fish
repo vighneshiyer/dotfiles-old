@@ -95,6 +95,7 @@ alias pdf 'silent qpdfview'
 alias zpdf 'silent zathura'
 alias office 'silent libreoffice'
 abbr -a cpr rsync -ah --progress
+abbr -a yt-audio "youtube-dl -f \"bestaudio\" -o \" %(title)s.%(ext)s\" --user-agent \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\""
 
 ### VNC
 function vnc
@@ -142,6 +143,7 @@ alias 240='cd /home/vighnesh/10-school/13-graduate/06-ee240c'
 alias records='silent libreoffice /home/vighnesh/90-notes/personal/Records.ods'
 alias log='silent libreoffice /home/vighnesh/90-notes/maxxing/Log.ods'
 alias systolic='cd /home/vighnesh/20-research/23-projects/05-systolic'
+alias 290='cd /home/vighnesh/10-school/13-graduate/08-ee290c-ml'
 
 # Hurricane ZC706 Aliases (converted from hurricane-zc706 repo to fish compatiable version)
 alias power_on_241 'curl -u admin:bwrc "http://192.168.192.230/outlet.cgi?outlet=2&command=1" > /dev/null'
@@ -209,14 +211,28 @@ function unmount_hpse
     end
 end
 
+function mount_eda
+    if mount | grep /mnt/eda > /dev/null;
+        fusermount -u /mnt/eda
+    end
+    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa ee290-2-aav@eda-1.eecs.berkeley.edu:/scratch/ee290-2-aav /mnt/eda
+end
+
+function unmount_eda
+    if mount | grep /mnt/eda > /dev/null;
+        fusermount -u /mnt/eda
+    end
+end
+
 # PATH manipulation
 set -gx PATH /opt/cisco/anyconnect/bin /opt/miniconda3/bin /opt/Xilinx/Vivado/2019.1/bin /usr/local/go/bin /opt/cabal/bin ~/.scripts $PATH
-set -gx RISCV /opt/riscv-esp-tools
+set -gx RISCV /opt/riscv-esp-tools-290
+#set -gx RISCV /opt/riscv-esp-tools
 #set -gx RISCV /opt/riscv-master
-#set -gx RISCV /home/vighnesh/20-research/24-repos/firesim-riscv-tools-prebuilt/distrib
 set -gx PATH $RISCV/bin $PATH
 set -gx LD_LIBRARY_PATH $RISCV/lib $LD_LIBRARY_PATH
 set -gx EDITOR nvim
+#set -gx FIRESIM_STANDALONE 1
 
 source /opt/miniconda3/etc/fish/conf.d/conda.fish
 
@@ -229,3 +245,8 @@ function dostuff --on-event fish_prompt
 end
 
 set -gx TERMINFO /lib/terminfo
+xset r rate 250 60
+
+# Symbiotic EDA Formal Verif Course
+set -gx PATH /home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/bin $PATH
+set -gx SYMBIOTIC_LICENSE /home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/symbiotic.lic
