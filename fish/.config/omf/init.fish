@@ -71,6 +71,8 @@ function tp
     xinput set-prop "TPPS/2 IBM TrackPoint" "libinput Accel Speed" 1;
 end
 
+alias list 'du -ahd1 | sort -h'
+
 ## t480 specific
 alias touchpad_on 'xinput set-prop "13" "Device Enabled" 1'
 alias touchpad_off 'xinput set-prop "13" "Device Enabled" 0'
@@ -91,8 +93,21 @@ alias nvidia_auto 'echo auto | sudo tee /sys/bus/pci/devices/0000:01:00.0/power/
 function silent
     nohup $argv </dev/null >/dev/null 2>&1 &
 end
-alias pdf 'silent qpdfview'
-alias zpdf 'silent zathura'
+alias pdf 'silent zathura'
+alias qpdf 'silent qpdfview'
+function pdfdump
+    pdftk $argv dump_data output $argv.pdfdata
+    echo \
+"BookmarkBegin
+BookmarkTitle: Example Bookmark Title
+BookmarkLevel: 1
+BookmarkPageNumber: 3"
+end
+function pdfupdate
+    pdftk $argv update_info $argv.pdfdata output $argv.modified
+    mv -f $argv.modified $argv
+    rm -f $argv.pdfdata
+end
 alias office 'silent libreoffice'
 abbr -a cpr rsync -ah --progress
 abbr -a yt-audio "youtube-dl -f \"bestaudio\" -o \" %(title)s.%(ext)s\" --user-agent \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\""
@@ -235,8 +250,6 @@ set -gx EDITOR nvim
 #set -gx FIRESIM_STANDALONE 1
 
 source /opt/miniconda3/etc/fish/conf.d/conda.fish
-
-alias uclid '/home/vighnesh/repos/uclid/target/universal/uclid-0.9.5/bin/uclid'
 
 # This function is called every time Enter is hit when in a terminal
 # The working directory is written to a tempfile, which is read by i3 if you want a new terminal with the same working directory
