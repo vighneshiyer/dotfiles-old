@@ -36,6 +36,7 @@ alias u2 'cd ../..'
 alias u3 'cd ../../..'
 alias u4 'cd ../../../..'
 alias u5 'cd ../../../../..'
+alias scd 'cd'
 
 ## bash/fish
 alias s 'omf reload'
@@ -72,6 +73,7 @@ function tp
 end
 
 alias list 'du -ahd1 | sort -h'
+alias sbt 'sbt -Dsbt.supershell=false'
 
 ## t480 specific
 alias touchpad_on 'xinput set-prop "13" "Device Enabled" 1'
@@ -93,8 +95,10 @@ alias nvidia_auto 'echo auto | sudo tee /sys/bus/pci/devices/0000:01:00.0/power/
 function silent
     nohup $argv </dev/null >/dev/null 2>&1 &
 end
+alias vlc 'silent vlc'
 alias pdf 'silent zathura'
 alias qpdf 'silent qpdfview'
+alias epdf 'silent evince'
 function pdfdump
     pdftk $argv dump_data output $argv.pdfdata
     echo \
@@ -111,6 +115,7 @@ end
 alias office 'silent libreoffice'
 abbr -a cpr rsync -ah --progress
 abbr -a yt-audio "youtube-dl -f \"bestaudio\" -o \" %(title)s.%(ext)s\" --user-agent \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\""
+abbr -a yt-video "youtube-dl -f \"bestvideo+bestaudio\" -o \" %(title)s.%(ext)s\" --user-agent \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\""
 
 ### VNC
 function vnc
@@ -131,6 +136,7 @@ alias bwrcvnc 'ssh -L 5901:`ssh vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu "cat 
 ## SSH Aliases
 alias ssh_ramnode 'ssh -i ~/.ssh/ramnode_id_rsa vighnesh@23.226.231.82'
 alias ssh_hpse 'ssh hpse-11.eecs.berkeley.edu -l cs199-ban -Y'
+alias ssh_eda 'ssh eda-1.eecs.berkeley.edu -l cs199-ban -Y'
 alias ssh_bwrc 'ssh bwrcrdsl-4.eecs.berkeley.edu -l vighnesh.iyer -X'
 alias ssh_rdsl1 'ssh -X vighnesh.iyer@bwrcrdsl-1.eecs.berkeley.edu'
 alias ssh_rdsl2 'ssh -X vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu'
@@ -230,7 +236,7 @@ function mount_eda
     if mount | grep /mnt/eda > /dev/null;
         fusermount -u /mnt/eda
     end
-    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa ee290-2-aav@eda-1.eecs.berkeley.edu:/scratch/ee290-2-aav /mnt/eda
+    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa cs199-ban@eda-1.eecs.berkeley.edu:/scratch/cs199-ban /mnt/eda
 end
 
 function unmount_eda
@@ -240,14 +246,20 @@ function unmount_eda
 end
 
 # PATH manipulation
-set -gx PATH /opt/cisco/anyconnect/bin /opt/miniconda3/bin /opt/Xilinx/Vivado/2019.1/bin /usr/local/go/bin /opt/cabal/bin ~/.scripts $PATH
-set -gx RISCV /opt/riscv-esp-tools-290
+set -gx PATH /opt/cisco/anyconnect/bin /opt/miniconda3/bin /opt/Xilinx/Vivado/2019.1/bin /usr/local/go/bin /opt/cabal/bin ~/.scripts /opt/mathematica $PATH
+
+#set -gx FIRESIM_STANDALONE 1
+
+#set -gx RISCV /opt/riscv-esp-tools-290
 #set -gx RISCV /opt/riscv-esp-tools
 #set -gx RISCV /opt/riscv-master
+set -gx RISCV /opt/riscv-2020-10-20-prebuilt
+
 set -gx PATH $RISCV/bin $PATH
 set -gx LD_LIBRARY_PATH $RISCV/lib $LD_LIBRARY_PATH
+
 set -gx EDITOR nvim
-#set -gx FIRESIM_STANDALONE 1
+set -gx PATH /home/vighnesh/.local/share/coursier/bin $PATH
 
 source /opt/miniconda3/etc/fish/conf.d/conda.fish
 
