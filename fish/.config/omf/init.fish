@@ -13,9 +13,10 @@ set -g theme_git_worktree_support yes
 set -g default_user root
 
 ### General Aliases
-## rm
+## file utilities
 alias rm 'rm -i -r'
 alias mv 'mv -i'
+alias cp 'cp -i'
 
 ## ls
 alias sl 'ls'
@@ -72,8 +73,15 @@ function tp
     xinput set-prop "TPPS/2 IBM TrackPoint" "libinput Accel Speed" 1;
 end
 
+function fix_perms
+    find . -type f -exec chmod 644 '{}' \;
+    find . -type d -exec chmod 775 '{}' \;
+end
+
 alias list 'du -ahd1 | sort -h'
 alias sbt 'sbt -Dsbt.supershell=false'
+# 6 GB heap
+set -gx SBT_OPTS "-Xmx6G -XX:+CMSClassUnloadingEnabled -Xss2M"
 
 ## t480 specific
 alias touchpad_on 'xinput set-prop "13" "Device Enabled" 1'
@@ -206,6 +214,9 @@ function vnc_tunnel_close
     ssh -S vnc-tunnel-socket -O exit bwrcrdsl-4.eecs.berkeley.edu
 end
 
+alias mount_exfat 'sudo mount -t exfat /dev/sdb1 /mnt/wd -o rw,uid=(id -u),gid=(id -g)'
+alias mount_vfat 'sudo mount -t vfat /dev/sdb1 /mnt/wd -o rw,uid=(id -u),gid=(id -g)'
+
 function mount_bwrc
     if mount | grep /mnt/bwrc > /dev/null;
         fusermount -u /mnt/bwrc
@@ -246,7 +257,7 @@ function unmount_eda
 end
 
 # PATH manipulation
-set -gx PATH /opt/cisco/anyconnect/bin /opt/miniconda3/bin /opt/Xilinx/Vivado/2019.1/bin /usr/local/go/bin /opt/cabal/bin ~/.scripts /opt/mathematica $PATH
+set -gx PATH /opt/miniconda3/bin /opt/Xilinx/Vivado/2019.1/bin ~/.bin /opt/mathematica $PATH
 
 #set -gx FIRESIM_STANDALONE 1
 
@@ -256,7 +267,7 @@ set -gx PATH /opt/cisco/anyconnect/bin /opt/miniconda3/bin /opt/Xilinx/Vivado/20
 set -gx RISCV /opt/riscv-2020-10-20-prebuilt
 
 set -gx PATH $RISCV/bin $PATH
-set -gx LD_LIBRARY_PATH $RISCV/lib $LD_LIBRARY_PATH
+set -gx LD_LIBRARY_PATH $RISCV/lib /usr/local/lib $LD_LIBRARY_PATH
 
 set -gx EDITOR nvim
 set -gx PATH /home/vighnesh/.local/share/coursier/bin $PATH

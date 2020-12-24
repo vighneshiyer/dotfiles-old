@@ -1,3 +1,6 @@
+- https://monadical.com/posts/moving-to-linux-desktop.html
+    - review of power optimization, dpi scaling, mouse tweaks
+
 # Base Install
 Install Ubuntu 18.04.1 LTS from a USB drive. Use Rufus to create a bootable USB from the latest 18.04 ISO image.
 
@@ -39,6 +42,23 @@ w /sys/devices/platform/i8042/serio1/sensitivity - - - - 255
 To create this tmpfile before the next reboot, run `sudo systemd-tmpfiles --prefix=/sys --create`.
 
 The udev technique doesn't seem to work with Ubuntu 18.04 on T480.
+I have a udev file with contents:
+
+```
+#SUBSYSTEM=="serio", DRIVERS=="psmouse", DEVPATH=="/sys/devices/platform/i8042/serio1/serio2", ATTR{sensitivity}="255", ATTR{speed}="97"
+
+#ACTION=="add", SUBSYSTEM=="serio", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{sensitivity}="240"
+
+ACTION=="add",
+SUBSYSTEM=="input",
+ATTR{name}=="TPPS/2 IBM TrackPoint",
+ATTR{device/sensitivity}="255"
+```
+In `/etc/udev/rules.d/trackpoint.rules`
+It causes a bunch of errors in journalctl like this:
+```
+Nov 27 15:21:07 vighnesh-ThinkPad-T480 systemd-udevd[32198]: error opening ATTR{/sys/kernel/slab/:0000016/cgroup/kmalloc-16(397375:cups.service)/device/sensitivity} for writing: No such file or directory
+```
 
 # NVIDIA Driver
 Using the GNOME drivers dialog, enable all repo sources (including closed-source stuff) and install the stable NVIDIA proprietary driver (nvidia-390). Reboot.
