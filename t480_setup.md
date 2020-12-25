@@ -28,7 +28,9 @@ Now, use the standard GNOME mouse settings dialog to push the trackpoint speed t
 
 ```
 cd /sys/devices/platform/i8042/serio1/serio2/
+cd /sys/devices/platform/i8042/serio1/driver/serio2 # for manjaro 20+
 echo 255 | sudo tee sensitivity
+echo 200 | sudo tee speed
 ```
 
 Now things are back to normal, like with Ubuntu 16.04. To make this permanent (across reboots):

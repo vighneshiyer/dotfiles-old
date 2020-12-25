@@ -1,18 +1,19 @@
-#### ASSUME THAT ALL BASH SCRIPT SOURCING IS DONE BEFORE MOVING INTO INIT FISH
 # Enable vi mode
 set -U fish_cursor_insert line
 set -U fish_cursor_replace_one underscore
 fish_vi_key_bindings
+
 # Fish theme options (bobthefish)
-set -g theme_color_scheme solarized
-set -g theme_display_user yes
-set -g theme_display_git no
-set -g theme_display_git_untracked no
-set -g theme_display_git_ahead_verbose no
-set -g theme_git_worktree_support yes
-set -g default_user root
+#set -g theme_color_scheme solarized
+#set -g theme_display_user yes
+#set -g theme_display_git no
+#set -g theme_display_git_untracked no
+#set -g theme_display_git_ahead_verbose no
+#set -g theme_git_worktree_support yes
+#set -g default_user root
 
 ### General Aliases
+alias sudo 'sudo '
 ## file utilities
 alias rm 'rm -i -r'
 alias mv 'mv -i'
@@ -40,7 +41,7 @@ alias u5 'cd ../../../../..'
 alias scd 'cd'
 
 ## bash/fish
-alias s 'omf reload'
+alias s 'source ~/.config/fish/conf.d/init.fish'
 alias rc 'vim ~/.bashrc'
 alias rca 'vim ~/.config/omf/init.fish'
 alias vi 'vim'
@@ -71,6 +72,8 @@ alias vivado 'vivado -nolog -nojournal'
 
 function tp
     xinput set-prop "TPPS/2 IBM TrackPoint" "libinput Accel Speed" 1;
+    echo 255 | sudo tee /sys/devices/platform/i8042/serio1/driver/serio2/sensitivity
+    echo 200 | sudo tee /sys/devices/platform/i8042/serio1/driver/serio2/speed
 end
 
 function fix_perms
@@ -257,7 +260,7 @@ function unmount_eda
 end
 
 # PATH manipulation
-set -gx PATH /opt/miniconda3/bin /opt/Xilinx/Vivado/2019.1/bin ~/.bin /opt/mathematica $PATH
+set -gx PATH ~/.bin $PATH
 
 #set -gx FIRESIM_STANDALONE 1
 
@@ -272,7 +275,7 @@ set -gx LD_LIBRARY_PATH $RISCV/lib /usr/local/lib $LD_LIBRARY_PATH
 set -gx EDITOR nvim
 set -gx PATH /home/vighnesh/.local/share/coursier/bin $PATH
 
-source /opt/miniconda3/etc/fish/conf.d/conda.fish
+#source /opt/miniconda3/etc/fish/conf.d/conda.fish
 
 # This function is called every time Enter is hit when in a terminal
 # The working directory is written to a tempfile, which is read by i3 if you want a new terminal with the same working directory
