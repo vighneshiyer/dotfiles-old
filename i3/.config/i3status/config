@@ -12,7 +12,7 @@ general {
 }
 
 #order += "ipv6"
-order += "path_exists VPN"
+#order += "path_exists VPN"
 order += "wireless _first_"
 order += "ethernet _first_"
 order += "disk /"
@@ -54,30 +54,30 @@ load {
 }
 
 cpu_usage {
-    format = "CPU: %usage"
+    format = "CPU %usage"
 }
 
 cpu_temperature 0 {
     format = "%degrees°"
-    path = "/sys/devices/platform/coretemp.0/hwmon/hwmon3/temp2_input"
+    path = "/sys/devices/platform/coretemp.0/hwmon/hwmon8/temp2_input"
     max_threshold = 95
 }
 
 cpu_temperature 1 {
     format = "%degrees°"
-    path = "/sys/devices/platform/coretemp.0/hwmon/hwmon3/temp3_input"
+    path = "/sys/devices/platform/coretemp.0/hwmon/hwmon8/temp3_input"
     max_threshold = 95
 }
 
 cpu_temperature 2 {
     format = "%degrees°"
-    path = "/sys/devices/platform/coretemp.0/hwmon/hwmon3/temp4_input"
+    path = "/sys/devices/platform/coretemp.0/hwmon/hwmon8/temp4_input"
     max_threshold = 95
 }
 
 cpu_temperature 3 {
     format = "%degrees°"
-    path = "/sys/devices/platform/coretemp.0/hwmon/hwmon3/temp5_input"
+    path = "/sys/devices/platform/coretemp.0/hwmon/hwmon8/temp5_input"
     max_threshold = 95
 }
 
@@ -86,10 +86,10 @@ disk "/" {
 }
 
 tztime local {
-    format = "%Y-%m-%d %H:%M"
+    format = "%Y-%m-%d %H:%M "
 }
 
-path_exists VPN {
+#path_exists VPN {
     # path exists when a VPN tunnel launched by Cisco AnyConnect VPN is active
-    path = "/proc/sys/net/ipv4/conf/cscotun0"
-}
+    #path = "/proc/sys/net/ipv4/conf/cscotun0"
+#}

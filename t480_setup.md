@@ -79,6 +79,14 @@ echo auto | sudo tee /sys/bus/pci/devices/0000:01:00.0/power/control
 
 Where the PCI device identifier of the NVIDIA card can be found with `lspci | grep 3D`. After running this, the NVIDIA card is actually powered off. Verify with `sudo powertop` which should report 7W consumption. You need to be on battery power for `powertop` to display power consumption.
 
+## Manjaro
+- I installed the PRIME properietary NVIDIA driver using the Manjaro hardware utilities
+- I also installed optimus-manager with pacman and rebooted
+    - Worked out of the box to switch to nvidia, play csgo, and back to intel
+    - However switching back to intel requires 2-3 minutes and hangs the display during that time, but it eventually worked
+- Haven't messed with power management since enabling all powertop PM settings and using the nvidia driver for PM seems OK when the laptop is plugged in, but ovbiously it doesn't disable the nvidia card entirely (nvidia-smi still works)
+    - Revisit this once I need to work on battery power again
+
 # Screen Brightness
 I had to add a file in `/etc/X11/xorg.conf` with the following:
 

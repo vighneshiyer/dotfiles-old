@@ -162,7 +162,15 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl -- set-source-mute `pacmd li
 bindsym XF86MonBrightnessUp exec xbacklight -inc 10
 bindsym XF86MonBrightnessDown exec xbacklight -dec 10
 
-exec --no-startup-id "xrandr --dpi 170"
+# Force DPI for certain programs (e.g. Vivado)
+exec_always --no-startup-id "xrandr --dpi 170"
+# Map CapsLock to Escape
+exec_always --no-startup-id "/usr/bin/xmodmap /home/vighnesh/.Xmodmap"
+# Disable screensaver
+# https://askubuntu.com/questions/763994/screen-times-out-in-i3-wm
+exec_always --no-startup-id "/usr/bin/xset s off"
+exec_always --no-startup-id "/usr/bin/xset -dpms"
+
 # When only 1 window exists in a workspace, remove the borders, add borders only when there are multiple windows
 hide_edge_borders smart
 new_window pixel 1
@@ -182,9 +190,9 @@ for_window [instance="arithmetic"] floating enable
 for_window [instance="arithmetic"] resize set 2000 1500
 for_window [instance="arithmetic"] move scratchpad
 for_window [instance="arithmetic"] border pixel 5
-exec --no-startup-id termite --name arithmetic --exec /home/vighnesh/miniconda3/bin/python
+exec --no-startup-id termite --name arithmetic --exec /usr/bin/python
 bindsym $mod+a [instance="arithmetic"] scratchpad show; [instance="arithmetic"] move position center
 
 exec --no-startup-id "feh --bg-fill ~/40-media/42-photos/03-pol/wallpapers/wallpaper5.jpg"
-bindsym $mod+Shift+Return exec termite -d $(cat /tmp/whereami)
+bindsym $mod+Shift+Return exec termite -d "$(cat /tmp/whereami)"
 bindsym $mod+Shift+p bar mode toggle

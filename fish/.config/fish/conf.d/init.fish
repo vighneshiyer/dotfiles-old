@@ -3,6 +3,8 @@ set -U fish_cursor_insert line
 set -U fish_cursor_replace_one underscore
 fish_vi_key_bindings
 
+set -U fish_greeting ""
+
 # Fish theme options (bobthefish)
 #set -g theme_color_scheme solarized
 #set -g theme_display_user yes
@@ -39,11 +41,11 @@ alias u3 'cd ../../..'
 alias u4 'cd ../../../..'
 alias u5 'cd ../../../../..'
 alias scd 'cd'
+alias dc 'cd'
 
 ## bash/fish
 alias s 'source ~/.config/fish/conf.d/init.fish'
-alias rc 'vim ~/.bashrc'
-alias rca 'vim ~/.config/omf/init.fish'
+alias rc 'vim ~/.config/fish/conf.d/init.fish'
 alias vi 'vim'
 alias vim 'nvim'
 alias c 'clear'
@@ -72,6 +74,7 @@ alias vivado 'vivado -nolog -nojournal'
 
 function tp
     xinput set-prop "TPPS/2 IBM TrackPoint" "libinput Accel Speed" 1;
+    xinput set-prop "Synaptics TM3276-022" "libinput Natural Scrolling Enabled" 1
     echo 255 | sudo tee /sys/devices/platform/i8042/serio1/driver/serio2/sensitivity
     echo 200 | sudo tee /sys/devices/platform/i8042/serio1/driver/serio2/speed
 end
@@ -83,23 +86,23 @@ end
 
 alias list 'du -ahd1 | sort -h'
 alias sbt 'sbt -Dsbt.supershell=false'
-# 6 GB heap
-set -gx SBT_OPTS "-Xmx6G -XX:+CMSClassUnloadingEnabled -Xss2M"
+# SBT_OPTS used as Makevar in Chipyard dev (1/4/2021), migrate to .sbtopts
+set -gx SBT_OPTS ""
 
 ## t480 specific
 alias touchpad_on 'xinput set-prop "13" "Device Enabled" 1'
 alias touchpad_off 'xinput set-prop "13" "Device Enabled" 0'
-alias hdmi_left 'xrandr --output eDP1 --auto --output HDMI2 --auto --primary --left-of eDP1'
-alias hdmi_right 'xrandr --output eDP1 --auto --output HDMI2 --auto --primary --right-of eDP1'
-alias hdmi_above 'xrandr --output eDP1 --auto --output HDMI2 --auto --primary --above eDP1'
-alias hdmi_dup 'xrandr --output eDP1 --auto --output HDMI2 --auto --same-as eDP1'
-alias hdmi_off 'xrandr --output HDMI2 --off'
-alias dp_left 'xrandr --output eDP1 --auto --output DP1 --auto --primary --left-of eDP1'
-alias dp_right 'xrandr --output eDP1 --auto --output DP1 --auto --primary --right-of eDP1'
-alias dp_left_scale 'xrandr --fb 6400x2400 --output eDP1 --mode 2560x1440 --pos 3840x0 --output DP1 --primary --mode 1920x1200 --pos 0x0 --scale 1.2x1.2 --filter bilinear'
-alias dp_right_scale 'xrandr --fb 5824x2400 --output eDP1 --mode 2560x1440 --pos 0x0 --output DP1 --primary --mode 1920x1200 --pos 3072x0 --scale 1.3x1.3 --filter bilinear'
-alias dp_right_scale2 'xrandr --fb 6720x4000 --output eDP1 --mode 2560x1440 --pos 0x0 --output DP1 --primary --mode 1920x1200 --pos 3840x0 --scale 1.5x1.5'
-alias dp_off 'xrandr --output DP1 --off'
+alias hdmi_left 'xrandr --output eDP-1 --auto --output HDMI-2 --auto --primary --left-of eDP-1'
+alias hdmi_right 'xrandr --output eDP-1 --auto --output HDMI-2 --auto --primary --right-of eDP-1'
+alias hdmi_above 'xrandr --output eDP-1 --auto --output HDMI-2 --auto --primary --above eDP-1'
+alias hdmi_dup 'xrandr --output eDP-1 --auto --output HDMI-2 --auto --same-as eDP-1'
+alias hdmi_off 'xrandr --output HDMI-2 --off'
+alias dp_left 'xrandr --output eDP-1 --auto --output DP-1 --auto --primary --left-of eDP-1'
+alias dp_right 'xrandr --output eDP-1 --auto --output DP-1 --auto --primary --right-of eDP-1'
+alias dp_left_scale 'xrandr --fb 6400x2400 --output eDP-1 --mode 2560x1440 --pos 3840x0 --output DP-1 --primary --mode 1920x1200 --pos 0x0 --scale 1.2x1.2 --filter bilinear'
+alias dp_right_scale 'xrandr --fb 5824x2400 --output eDP-1 --mode 2560x1440 --pos 0x0 --output DP-1 --primary --mode 1920x1200 --pos 3072x0 --scale 1.3x1.3 --filter bilinear'
+alias dp_right_scale2 'xrandr --fb 6720x4000 --output eDP-1 --mode 2560x1440 --pos 0x0 --output DP-1 --primary --mode 1920x1200 --pos 3840x0 --scale 1.5x1.5'
+alias dp_off 'xrandr --output DP-1 --off'
 alias nvidia_auto 'echo auto | sudo tee /sys/bus/pci/devices/0000:01:00.0/power/control'
 
 # For launching (usually graphical) applications that produce lots of junk printed out
@@ -260,14 +263,11 @@ function unmount_eda
 end
 
 # PATH manipulation
-set -gx PATH ~/.bin $PATH
+set -gx PATH /opt/miniconda/bin ~/.bin ~/.local/bin $PATH
 
 #set -gx FIRESIM_STANDALONE 1
 
-#set -gx RISCV /opt/riscv-esp-tools-290
-#set -gx RISCV /opt/riscv-esp-tools
-#set -gx RISCV /opt/riscv-master
-set -gx RISCV /opt/riscv-2020-10-20-prebuilt
+set -gx RISCV /opt/riscv
 
 set -gx PATH $RISCV/bin $PATH
 set -gx LD_LIBRARY_PATH $RISCV/lib /usr/local/lib $LD_LIBRARY_PATH
@@ -287,5 +287,5 @@ set -gx TERMINFO /lib/terminfo
 xset r rate 250 60
 
 # Symbiotic EDA Formal Verif Course
-set -gx PATH /home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/bin $PATH
-set -gx SYMBIOTIC_LICENSE /home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/symbiotic.lic
+#set -gx PATH /home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/bin $PATH
+#set -gx SYMBIOTIC_LICENSE /home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/symbiotic.lic
