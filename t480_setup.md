@@ -187,6 +187,28 @@ xrandr --output DP1 --filter nearest
 
 OK, so this doesn't help my situation since this is for upscaling interpolation (not for downscaling). It looks very bad when used to downscale.
 
+## External Monitor Dimming
+- Install ddcutil (pacman -S ddcutil)
+- Install i2c-tools (pacman -S i2c-tools)
+- Use 'sudo ddcutil environment' to figure out issues
+- Manually load the driver for now
+    - sudo modprobe i2c-dev
+    - Check it's loaded: lsmod | grep i2c
+- Create /etc/modules-load.d/i2c-dev.conf
+    - Should have one line with 'i2c_dev'
+    - This will load the kernel module on boot
+- Check with 'sudo ddcutil detect'
+- Avoid using root
+    - sudo groupadd --system i2c
+    - sudo usermod -G i2c -a vighnesh
+    - Then log out and back in
+- ddcutil getvcp known
+    - Lists vcps that can be modified
+    - 0x10 = brightness
+    - 0x12 = contrast
+- sudo ddcutil setvcp --model "DELL U2515HX" 0x10 30
+    - set brightness level to 30/100
+
 # Redshift
 Use `stow redshift` to place the redshift config file and a systemd user unit file in the right `~/.config` place.
 

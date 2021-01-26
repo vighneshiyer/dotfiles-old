@@ -5,17 +5,9 @@ fish_vi_key_bindings
 
 set -U fish_greeting ""
 
-# Fish theme options (bobthefish)
-#set -g theme_color_scheme solarized
-#set -g theme_display_user yes
-#set -g theme_display_git no
-#set -g theme_display_git_untracked no
-#set -g theme_display_git_ahead_verbose no
-#set -g theme_git_worktree_support yes
-#set -g default_user root
-
 ### General Aliases
 alias sudo 'sudo '
+alias dmesg 'dmesg --ctime'
 ## file utilities
 alias rm 'rm -i -r'
 alias mv 'mv -i'
@@ -44,8 +36,8 @@ alias scd 'cd'
 alias dc 'cd'
 
 ## bash/fish
-alias s 'source ~/.config/fish/conf.d/init.fish'
-alias rc 'vim ~/.config/fish/conf.d/init.fish'
+alias s 'source ~/.config/fish/config.fish'
+alias rc 'vim ~/.config/fish/config.fish'
 alias vi 'vim'
 alias vim 'nvim'
 alias c 'clear'
@@ -58,38 +50,60 @@ alias gsu 'git status -uno'
 alias gpull 'git pull'
 alias gfetch 'git fetch'
 alias gpush 'git push'
+set -gx EDITOR nvim
 
-## taskwarrior
-alias tl 'task list'
-alias t 'task'
-alias ts 'task sync'
-alias taskbackup 'cd ~/.task; and tar czf ~/sensitive-dotfiles/task_backups/task-backup-(date +'%Y%m%d').tar.gz *'
-
-## tree
-alias treea 'tree -a -I .git'
-alias newterm 'silent termite -d (pwd)'
+## For launching (usually graphical) applications that print out lots of junk
+function silent
+    nohup $argv </dev/null >/dev/null 2>&1 &
+end
 
 ## Tool Aliases
+alias newterm 'silent termite -d (pwd)'
 alias vivado 'vivado -nolog -nojournal'
-
-function tp
-    xinput set-prop "TPPS/2 IBM TrackPoint" "libinput Accel Speed" 1;
-    xinput set-prop "Synaptics TM3276-022" "libinput Natural Scrolling Enabled" 1
-    echo 255 | sudo tee /sys/devices/platform/i8042/serio1/driver/serio2/sensitivity
-    echo 200 | sudo tee /sys/devices/platform/i8042/serio1/driver/serio2/speed
-end
+alias sbt 'sbt -Dsbt.supershell=false'
+set -gx SBT_OPTS
+alias treea 'tree -a -I .git'
+alias list 'du -ahd1 | sort -h'
+alias df 'df -h'
+alias vlc 'silent vlc'
+alias pdf 'silent zathura'
+alias qpdf 'silent qpdfview'
+alias epdf 'silent evince'
+alias office 'silent libreoffice'
+abbr -a cpr rsync -ah --progress
+abbr -a yt-audio "youtube-dl -f \"bestaudio\" -o \" %(title)s.%(ext)s\" --user-agent \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\""
+abbr -a yt-video "youtube-dl -f \"bestvideo+bestaudio\" -o \" %(title)s.%(ext)s\" --user-agent \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\""
 
 function fix_perms
     find . -type f -exec chmod 644 '{}' \;
     find . -type d -exec chmod 775 '{}' \;
 end
 
-alias list 'du -ahd1 | sort -h'
-alias sbt 'sbt -Dsbt.supershell=false'
-# SBT_OPTS used as Makevar in Chipyard dev (1/4/2021), migrate to .sbtopts
-set -gx SBT_OPTS ""
+function pdfdump
+    pdftk $argv dump_data output $argv.pdfdata
+    echo \
+"BookmarkBegin
+BookmarkTitle: Example Bookmark Title
+BookmarkLevel: 1
+BookmarkPageNumber: 3"
+end
+
+function pdfupdate
+    pdftk $argv update_info $argv.pdfdata output $argv.modified
+    mv -f $argv.modified $argv
+    rm -f $argv.pdfdata
+end
 
 ## t480 specific
+set -gx TERMINFO /lib/terminfo
+xset r rate 250 60
+# Fix settings on trackpoint for ideal sensitivity, enable natural scrolling on touchpad
+function tp
+    xinput set-prop "TPPS/2 IBM TrackPoint" "libinput Accel Speed" 1;
+    xinput set-prop "Synaptics TM3276-022" "libinput Natural Scrolling Enabled" 1
+    echo 255 | sudo tee /sys/devices/platform/i8042/serio1/driver/serio2/sensitivity
+    echo 200 | sudo tee /sys/devices/platform/i8042/serio1/driver/serio2/speed
+end
 alias touchpad_on 'xinput set-prop "13" "Device Enabled" 1'
 alias touchpad_off 'xinput set-prop "13" "Device Enabled" 0'
 alias hdmi_left 'xrandr --output eDP-1 --auto --output HDMI-2 --auto --primary --left-of eDP-1'
@@ -104,48 +118,17 @@ alias dp_right_scale 'xrandr --fb 5824x2400 --output eDP-1 --mode 2560x1440 --po
 alias dp_right_scale2 'xrandr --fb 6720x4000 --output eDP-1 --mode 2560x1440 --pos 0x0 --output DP-1 --primary --mode 1920x1200 --pos 3840x0 --scale 1.5x1.5'
 alias dp_off 'xrandr --output DP-1 --off'
 alias nvidia_auto 'echo auto | sudo tee /sys/bus/pci/devices/0000:01:00.0/power/control'
+function ext_brightness
+    sudo ddcutil setvcp --model "DELL U2515HX" 0x10 $argv
+end
 
-# For launching (usually graphical) applications that produce lots of junk printed out
-function silent
-    nohup $argv </dev/null >/dev/null 2>&1 &
-end
-alias vlc 'silent vlc'
-alias pdf 'silent zathura'
-alias qpdf 'silent qpdfview'
-alias epdf 'silent evince'
-function pdfdump
-    pdftk $argv dump_data output $argv.pdfdata
-    echo \
-"BookmarkBegin
-BookmarkTitle: Example Bookmark Title
-BookmarkLevel: 1
-BookmarkPageNumber: 3"
-end
-function pdfupdate
-    pdftk $argv update_info $argv.pdfdata output $argv.modified
-    mv -f $argv.modified $argv
-    rm -f $argv.pdfdata
-end
-alias office 'silent libreoffice'
-abbr -a cpr rsync -ah --progress
-abbr -a yt-audio "youtube-dl -f \"bestaudio\" -o \" %(title)s.%(ext)s\" --user-agent \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\""
-abbr -a yt-video "youtube-dl -f \"bestvideo+bestaudio\" -o \" %(title)s.%(ext)s\" --user-agent \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\""
-
-### VNC
+## VNC
 function vnc
     vncserver -geometry 2560x1440 2>&1 | grep ^New | awk '{print \$6;}' | tee .vivnc2 | awk -F: '{print \$1\":\"5900+\$2\" `whoami`@\"\$1}' > .vivnc2
 end
 alias vncnum 'ps -fu `whoami` | grep -i vnc | head -n1 | awk '"'"'{print $9;}'"'"
 alias vnckill "cat ~/.vivnc2 | xargs vncserver -kill"
 alias bwrcvnc 'ssh -L 5901:`ssh vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu "cat ~/.vivnc2"`'
-
-## VNC resolution adjustment
-#alias fixcols 'shopt -s checkwinsize'
-#alias big 'xrandr -s 1920x1200; fixcols'
-#alias vbig 'xrandr -s 2560x1440; fixcols'
-#alias s1080 'xrandr -s 1920x1080; fixcols'
-#alias s1024 'xrandr -s 1024x768; fixcols'
-#alias small 'xrandr -s 1280x800; fixcols'
 
 ## SSH Aliases
 alias ssh_ramnode 'ssh -i ~/.ssh/ramnode_id_rsa vighnesh@23.226.231.82'
@@ -168,17 +151,9 @@ alias noemail "set -gx LSB_JOB_REPORT_MAIL n"
 alias yesemail "set -gx LSB_JOB_REPORT_MAIL y"
 
 ## Directory Aliases
-alias hurricane_zc706='cd /tools/projects/vighneshiyer/hurricane-zc706/zc706'
-alias hurricane_fesvr='cd /tools/projects/vighneshiyer/hurricane-fesvr'
-alias hurricane_riscv_tests='cd /tools/projects/vighneshiyer/hurricane-riscv-tests/xhbwif'
-alias splash_tests='cd /tools/projects/vighneshiyer/splash2-testing'
-alias hurricane_testing='cd /tools/projects/vighneshiyer/hurricane-testing-host'
-alias 151='cd /home/vighnesh/10-school/12-secondary/19-eecs151'
-alias 240='cd /home/vighnesh/10-school/13-graduate/06-ee240c'
 alias records='silent libreoffice /home/vighnesh/90-notes/personal/Records.ods'
 alias log='silent libreoffice /home/vighnesh/90-notes/maxxing/Log.ods'
-alias systolic='cd /home/vighnesh/20-research/23-projects/05-systolic'
-alias 290='cd /home/vighnesh/10-school/13-graduate/08-ee290c-ml'
+alias tl 'pdf /home/vighnesh/30-references/31-engineering/specs/tilelink-spec-1.8.0.pdf'
 
 # Hurricane ZC706 Aliases (converted from hurricane-zc706 repo to fish compatiable version)
 alias power_on_241 'curl -u admin:bwrc "http://192.168.192.230/outlet.cgi?outlet=2&command=1" > /dev/null'
@@ -263,18 +238,24 @@ function unmount_eda
 end
 
 # PATH manipulation
-set -gx PATH /opt/miniconda/bin ~/.bin ~/.local/bin $PATH
+set -gx RISCV /opt/riscv-1.4
+set -gx LD_LIBRARY_PATH \
+    $RISCV/lib \
+    /usr/local/lib
+set -gx PATH \
+    $RISCV/bin \
+    #/opt/miniconda/bin \
+    /home/vighnesh/.bin \
+    /home/vighnesh/.local/bin \
+    /usr/local/sbin \
+    /usr/local/bin \
+    /usr/bin \
+    /usr/bin/site_perl \
+    /usr/bin/vendor_perl \
+    /usr/bin/core_perl \
+    #/home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/bin
 
-#set -gx FIRESIM_STANDALONE 1
-
-set -gx RISCV /opt/riscv
-
-set -gx PATH $RISCV/bin $PATH
-set -gx LD_LIBRARY_PATH $RISCV/lib /usr/local/lib $LD_LIBRARY_PATH
-
-set -gx EDITOR nvim
-set -gx PATH /home/vighnesh/.local/share/coursier/bin $PATH
-
+#set -gx SYMBIOTIC_LICENSE /home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/symbiotic.lic
 #source /opt/miniconda3/etc/fish/conf.d/conda.fish
 
 # This function is called every time Enter is hit when in a terminal
@@ -282,10 +263,3 @@ set -gx PATH /home/vighnesh/.local/share/coursier/bin $PATH
 function dostuff --on-event fish_prompt
     pwd > /tmp/whereami
 end
-
-set -gx TERMINFO /lib/terminfo
-xset r rate 250 60
-
-# Symbiotic EDA Formal Verif Course
-#set -gx PATH /home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/bin $PATH
-#set -gx SYMBIOTIC_LICENSE /home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/symbiotic.lic

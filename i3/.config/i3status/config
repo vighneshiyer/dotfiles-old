@@ -14,8 +14,8 @@ general {
 #order += "ipv6"
 #order += "path_exists VPN"
 order += "wireless _first_"
-order += "ethernet _first_"
-order += "disk /"
+#order += "ethernet _first_"
+#order += "disk /"
 order += "volume master"
 order += "cpu_usage"
 order += "cpu_temperature 0"
@@ -46,6 +46,7 @@ volume master {
 
 battery all {
     format = "%status %percentage %remaining"
+    integer_battery_capacity = true
     hide_seconds = true
 }
 
@@ -86,7 +87,7 @@ disk "/" {
 }
 
 tztime local {
-    format = "%Y-%m-%d %H:%M "
+    format = "%a %m/%d %H:%M "
 }
 
 #path_exists VPN {

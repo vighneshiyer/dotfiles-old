@@ -26,9 +26,11 @@ function fish_prompt
   set -l repository_color (set_color $fish_color_cwd 2> /dev/null; or set_color green)
 
   if test $last_command_status -eq 0
-    echo -n -s $success_color $fish $normal_color
+    #echo -n -s $success_color $fish $normal_color
+    echo -n -s $normal_color
   else
-    echo -n -s $error_color $fish $normal_color
+    #echo -n -s $error_color $fish $normal_color
+    echo -n -s $error_color [$last_command_status] $normal_color " "
   end
 
   if not pwd | grep "mnt" > /dev/null; and git_is_repo; and not pwd | grep -q "chipyard"; and not pwd | grep -q "firesim"
@@ -38,7 +40,7 @@ function fish_prompt
       set cwd (echo $PWD | sed -e "s|$parent_root_folder/||")
     end
 
-    echo -n -s " " $directory_color $cwd $normal_color
+    echo -n -s "" $directory_color $cwd $normal_color
     echo -n -s " on " $repository_color (git_branch_name) $normal_color " "
 
     if git_is_touched
@@ -47,7 +49,7 @@ function fish_prompt
       echo -n -s (git_ahead $ahead $behind $diverged $none)
     end
   else
-    echo -n -s " " $directory_color $cwd $normal_color
+    echo -n -s "" $directory_color $cwd $normal_color
   end
 
   echo -n -s " "
