@@ -7,6 +7,10 @@ set -U fish_greeting ""
 
 ### General Aliases
 alias sudo 'sudo '
+function sudo!!
+    echo sudo $history[1]
+    eval sudo $history[1]
+end
 alias dmesg 'dmesg --ctime'
 ## file utilities
 alias rm 'rm -i -r'
