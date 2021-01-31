@@ -109,8 +109,8 @@ xset r rate 250 60
 function tp
     xinput set-prop "TPPS/2 IBM TrackPoint" "libinput Accel Speed" 1;
     xinput set-prop "Synaptics TM3276-022" "libinput Natural Scrolling Enabled" 1
-    echo 255 | sudo tee /sys/devices/platform/i8042/serio1/driver/serio2/sensitivity
-    echo 200 | sudo tee /sys/devices/platform/i8042/serio1/driver/serio2/speed
+    echo 255 | sudo tee /sys/devices/platform/i8042/serio1/driver/serio3/sensitivity
+    echo 200 | sudo tee /sys/devices/platform/i8042/serio1/driver/serio3/speed
 end
 alias touchpad_on 'xinput set-prop "13" "Device Enabled" 1'
 alias touchpad_off 'xinput set-prop "13" "Device Enabled" 0'
