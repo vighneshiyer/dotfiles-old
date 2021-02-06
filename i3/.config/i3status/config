@@ -49,6 +49,7 @@ battery all {
     integer_battery_capacity = true
     hide_seconds = true
 }
+# get status: upower -i /org/freedesktop/UPower/devices/battery_BAT1 | grep "state:" | tr -s ' ' | cut -d ' ' -f 3
 
 load {
     format = "%1min"

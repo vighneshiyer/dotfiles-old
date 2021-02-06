@@ -14,12 +14,12 @@ def new_name(old_name):
 if os.path.isfile(arg):
     new = new_name(arg)
     if new != arg:
-        print("Fixing {} -> {}".format(arg, new))
+        print("Fixing\n{}\n{}".format(arg, new))
         os.rename(arg, new)
 if os.path.isdir(arg):
     files = [f for f in os.listdir(arg) if os.path.isfile(os.path.join(arg, f))]
     for f in files:
         new = new_name(f)
         if new != f:
-            print("Fixing {} -> {}".format(f, new))
+            print("Fixing\n{}\n{}".format(f, new))
             os.rename(f, new)
