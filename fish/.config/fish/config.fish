@@ -69,6 +69,10 @@ set -gx SBT_OPTS
 alias treea 'tree -a -I .git'
 alias list 'du -ahd1 | sort -h'
 alias df 'df -h'
+alias free 'free -mh'
+function ff
+    find . -type f -iname "*$argv*"
+end
 alias vlc 'silent vlc'
 alias pdf 'silent zathura'
 alias qpdf 'silent qpdfview'

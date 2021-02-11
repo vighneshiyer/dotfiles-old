@@ -156,6 +156,7 @@ autocmd BufRead,BufNewFile *.vh set syntax=verilog
 autocmd BufRead,BufNewFile Makefrag set syntax=make
 autocmd BufRead,BufNewFile SConscript set syntax=python
 autocmd BufRead,BufNewFile SConstruct set syntax=python
+autocmd BufRead,BufNewFile *.lib set syntax=text
 
 " folding
 set foldmethod=syntax
