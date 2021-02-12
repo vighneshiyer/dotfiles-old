@@ -82,8 +82,8 @@ abbr -a cpr rsync -ah --progress
 abbr -a yt-audio "youtube-dl -f \"bestaudio\" -o \" %(title)s.%(ext)s\" --user-agent \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\""
 abbr -a yt-video "youtube-dl -f \"bestvideo+bestaudio\" -o \" %(title)s.%(ext)s\" --user-agent \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\""
 function borgstatus
-    echo (ls -lt *.log | head -n 1 | cut -d ' ' -f 11)
-    grep 'status, ' (ls -lt *.log | head -n 1 | cut -d ' ' -f 11)
+    echo (ls -lt *.log | head -n 1 | rev | cut -d ' ' -f 1 | rev)
+    grep 'status, ' (ls -lt *.log | head -n 1 | rev | cut -d ' ' -f 1 | rev)
 end
 
 function fix_perms
