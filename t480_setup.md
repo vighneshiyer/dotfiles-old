@@ -1,3 +1,6 @@
+- https://monadical.com/posts/moving-to-linux-desktop.html
+    - review of power optimization, dpi scaling, mouse tweaks
+
 # Base Install
 Install Ubuntu 18.04.1 LTS from a USB drive. Use Rufus to create a bootable USB from the latest 18.04 ISO image.
 
@@ -25,7 +28,9 @@ Now, use the standard GNOME mouse settings dialog to push the trackpoint speed t
 
 ```
 cd /sys/devices/platform/i8042/serio1/serio2/
+cd /sys/devices/platform/i8042/serio1/driver/serio2 # for manjaro 20+
 echo 255 | sudo tee sensitivity
+echo 200 | sudo tee speed
 ```
 
 Now things are back to normal, like with Ubuntu 16.04. To make this permanent (across reboots):
@@ -39,6 +44,23 @@ w /sys/devices/platform/i8042/serio1/sensitivity - - - - 255
 To create this tmpfile before the next reboot, run `sudo systemd-tmpfiles --prefix=/sys --create`.
 
 The udev technique doesn't seem to work with Ubuntu 18.04 on T480.
+I have a udev file with contents:
+
+```
+#SUBSYSTEM=="serio", DRIVERS=="psmouse", DEVPATH=="/sys/devices/platform/i8042/serio1/serio2", ATTR{sensitivity}="255", ATTR{speed}="97"
+
+#ACTION=="add", SUBSYSTEM=="serio", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{sensitivity}="240"
+
+ACTION=="add",
+SUBSYSTEM=="input",
+ATTR{name}=="TPPS/2 IBM TrackPoint",
+ATTR{device/sensitivity}="255"
+```
+In `/etc/udev/rules.d/trackpoint.rules`
+It causes a bunch of errors in journalctl like this:
+```
+Nov 27 15:21:07 vighnesh-ThinkPad-T480 systemd-udevd[32198]: error opening ATTR{/sys/kernel/slab/:0000016/cgroup/kmalloc-16(397375:cups.service)/device/sensitivity} for writing: No such file or directory
+```
 
 # NVIDIA Driver
 Using the GNOME drivers dialog, enable all repo sources (including closed-source stuff) and install the stable NVIDIA proprietary driver (nvidia-390). Reboot.
@@ -56,6 +78,14 @@ echo auto | sudo tee /sys/bus/pci/devices/0000:01:00.0/power/control
 ```
 
 Where the PCI device identifier of the NVIDIA card can be found with `lspci | grep 3D`. After running this, the NVIDIA card is actually powered off. Verify with `sudo powertop` which should report 7W consumption. You need to be on battery power for `powertop` to display power consumption.
+
+## Manjaro
+- I installed the PRIME properietary NVIDIA driver using the Manjaro hardware utilities
+- I also installed optimus-manager with pacman and rebooted
+    - Worked out of the box to switch to nvidia, play csgo, and back to intel
+    - However switching back to intel requires 2-3 minutes and hangs the display during that time, but it eventually worked
+- Haven't messed with power management since enabling all powertop PM settings and using the nvidia driver for PM seems OK when the laptop is plugged in, but ovbiously it doesn't disable the nvidia card entirely (nvidia-smi still works)
+    - Revisit this once I need to work on battery power again
 
 # Screen Brightness
 I had to add a file in `/etc/X11/xorg.conf` with the following:
@@ -156,6 +186,28 @@ xrandr --output DP1 --filter nearest
 ```
 
 OK, so this doesn't help my situation since this is for upscaling interpolation (not for downscaling). It looks very bad when used to downscale.
+
+## External Monitor Dimming
+- Install ddcutil (pacman -S ddcutil)
+- Install i2c-tools (pacman -S i2c-tools)
+- Use 'sudo ddcutil environment' to figure out issues
+- Manually load the driver for now
+    - sudo modprobe i2c-dev
+    - Check it's loaded: lsmod | grep i2c
+- Create /etc/modules-load.d/i2c-dev.conf
+    - Should have one line with 'i2c_dev'
+    - This will load the kernel module on boot
+- Check with 'sudo ddcutil detect'
+- Avoid using root
+    - sudo groupadd --system i2c
+    - sudo usermod -G i2c -a vighnesh
+    - Then log out and back in
+- ddcutil getvcp known
+    - Lists vcps that can be modified
+    - 0x10 = brightness
+    - 0x12 = contrast
+- sudo ddcutil setvcp --model "DELL U2515HX" 0x10 30
+    - set brightness level to 30/100
 
 # Redshift
 Use `stow redshift` to place the redshift config file and a systemd user unit file in the right `~/.config` place.
