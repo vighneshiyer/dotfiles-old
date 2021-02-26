@@ -54,3 +54,19 @@ alias ssh_dp690='ssh dp690-12.eecs.berkeley.edu -l vighnesh.iyer -Y'
 # Internet utilities
 alias myip='curl ipinfo.io/ip'
 alias speedtest='curl -s  https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -'
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/users/vighnesh.iyer/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/users/vighnesh.iyer/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/users/vighnesh.iyer/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/users/vighnesh.iyer/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+

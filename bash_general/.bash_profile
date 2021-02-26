@@ -1,6 +1,6 @@
 source ~/.bashrc
-if [ "$HOSTNAME" == "bwrcrdsl-2.EECS.Berkeley.EDU" ]; then
-    exec fish
-else
-    printf 'not on bwrcrdsl-2, using bash\n'
-fi
+#if [[ $- == *i* ]]; then
+    #exec fish
+#else
+    #printf 'not interactive, using bash'
+#fi

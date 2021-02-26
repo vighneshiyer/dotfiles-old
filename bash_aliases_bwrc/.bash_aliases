@@ -1,3 +1,11 @@
+#### Prompt
+PS1="{\u@\h:\w}\n\t $ "
+
+#### Envvars
+export TERM=xterm-color
+export FTP_PASSIVE_MODE=yes
+export LSB_JOB_REPORT_MAIL=n    # Turn LSF emails off
+
 #### Sourcing bash scripts
 
 # Source LSF envvars and commands
@@ -7,40 +15,38 @@ source /tools/support/lsf/conf/profile.lsf
 source /tools/flexlm/flexlm.sh
 
 # Source hurricane-zc706 specific aliases
-source /tools/projects/vighneshiyer/hurricane-zc706/sourceme.sh
-
-#### Prompt
-PS1="{\u@\h:\w}\n\t $ "
-
-#### Envvars
-export TERM=xterm-color
-export FTP_PASSIVE_MODE=yes
-export LSB_JOB_REPORT_MAIL=n    # Turn LSF emails off
+#source /tools/projects/vighneshiyer/hurricane-zc706/sourceme.sh
 
 #### PATH
-# Vivado Build Tools
-export PATH=$PATH:/tools/xilinx/Vivado/2016.4/Vivado/2016.4/bin
-
-# Vivado SDK (hw_server)
-export PATH=$PATH:/tools/xilinx/Vivado/2016.4/SDK/2016.4/bin
-
 # Xilinx ARM toolchain
-export PATH=$PATH:/tools/xilinx/SDK/2016.2/gnu/arm/lin/bin
+#export PATH=$PATH:/tools/xilinx/SDK/2016.2/gnu/arm/lin/bin
 
 # Riscv toolchain for hurricane-riscv-tests
-export RISCV=/tools/designs/hurricane/riscv-tools-5/install
-export PATH=$PATH:$RISCV/bin
+#export RISCV=/tools/designs/hurricane/riscv-tools-5/install
+#export RISCV=/tools/projects/colins/eagleX/install
+#export PATH=$PATH:$RISCV/bin
 
 # Anaconda3 (Python3 and utilities)
-export PATH=/users/vighnesh.iyer/anaconda3/bin:$PATH
+#export PATH=/users/vighnesh.iyer/anaconda3/bin:$PATH
 
 # Linuxbrew (local package manager)
-export PATH="$HOME/.linuxbrew/bin:$PATH"
-export MANPATH="$HOME/.linuxbrew/share/man:$MANPATH"
-export INFOPATH="$HOME/.linuxbrew/share/info:$INFOPATH"
+#export PATH="$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin:$PATH"
+#export PATH="$HOME/.bin:$PATH"
+#export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/.linuxbrew"
+#export MANPATH="$HOME/.linuxbrew/share/man:$MANPATH"
+#export INFOPATH="$HOME/.linuxbrew/share/info:$INFOPATH"
+
+# Custom Python3 for hammer
+#export PATH="/tools/projects/hammer/python3-bin/:$PATH"
+#export PATH="/users/vighnesh.iyer/miniconda3/bin:$PATH"
+
+# EAGLE-X tapeout
+#export HAMMER_HOME="/tools/B/vighneshiyer/eagle-chip/vlsi/hammer"
+#source /tools/B/vighneshiyer/eagle-chip/vlsi/hammer/sourceme.sh
+#cd /tools/B/vighneshiyer/eagle-chip && source sourceme.sh
+#export PATH=$PATH:/tools/projects/colins/dtc/dtc-1.4.4
 
 #### BWRC Aliases
-
 ### VNC launching and resolution
 alias vnc="vncserver -geometry 2560x1440 |& grep ^New | awk '{print \$6;}' | tee .vivnc2 | awk -F: '{print \$1\":\"5900+\$2\" `whoami`@\"\$1}' > .vivnc2"
 alias bwrcvnc='ssh -L 5901:`ssh vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu "cat ~/.vivnc2"`'
@@ -74,7 +80,7 @@ if hash bsub 2>/dev/null; then
     alias bf='bpeek -f'
     alias bfe='bpeek -f | grep --color --line-buffered -E '"'"'^Error.*'"'"
     alias bfw='bpeek -f | grep --color --line-buffered -E '"'"'^Error.*|^Warning.*'"'"
-    alias virtuoso='bsub -Is virtuoso &'
+    alias bvirtuoso='bsub -Is virtuoso &'
     alias bdve='bsub -Is dve -full64 -vpd vcdplus.vpd &'
     alias tmaxgui='bsub -Is tmax &'
     alias iccgui='bsub -Is icc_shell -64bit -gui'
@@ -92,38 +98,10 @@ else
     alias tmaxgui='tmax &'
 fi
 
-# Vivado specific aliases
-# Open a hw_server instance and tunnel it to the host machine
-# Call with 'launch_hw_server &'
-function launch_hw_server {
-    # SSH to the lab machine, while in the lab machine:
-        # Kill any old hw_server instances
-        # Start hw_server on default port (3121)
-        # Kill any old SSH tunneling sessions to dev machine (bwrcrdsl-2)
-        # Start a new SSH tunneling session to dev machine
-killall hw_server
-ssh vighnesh.iyer@dp690-12.eecs.berkeley.edu << 'ENDSSH'
-source ~/.bashrc
-killall hw_server
-hw_server &
-ssh -S hw-server-socket -O exit bwrcrdsl-2
-ssh -f -N -M -S hw-server-socket -R 3121:localhost:3121 bwrcrdsl-2 &
-exit
-ENDSSH
-}
-
-function kill_hw_server {
-killall hw_server
-ssh vighnesh.iyer@dp690-12.eecs.berkeley.edu << 'ENDSSH'
-source ~/.bashrc
-killall hw_server
-ssh -S hw-server-socket -O exit bwrcrdsl-2
-ENDSSH
-}
-
 # Working folder aliases
 alias hurricane_zc706='cd /tools/projects/vighneshiyer/hurricane-zc706/zc706'
 alias hurricane_fesvr='cd /tools/projects/vighneshiyer/hurricane-fesvr'
 alias hurricane_riscv_tests='cd /tools/projects/vighneshiyer/hurricane-riscv-tests/xhbwif'
 alias splash_tests='cd /tools/projects/vighneshiyer/splash2-testing'
 alias hurricane_testing='cd /tools/projects/vighneshiyer/hurricane-testing-host'
+alias eagle='cd /tools/B/vighneshiyer/eagle-chip'

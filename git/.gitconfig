@@ -3,3 +3,6 @@
 	email = vighnesh.iyer@berkeley.edu
 [core]
 	autocrlf = input
+	askPass = 
+[credential]
+	helper = cache --timeout=604800
