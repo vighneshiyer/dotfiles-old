@@ -193,7 +193,7 @@ for_window [instance="arithmetic"] border pixel 5
 exec --no-startup-id termite --name arithmetic --exec /usr/bin/python
 bindsym $mod+a [instance="arithmetic"] scratchpad show; [instance="arithmetic"] move position center
 
-exec --no-startup-id "feh --bg-fill ~/40-media/42-photos/03-pol/wallpapers/wallpaper5.jpg"
+exec --no-startup-id "feh --bg-fill ~/40-media/42-photos/03-pol/wallpapers/wallpaper4.jpg"
 bindsym $mod+Shift+Return exec termite -d "$(cat /tmp/whereami)"
 bindsym $mod+Shift+p bar mode toggle
 exec --no-startup-id /usr/bin/dunst

@@ -209,6 +209,18 @@ OK, so this doesn't help my situation since this is for upscaling interpolation 
 - sudo ddcutil setvcp --model "DELL U2515HX" 0x10 30
     - set brightness level to 30/100
 
+- Creating a group i2c and adding myself to it didn't fix the permissions on the i2c devices... (this only works on Debian/Ubuntu)
+- Instead add a file to /etc/udev/rules.d with the following:
+```
+SUBSYSTEM=="i2c-dev",KERNEL=="i2c-[0-9]*", MODE="0666"
+```
+Run
+```
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+```
+to apply the new permissions without rebooting.
+
 # Redshift
 Use `stow redshift` to place the redshift config file and a systemd user unit file in the right `~/.config` place.
 
@@ -216,3 +228,22 @@ Use `stow redshift` to place the redshift config file and a systemd user unit fi
 systemctl --user start redshift # to start
 systemctl --user enable redshift # to enable autostart on boot
 ```
+
+# Colors
+- https://wiki.archlinux.org/index.php/Color_output_in_console
+- Uncomment the Color line in `/etc/pacman.conf`
+
+# Bluetooth
+- `bluetoothctl`
+    - scan
+    - paired-devices
+    - connect
+
+# VPN
+- For the 'new' Berkeley VPN (GlobalProtect, Cisco has been decomsissioned)
+- The 'official' GlobalProtect client from PaloAltoNetworks is garbage
+- Instead `yay globalprotect-openconnect`
+- Run `gpclient`
+- Use `vpn.berkeley.edu`
+- Enter credentials and 2FA as usual in the popup browser
+- Connected, ignore the error message
