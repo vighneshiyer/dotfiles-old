@@ -1,5 +1,5 @@
 #### Prompt
-PS1="{\u@\h:\w}\n\t $ "
+export PS1="\[$(tput bold)\]\[\033[38;5;82m\][\h\[$(tput sgr0)\] \[$(tput sgr0)\]\[$(tput bold)\]\[\033[38;5;9m\]\w\[$(tput sgr0)\]\[\033[38;5;82m\]]\\$\[$(tput sgr0)\] \[$(tput sgr0)\]"
 
 #### Envvars
 export TERM=xterm-color
@@ -45,29 +45,6 @@ source /tools/flexlm/flexlm.sh
 #source /tools/B/vighneshiyer/eagle-chip/vlsi/hammer/sourceme.sh
 #cd /tools/B/vighneshiyer/eagle-chip && source sourceme.sh
 #export PATH=$PATH:/tools/projects/colins/dtc/dtc-1.4.4
-
-#### BWRC Aliases
-### VNC launching and resolution
-alias vnc="vncserver -geometry 2560x1440 |& grep ^New | awk '{print \$6;}' | tee .vivnc2 | awk -F: '{print \$1\":\"5900+\$2\" `whoami`@\"\$1}' > .vivnc2"
-alias bwrcvnc='ssh -L 5901:`ssh vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu "cat ~/.vivnc2"`'
-
-alias vnckill="cat ~/.vivnc2 | xargs vncserver -kill"
-alias fixcols='shopt -s checkwinsize'
-alias big='xrandr -s 1920x1200; fixcols'
-alias vbig='xrandr -s 2560x1440; fixcols'
-alias s1080='xrandr -s 1920x1080; fixcols'
-alias s1024='xrandr -s 1024x768; fixcols'
-alias small='xrandr -s 1280x800; fixcols'
-# this needs VNC scaling of 75%
-alias retina='xrandr -s 1920x1200; fixcols'
-alias vncnum='ps -fu `whoami` | grep -i vnc | head -n1 | awk '"'"'{print $9;}'"'"
-
-alias grepe='grep --color -E '"'"'^|Error.*'"'"
-alias rmcolor='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"'
-
-# ssh aliases
-alias ssh_241='ssh root@192.168.192.241'
-alias ssh_240='ssh root@192.168.192.240'
 
 # LSF aliases
 if hash bsub 2>/dev/null; then
