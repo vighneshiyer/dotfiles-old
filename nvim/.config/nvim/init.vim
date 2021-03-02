@@ -10,6 +10,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'lervag/vimtex'
 Plug 'plasticboy/vim-markdown'
 Plug 'junegunn/goyo.vim'
+Plug 'mkitt/tabline.vim'
 "Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install', 'for': ['vim', ], 'branch': 'release'}
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'bohlender/vim-smt2'
@@ -143,6 +144,19 @@ nmap <Leader>h <C-w>h
 nmap <Leader>j <C-w>j
 nmap <Leader>k <C-w>k
 nmap <Leader>l <C-w>l
+nmap <Leader>c <C-w>c
+
+"" tab switching
+nmap <Leader>1 1gt
+nmap <Leader>2 2gt
+nmap <Leader>3 3gt
+nmap <Leader>4 4gt
+nmap <Leader>5 5gt
+nmap <Leader>6 6gt
+nmap <Leader>7 7gt
+nmap <Leader>8 8gt
+nmap <Leader>9 9gt
+nmap <Leader>0 10gt
 
 nnoremap <Leader>o :CtrlP<CR>
 nnoremap <Leader>b :CtrlPBuffer<CR>
