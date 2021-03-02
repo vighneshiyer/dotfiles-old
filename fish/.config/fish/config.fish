@@ -95,6 +95,14 @@ function fix_perms
     find . -type d -exec chmod 775 '{}' \;
 end
 
+function rename
+    set tmp (mktemp)
+    echo $argv > $tmp
+    vim $tmp
+    mv $argv (cat $tmp | head -n 1)
+    rm -f $tmp
+end
+
 function pdfdump
     pdftk $argv dump_data output $argv.pdfdata
     echo \
