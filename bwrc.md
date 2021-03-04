@@ -2,6 +2,8 @@
 - https://github.com/Linuxbrew/brew/wiki/CentOS6
 - https://stackoverflow.com/questions/36651091/how-to-install-packages-in-linux-centos-without-root-user-with-automatic-depen
 
+## Login and Compute Servers
+
 ## VPN
 - ssh tunnel alternative
 - use globalprotect client on OSX or Windows
@@ -85,89 +87,243 @@ bsub -Is "make CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS=\"-DCMAKE_INSTALL_PREF
 make install
 ```
 
-- Let's manually build glibc 2.14
-    - IMPORTANT: remove miniconda and devtoolset from your .bashrc, you need the system build tools to build glibc 2.14 (without tool versions being too new)
-    - Reference: https://unix.stackexchange.com/questions/176489/how-to-update-glibc-to-2-14-in-centos-6-5
-- Download tarball: http://ftp.gnu.org/gnu/glibc/
-- In tmux session, run
-```bash
-mkdir ~/glibc_214
-wget <> && tar -xzvf <> && cd glibc-2.14
-mkdir build
-cd build && ../configure --prefix=/users/vighnesh.iyer/glibc_214
-bsub -Is "make -j4"
-make install
-```
-
-This will mostly succeed, but will fail at the end with the following message:
-```
-test ! -x /users/vighnesh.iyer/sources/glibc-2.14/build/elf/ldconfig || LC_ALL=C LANGUAGE=C \
-          /users/vighnesh.iyer/sources/glibc-2.14/build/elf/ldconfig  \
-                                       /users/vighnesh.iyer/glibc_214/lib /users/vighnesh.iyer/glibc_214/lib
-/users/vighnesh.iyer/sources/glibc-2.14/build/elf/ldconfig: Can't open configuration file /users/vighnesh.iyer/glibc_214/etc/ld.so.conf: No such file or directory
-make[1]: Leaving directory `/users/vighnesh.iyer/sources/glibc-2.14'
-```
-To fix:
-```
-cp /etc/ld.so.conf ~/glibc_214/etc/.
-cp -r /etc/ld.so.conf.d ~/glibc_214/etc/.
-```
-Rerun `make install`.
 
 Done, now
 
-## JDK
-conda install -c conda-jdk
-
 ## Chipyard on BWRC
+### Basic Setup
 - Run the steps from the Chipyard docs as usual to set up the repo
-```bash
-git clone git@github.com:ucb-bar/chipyard
-cd chipyard
-./scripts/init-submodules-no-riscv-tools.sh
-```
-   - this will take a while, 20-30 minutes
+    ```bash
+    cd /tools/B/<your username>
+    git clone git@github.com:ucb-bar/chipyard
+    cd chipyard
+    ./scripts/init-submodules-no-riscv-tools.sh
+    ```
+        - this will take a while, 20-30 minutes
 
-- Install verilator (Chipyard requires version 4.034 as of Chipyard 1.4)
-   - From source (this probably doesn't work out of the box on BWRC machines, due to flex/bison versions)
-   ```bash
-   mkdir ~/verilator
-   git clone http://git.veripool.org/git/verilator
-   cd verilator
-   git checkout v4.034
-   autoconf && ./configure && bsub -Is "make" && sudo make install
-   ```
-   - From package (recommended)
-   ```bash
-   conda install -c conda-forge verilator
-   verilator --version
-   Verilator 4.034 2020-05-03 rev UNKNOWN_REV (mod)
-   ```
+### Install Verilator
+- Chipyard requires Verilator version 4.034 (as of Chipyard 1.4), build from source
+    1. Modify your `.bashrc` to use a specific version of bison and the regular devtoolset-8 (don't add any other stuff to PATH/LD_LIBRARY_PATH):
+        ```bash
+        source /opt/rh/devtoolset-8/enable
+        export PATH="/users/vighnesh.iyer/bison-3.4:$PATH"
+        ```
 
-- Set $RISCV to a precompiled tool location (in .bashrc)
-```bash
-export RISCV=/tools/B/abejgonza/installs
-export PATH=$RISCV/bin:$PATH
-```
-   - Check that the tools are in your path
-   ```bash
-   riscv64-unknown-elf-gcc -v
-   ...
-   gcc version 7.2.0 (GCC)
-   ```
+   2. Then build:
+      ```bash
+      mkdir ~/verilator-4.034
+      git clone http://git.veripool.org/git/verilator
+      cd verilator
+      git checkout v4.034
+      autoconf
+      ./configure --prefix=$(HOME)/verilator-4.034
+      bsub -Is "make"
+      make install
+      cd ~/verilator-4.034 && verilator --version
+      Verilator 4.034 2020-05-03 rev v4.034
+      ```
 
-- Build FIRRTL
-```bash
-cd chipyard/sims/verilator
-bsub -Is "make"
-```
+   3. Finally put verilator on your PATH:
+      ```bash
+      export PATH="$HOME/verilator-4.034/bin:$PATH"
+      ```
+
+### Install RISCV toolchain
+
+#### Quick
+
+#### Full Details
+   1. Download and unpack the prebuilt tools
+      ```bash
+      mkdir ~/riscv-1.4
+      wget https://github.com/ucb-bar/chipyard-toolchain-prebuilt/archive/chipyard-1.4-bump.zip
+      unzip chipyard-toolchain-prebuilt-chipyard-1.4-bump.zip
+      cd chipyard-toolchain-prebuilt-chipyard-1.4-bump
+      make DESTDIR=$HOME/riscv-1.4 install
+      ```
+
+      If you try running the tools as-is, you will get dynamic loading errors:
+      ```bash
+      ~/riscv-1.4/bin/riscv64-unknown-elf-gcc
+      ./riscv64-unknown-elf-gcc: /lib64/libc.so.6: version GLIBC_2.14 not found (required by ./riscv64-unknown-elf-gcc)
+      ```
+
+      We need to patch these binaries with a custom dynamic loader and associated libc.
+
+   2. Analyze dynamic dependencies
+      ```bash
+      cd ~/riscv-1.4/bin && ldd *
+      cd ~/riscv-1.4/libexec/gcc/riscv64-unknown-elf/9.2.0 && ldd *
+      cd ~/riscv-1.4/riscv64-unknown-elf/bin && ldd *
+      ```
+
+      Note the dependencies of each binary. Here is a list of all the dependencies we care about.
+      - libc.so.6 => /lib64/libc.so.6
+      - libm.so.6 => /lib64/libm.so.6
+      - libdl.so.2 => /lib64/libdl.so.2
+      - libz.so.1 => /lib64/libz.so.1
+      - libmpc.so.3 => not found
+      - libmpfr.so.4 => not found
+      - libgmp.so.10 => not found
+      - /lib64/ld-linux-x86-64.so.2 (program interpreter)
+
+      - for gdb specifically: (not going to bother fixing)
+         - libpython2.7.so.1.0 => not found
+         - liblzma.so.5 => not found
+         - libncursesw.so.5 => /lib64/libncursesw.so.5 (0x0000003ee4a00000)
+         - libtinfo.so.5 => /lib64/libtinfo.so.5 (0x0000003eee600000)
+         - libexpat.so.1 => /lib64/libexpat.so.1 (0x0000003ee2200000)
+
+   3. Evaluate our plan
+      - These binaries depend on:
+         - GNU libc with version GLIBC 2.14+ (libc, libm, libdl)
+         - libmpc, libmpfr, and libgmp (multiprecision arithmetic libraries)
+         - libz (zlib compression/decompression)
+      - Our plan is to gather all these libraries' shared objects in our home directory and use `patchelf` to direct the precompiled RISC-V toolchain binaries to use our custom loader, glibc, and other .so's
+
+   4. Build glibc
+      - **IMPORTANT**: remove any changes to your $PATH (e.g. adding devtoolset-8, bison); you need the **system** build tools to build glibc 2.14
+      - Reference: https://unix.stackexchange.com/questions/176489/how-to-update-glibc-to-2-14-in-centos-6-5
+      ```bash
+      mkdir ~/glibc-2.14
+      wget http://ftp.gnu.org/gnu/glibc/glibc-2.14.tar.gz
+      tar -xzvf glibc-2.14.tar.gz
+      cd glibc-2.14
+      mkdir build && cd build
+      ../configure --prefix=/users/vighnesh.iyer/glibc-2.14
+      bsub -Is "make -j4"
+      make install
+      ```
+      - This will mostly succeed, but will fail at the end with the following message:
+      ```text
+      /users/vighnesh.iyer/sources/glibc-2.14/build/elf/ldconfig: Can't open configuration file /users/vighnesh.iyer/glibc_214/etc/ld.so.conf: No such file or directory
+      make[1]: Leaving directory /users/vighnesh.iyer/sources/glibc-2.14
+      ```
+      - To fix:
+      ```bash
+      cp /etc/ld.so.conf ~/glibc_214/etc/.
+      cp -r /etc/ld.so.conf.d ~/glibc_214/etc/.
+      ```
+      - Rerun `make install`
+
+   5. Install other dependencies
+      - Reference https://stackoverflow.com/questions/36651091/how-to-install-packages-in-linux-centos-without-root-user-with-automatic-depen
+      - To avoid building from source, download RPMs (CentOS 7) of the required dependencies (use https://pkgs.org/) and extract them
+      ```bash
+      mkdir ~/sources/rpm && cd ~/sources/rpm
+      wget http://mirror.centos.org/centos/7/os/x86_64/Packages/gmp-6.0.0-15.el7.x86_64.rpm
+      rpm2cpio gmp-6.0.0-15.el7.x86_64.rpm | cpio -id
+      wget http://mirror.centos.org/centos/7/os/x86_64/Packages/libmpc-1.0.1-3.el7.x86_64.rpm
+      rpm2cpio libmpc-1.0.1-3.el7.x86_64.rpm | cpio -id
+      wget http://mirror.centos.org/centos/7/os/x86_64/Packages/mpfr-3.1.1-4.el7.x86_64.rpm
+      rpm2cpio mpfr-3.1.1-4.el7.x86_64.rpm | cpio -id
+      http://mirror.centos.org/centos/7/os/x86_64/Packages/zlib-1.2.7-18.el7.x86_64.rpm
+      rpm2cpio zlib-1.2.7-18.el7.x86_64.rpm | cpio -id
+
+      cp -r ~/sources/rpm/usr/lib64/* ~/glibc-2.14/lib/.
+      ```
+
+   6. Patch binaries
+      - Readd devtoolset-8 to your $PATH
+      - Install patchelf
+         ```bash
+         mkdir ~/patchelf-0.12
+         git clone git@github.com:NixOS/patchelf.git
+         git checkout 0.12
+         ./bootstrap.sh
+         ./configure --prefix=/users/vighnesh.iyer/patchelf-0.12
+         make
+         make check
+         make install
+         ```
+         - add patchelf to your $PATH
+      - Run `find . -type f -executable -exec patchelf --set-interpreter ~/glibc-2.14/lib/ld-linux-x86-64.so.2 --set-rpath ~/glibc-2.14/lib/ {} \;` in
+         - `riscv-1.4/bin`
+         - `riscv-1.4/libexec/gcc/riscv64-unknown-elf/9.2.0`
+         - `riscv-1.4/riscv64-unknown-elf/bin`
+         - Some errors are expected (patchelf: unsupported overlap of SHT_NOTE and PT_NOTE), all the important binaries have been patched regardless (gdb won't work yet)
+
+   7. Set $RISCV and $PATH
+      ```bash
+      export RISCV="$HOME/riscv-1.4"
+      export PATH="$RISCV/bin:$PATH"
+      ```
+
+   8. Build DTC (device tree compiler)
+      ```bash
+      cd ~/ && wget https://git.kernel.org/pub/scm/utils/dtc/dtc.git/snapshot/dtc-1.6.0.tar.gz
+      tar -xzvf dtc-1.6.0.tar.gz
+      cd dtc-1.6.0
+      make
+      make install
+      mv ~/bin ~/dtc-1.6.0
+      ```
+      Put dtc-1.6.0 on your $PATH
+      ```bash
+      export PATH="$HOME/dtc-1.6.0:$PATH"
+      ```
+
+   9. Build auxiluary programs (spike+fesvr, pk, riscv-tests)
+      - Spike (RISC-V ISA simulator) + Fesvr (host interaction library)
+      ```bash
+      cd /tools/B/vighnesh.iyer/chipyard/toolchains/riscv-tools/riscv-isa-sim
+      git submodule update --init --recursive . # clone only the riscv-isa-sim submodule (requires git in /users/vighnesh.iyer/miniconda3/bin/git)
+      mkdir build
+      cd build
+      ../configure --prefix=$RISCV
+      make
+      make install
+      ```
+
+      - pk (proxy kernel)
+      ```bash
+      cd .../chipyard/toolchains/riscv-tools/riscv-pk
+      git submodule update --init --recursive .
+      mkdir build
+      cd build
+      ../configure --prefix=$RISCV --host=riscv64-unknown-elf
+      make
+      make install
+      ```
+
+      - riscv-tests (RISCV ISA microtests and benchmarks)
+      ```bash
+      cd .../chipyard/toolchains/riscv-tools/riscv-tests
+      git submodule update --init --recursive .
+      autoconf
+      ./configure --prefix=$RISCV/target
+      make
+      make install
+      ```
+
+      - Test out the tools
+      ```bash
+      $ which spike
+      /users/vighnesh.iyer/riscv-1.4/bin/spike
+
+      $ spike -l ~/riscv-1.4/target/share/riscv-tests/isa/rv64ui-p-add
+      ...
+      $ echo $?
+      0
+
+      $ spike ~/riscv-1.4/target/share/riscv-tests/benchmarks/dhrystone.riscv
+      Microseconds for one run through Dhrystone: 392
+      Dhrystones per Second:                      2550
+      mcycle = 196024
+      minstret = 196029
+      ```
+
+### Build FIRRTL
+   ```bash
+   cd chipyard/sims/verilator
+   bsub -Is "make"
+   ```
    - You will likely get an error that looks like this:
    ```text
-   protoc-jar: executing: [/tmp/protocjar10293879504066272150/bin/protoc.exe, -I/tools/B/vighneshiyer/chipyard-1.4/tools/firrtl/src/main/proto, -I/tools/B/vighneshiyer/chipyard-1.4/tools/firrtl/target/protobuf_external, --java_out=/tools/B/vighneshiyer/chipyard-1.4/tools/firrtl/target/scala-2.12/src_managed/main/compiled_protobuf, /tools/B/vighneshiyer/chipyard-1.4/tools/firrtl/src/main/proto/firrtl.proto]
    /tmp/protocjar10293879504066272150/bin/protoc.exe: /lib64/libc.so.6: version `GLIBC_2.14' not found (required by /tmp/protocjar10293879504066272150/bin/protoc.exe)
    [error] java.lang.RuntimeException: protoc returned exit code: 1
    ```
-   - The BWRC machines run RHEL 6 which comes with glibc 2.12, but the protobuf compiler dependency of FIRRTL requires glibc 2.14
+   - https://github.com/ucb-bar/chipyard/pull/774/files
    - To hack around this, add this to your .bashrc
    ```bash
    export LD_LIBRARY_PATH=/tools/projects/johnwright/install/hack/lib:$LD_LIBRARY_PATH
@@ -175,16 +331,7 @@ bsub -Is "make"
       - John built glibc 2.14 from source and created a lib directory that only symlinks `libc-2.14.1.so, libc.a, libc.so, libc.so.6`
       - I have an equivalent directory in `/tools/B/vighnesh.iyer/glibc_214_export/lib`
    - Rerun `make` and try again; the process should finish with a verilator simulator
-   - Remove the `LD_LIBRARY_PATH` glibc export from your .bashrc 
-
-conda verilator failed build - build verilator from source
-```text
-/home/conda/feedstock_root/build_artifacts/verilator_1588864401395/_build_env/bin/x86_64-conda_cos6-linux-gnu-c++ -fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /users/vighnesh.iyer/miniconda3/include -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /users/vighnesh.iyer/miniconda3/include -I.  -MMD -I/users/vighnesh.iyer/miniconda3/share/verilator/include -I/users/vighnesh.iyer/miniconda3/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TRACE=0 -faligned-new -Wno-bool-operation -Wno-sign-compare -Wno-uninitialized -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-shadow     -fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /users/vighnesh.iyer/miniconda3/include -O3 -std=c++11 -I/tools/B/abejgonza/installs/include -I/tools/B/vighneshiyer/chipyard-1.4/tools/DRAMSim2 -I/tools/B/vighneshiyer/chipyard-1.4/sims/verilator/generated-src/chipyard.TestHarness.RocketConfig    -D__STDC_FORMAT_MACROS -DTEST_HARNESS=VTestHarness -DVERILATOR -include /tools/B/vighneshiyer/chipyard-1.4/sims/verilator/generated-src/chipyard.TestHarness.RocketConfig/chipyard.TestHarness.RocketConfig.plusArgs -include /tools/B/vighneshiyer/chipyard-1.4/sims/verilator/generated-src/chipyard.TestHarness.RocketConfig/verilator.h -include /tools/B/vighneshiyer/chipyard-1.4/sims/verilator/generated-src/chipyard.TestHarness.RocketConfig/chipyard.TestHarness.RocketConfig/VTestHarness.h  -DVL_THREADED -std=gnu++14  -c -o SimDRAM.o /tools/B/vighneshiyer/chipyard-1.4/sims/verilator/generated-src/chipyard.TestHarness.RocketConfig/SimDRAM.cc
-make[1]: /home/conda/feedstock_root/build_artifacts/verilator_1588864401395/_build_env/bin/x86_64-conda_cos6-linux-gnu-c++: No such file or directory
-make[1]: *** [VTestHarness.mk:72: SimDRAM.o] Error 127
-make[1]: Leaving directory '/tools/B/vighneshiyer/chipyard-1.4/sims/verilator/generated-src/chipyard.TestHarness.RocketConfig/chipyard.TestHarness.RocketConfig'
-make: *** [Makefile:198: /tools/B/vighneshiyer/chipyard-1.4/sims/verilator/simulator-chipyard-RocketConfig] Error 2
-```
+   - Remove the `LD_LIBRARY_PATH` glibc export from your .bashrc
 
 ## Intro Message
 ```
@@ -258,3 +405,54 @@ Access - servers and other resources:
 Thank you,
 BWRC Sysadmins.
 ```
+
+# Archive
+
+## Trying to build GMP, MPC, MPFR from source
+- Add devtoolset-8 to your $PATH for the following steps
+    - Reference: https://stackoverflow.com/questions/9450394/how-to-install-gcc-piece-by-piece-with-gmp-mpfr-mpc-elf-without-shared-libra
+    - This was a bad idea since gcc has these libraries themselves as a dependency which makes the build tricky
+    - In the end, building MPC didn't work due to linker errors
+
+- Building GMP
+   ```bash
+   wget https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz
+   tar -xvf gmp-6.2.1.tar.xz
+   cd gmp-6.2.1
+   ./configure --prefix=/users/vighnesh.iyer/glibc-2.14
+   bsub -Is "make"
+   make install
+   ```
+
+- Building MPFR
+   ```bash
+   wget https://www.mpfr.org/mpfr-current/mpfr-4.1.0.tar.gz
+   tar -xzvf mpfr-4.1.0.tar.gz
+   cd mpfr-4.1.0
+   ./configure --prefix=/users/vighnesh.iyer/glibc-2.14 --with-gmp-build=/users/vighnesh.iyer/source/gmp-6.2.1
+   bsub -Is "make"
+   make install
+   cd ~/glibc-2.14/lib
+   ln -s libmpfr.so libmpfr.so.4
+   ```
+
+- Building MPC
+   ```bash
+   wget https://ftp.gnu.org/gnu/mpc/mpc-1.2.1.tar.gz
+   tar -xzvf mpc-1.2.1.tar.gz
+   cd mpc-1.2.1
+   ./configure --prefix=/users/vighnesh.iyer/glibc-2.14 --with-gmp=/users/vighnesh.iyer/glibc-2.14 --with-mpfr=/users/vighnesh.iyer/glibc-2.14
+   configure: error: in /users/vighnesh.iyer/sources/mpc-1.2.1
+   configure: error: C compiler cannot create executables
+   ```
+   ```text
+   # config.log
+
+   configure:3766: checking whether the C compiler works
+   configure:3788: gcc -O2 -pedantic -fomit-frame-pointer -m64 -mtune=skylake -march=broadwell -I/users/vighnesh.iyer/glibc-2.14/include -I/users/vighnesh.iyer/glibc-2.14/include  -    L/users/vighnesh.iyer/glibc-2.14/lib -L/users/vighnesh.iyer/glibc-2.14/lib  conftest.c  >&5
+   /opt/rh/devtoolset-8/root/usr/libexec/gcc/x86_64-redhat-linux/8/ld: cannot find /users/vighnesh.iyer/glibc_214/lib/libc.so.6
+   /opt/rh/devtoolset-8/root/usr/libexec/gcc/x86_64-redhat-linux/8/ld: cannot find /users/vighnesh.iyer/glibc_214/lib/libc_nonshared.a
+   /opt/rh/devtoolset-8/root/usr/libexec/gcc/x86_64-redhat-linux/8/ld: cannot find /users/vighnesh.iyer/glibc_214/lib/ld-linux-x86-64.so.2
+   collect2: error: ld returned 1 exit status
+   ```
+   - this failed and I have no way to fix it without rebuilding gcc with the custom glibc, don't bother with this method
