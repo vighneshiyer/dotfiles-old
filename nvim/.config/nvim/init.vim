@@ -14,6 +14,7 @@ Plug 'mkitt/tabline.vim'
 "Plug 'neoclide/coc.nvim', {'tag': '*', 'do': 'yarn install', 'for': ['vim', ], 'branch': 'release'}
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'bohlender/vim-smt2'
+Plug 'easymotion/vim-easymotion'
 autocmd FileType markdown let b:coc_suggest_disable = 1
 autocmd FileType tex let b:coc_suggest_disable = 1
 
