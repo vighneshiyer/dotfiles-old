@@ -352,3 +352,19 @@ export PATH="$RISCV/bin:$PATH"
    $ make run-binary-fast-hex BINARY=~/riscv-1.4/target/share/riscv-tests/isa/rv64ui-p-add
    $ make run-binary-fast-hex BINARY=~/riscv-1.4/target/share/riscv-tests/benchmarks/dhrystone.riscv
    ```
+
+### Setup HAMMER for VLSI Flow (tsmc28)
+   Clone the VLSI repos.
+   ```bash
+   ./scripts/init-vlsi.sh
+   cd vlsi
+   git clone git@bwrcrepo.eecs.berkeley.edu:tstech28/hammer-tstech28-plugin
+   ```
+
+   Set up the environment and design yaml files.
+
+   Use the SRAM compiler USE_SRAM_COMPILER.
+
+   ```bash
+   bsub -Is "make buildfile ENV_YML=\"bwrc-env.yml\" INPUT_CONFS=\"bwrc-tstech28-tools.yml tstech28.yml tstech28-design.yml\" tech_name=tstech28 USE_SRAM_COMPILER=1"
+   ```

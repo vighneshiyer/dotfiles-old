@@ -156,6 +156,7 @@ alias bwrcvnc 'ssh -L 5901:`ssh vighnesh.iyer@bwrcrdsl-2.eecs.berkeley.edu "cat 
 alias bwrctunnel 'sshuttle -vvvv -r cs199-ban@eda-1.eecs.berkeley.edu 0/0 -x eda-1.eecs.berkeley.edu'
 
 ## SSH Aliases
+#alias ssh_intovps='ssh 184.75.242.173 -l www -p 33322 -i ~/Documents/sync/WEBSITES/Servers_Credentials/IntoVPS/SSH/id_www'
 alias ssh_ramnode 'ssh -i ~/.ssh/ramnode_id_rsa vighnesh@23.226.231.82'
 alias ssh_hpse 'ssh hpse-11.eecs.berkeley.edu -l cs199-ban -Y'
 alias ssh_eda 'ssh eda-1.eecs.berkeley.edu -l cs199-ban -Y'
