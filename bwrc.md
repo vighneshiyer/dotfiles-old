@@ -361,10 +361,181 @@ export PATH="$RISCV/bin:$PATH"
    git clone git@bwrcrepo.eecs.berkeley.edu:tstech28/hammer-tstech28-plugin
    ```
 
-   Set up the environment and design yaml files.
+   If you get permission errors when cloning, make sure you are added to the [ucb-bar](https://github.com/ucb-bar) Github group.
+   If you have Github 2FA enabled, you will need to [create a personal access token](https://github.com/settings/tokens) to clone private repos via https.
 
-   Use the SRAM compiler USE_SRAM_COMPILER.
+   Create the following configuration files in `chipyard/vlsi`:
 
+   1. `bwrc-env.yml` (CAD tool install locations, license servers, LSF configuration)
+      ```yaml
+         mentor.mentor_home: "/tools/mentor"
+         mentor.MGLS_LICENSE_FILE: "1717@bwrcflex-1.eecs.berkeley.edu:1717@bwrcflex-2.eecs.berkeley.edu"
+         cadence.cadence_home: "/tools/cadence"
+         cadence.CDS_LIC_FILE: "5280@bwrcflex-1.eecs.berkeley.edu:5280@bwrcflex-2.eecs.berkeley.edu"
+         synopsys.synopsys_home: "/tools/synopsys"
+         synopsys.SNPSLMD_LICENSE_FILE: "1701@bwrcflex-1.eecs.berkeley.edu:1701@bwrcflex-2.eecs.berkeley.edu"
+         synopsys.MGLS_LICENSE_FILE: "1717@bwrcflex-1.eecs.berkeley.edu:1717@bwrcflex-2.eecs.berkeley.edu"
+
+         #submit command (use LSF)
+         vlsi.submit:
+             command: "lsf"
+             settings: [{"lsf": {
+                 "bsub_binary": "/tools/support/lsf/9.1/linux2.6-glibc2.3-x86_64/bin/bsub",
+                 "num_cpus": 8,
+                 "queue": "bora",
+                 "extra_args": ["-R", "span[hosts=1]"]
+                 }
+             }]
+             settings_meta: "append"
+         vlsi.core.max_threads: 8
+      ```
+
+   2. `tstech28-tools.yml` (HAMMER plugin locations, CAD tool selections, CAD tool versions)
+      ```yaml
+         # Genus options
+         vlsi.core.synthesis_tool: "genus"
+         vlsi.core.synthesis_tool_path: ["hammer-cadence-plugins/synthesis"]
+         vlsi.core.synthesis_tool_path_meta: "append"
+         #synthesis.genus.version: "1813"
+         synthesis.genus.version: "171" # this version must match Joules version
+
+         # Innovus options
+         vlsi.core.par_tool: "innovus"
+         vlsi.core.par_tool_path: ["hammer-cadence-plugins/par"]
+         vlsi.core.par_tool_path_meta: "append"
+         par.innovus.version: "191_ISR3"
+         par.innovus.design_flow_effort: "standard"
+         par.inputs.gds_merge: true
+
+         # Calibre options
+         vlsi.core.drc_tool: "calibre"
+         vlsi.core.drc_tool_path: ["hammer-mentor-plugins/drc"]
+         vlsi.core.lvs_tool: "calibre"
+         vlsi.core.lvs_tool_path: ["hammer-mentor-plugins/lvs"]
+
+         # Voltus options
+         vlsi.core.power_tool: "voltus"
+         vlsi.core.power_tool_path: ["hammer-cadence-plugins/power"]
+         vlsi.core.power_tool_path_meta: "append"
+
+         # VCS options
+         vlsi.core.sim_tool: "vcs"
+         vlsi.core.sim_tool_path: ["hammer-synopsys-plugins/sim"]
+         sim.vcs.version: "P-2019.06-SP2-5"
+      ```
+
+   3. `tstech28.yml` (technology)
+       ```yaml
+         # Technology Setup
+         vlsi.core.technology: tstech28
+         vlsi.core.technology_path: ["hammer-tstech28-plugin"]
+         vlsi.core.technology_path_meta: append
+         vlsi.core.node: 28
+         technology.tstech28.install_dir: "/tools/tstech28"
+
+         # SRAM Compiler compiler options
+         vlsi.core.sram_generator_tool: "sram_compiler"
+         # You should specify a location for the SRAM generator in the tech plugin
+         vlsi.core.sram_generator_tool_path: ["hammer-tstech28-plugin"]
+         vlsi.core.sram_generator_tool_path_meta: "append"
+
+         # Generate Make include to aid in flow
+         vlsi.core.build_system: make
+       ```
+
+   4. `design.yml` (Design specific concerns - constraints, power pins, pin placement)
+      ```yaml
+          #supplies, and corners in tech plugin
+         vlsi.inputs.supplies.power: [
+           {name: "VDD", pin: "VDD"},
+           {name: "VPP", pin: "VPP", tie: "VDD"}
+         ]
+         vlsi.inputs.supplies.ground: [
+           {name: "VSS", pin: "VSS"},
+           {name: "VBB", pin: "VBB", tie: "VSS"}
+         ]
+
+         vlsi.inputs.default_output_load: 0.05
+
+         vlsi.inputs.delays: [
+           {name: "*", clock: "clock", delay: "0.2", direction: "input"}
+         ]
+
+         # Hammer will auto-generate a CPF for simple power designs; see hammer/src/hammer-vlsi/defaults.yml for more info
+         vlsi.inputs.power_spec_mode: "auto"
+         vlsi.inputs.power_spec_type: "cpf"
+
+         # Specify clock signals
+         vlsi.inputs.clocks: [
+           {name: "clock", period: "5ns", uncertainty: "0.1ns"}
+         ]
+
+         synthesis.clock_gating_mode: empty
+
+         # Power Straps
+         par.power_straps_mode: generate
+         par.generate_power_straps_method: by_tracks
+         par.blockage_spacing: 2.0
+         # par.blockage_spacing_top_layer: "m4"
+         par.generate_power_straps_options:
+           by_tracks:
+             strap_layers:
+               - m3
+               - m4
+               - m5
+               - m6
+                 #- m7
+                 #- m8
+                 #   # pin_layers:
+               - m8
+             track_width: 1
+             track_width_m5: 2
+             track_width_m6: 4
+             track_spacing: 0
+             track_spacing_M3: 2
+             track_spacing_M4: 2
+             track_start: 10
+             power_utilization: 0.2
+             power_utilization_M5: 0.1
+             power_utilization_M7: 0.8
+             power_utilization_M8: 0.9
+
+         # Placement Constraints
+         par.innovus.floorplan_mode: "auto"
+         vlsi.inputs.placement_constraints:
+           - path: "ChipTop"
+             type: toplevel
+             x: 0
+             y: 0
+             width: 300
+             height: 300
+             margins:
+               left: 0
+               right: 0
+               top: 0
+               bottom: 0
+
+         # Pin placement constraints
+         vlsi.inputs.pin_mode: generated
+         vlsi.inputs.pin.generate_mode: semi_auto
+         vlsi.inputs.pin.assignments: [
+           {pins: "*", layers: ["m3", "m5"], side: "bottom"}
+         ]
+      ```
+
+   Source the HAMMER environment.
    ```bash
-   bsub -Is "make buildfile ENV_YML=\"bwrc-env.yml\" INPUT_CONFS=\"bwrc-tstech28-tools.yml tstech28.yml tstech28-design.yml\" tech_name=tstech28 USE_SRAM_COMPILER=1"
+      cd vlsi/hammer && source sourceme.sh
    ```
+
+   Create the HAMMER Makefile fragment (which builds a Chipyard SoC in `generated-src`, sets up the SRAM compiler, and generates a Makefile fragment in `build/chipyard.TestHarness.RocketConfig-ChipTop/hammer.d`).
+   ```bash
+   bsub -Is "make buildfile ENV_YML=\"bwrc-env.yml\" INPUT_CONFS=\"tstech28-tools.yml tstech28.yml design.yml\" tech_name=tstech28 USE_SRAM_COMPILER=1"
+   ```
+
+   Build an RTL simulator and run a binary.
+   ```bash
+      bsub -Is "make sim-rtl ENV_YML=\"bwrc-env.yml\" INPUT_CONFS=\"tstech28-tools.yml tstech28.yml design.yml\" tech_name=tstech28 USE_SRAM_COMPILER=1 BINARY=/users/vighnesh.iyer/riscv-1.4/target/share/riscv-tests/benchmarks/dhrystone.riscv"
+   ```
+
+   Use the `redo-sim-rtl` target to rerun simulation with a different `BINARY`.

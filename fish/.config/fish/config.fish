@@ -279,6 +279,7 @@ set -gx PATH \
     /usr/bin/site_perl \
     /usr/bin/vendor_perl \
     /usr/bin/core_perl \
+    $HOME/.local/share/coursier/bin \
     #/home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/bin
 
 #set -gx SYMBIOTIC_LICENSE /home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/symbiotic.lic

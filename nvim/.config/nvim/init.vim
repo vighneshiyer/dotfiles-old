@@ -172,6 +172,7 @@ autocmd BufRead,BufNewFile Makefrag set syntax=make
 autocmd BufRead,BufNewFile SConscript set syntax=python
 autocmd BufRead,BufNewFile SConstruct set syntax=python
 autocmd BufRead,BufNewFile *.lib set syntax=text
+autocmd BufRead,BufNewFile *.sbt,*.sc set filetype=scala
 
 " folding
 set foldmethod=syntax
