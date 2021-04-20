@@ -535,7 +535,7 @@ export PATH="$RISCV/bin:$PATH"
 
    Build an RTL simulator and run a binary.
    ```bash
-      bsub -Is "make sim-rtl ENV_YML=\"bwrc-env.yml\" INPUT_CONFS=\"tstech28-tools.yml tstech28.yml design.yml\" tech_name=tstech28 USE_SRAM_COMPILER=1 BINARY=/users/vighnesh.iyer/riscv-1.4/target/share/riscv-tests/benchmarks/dhrystone.riscv"
+   bsub -Is "make sim-rtl ENV_YML=\"bwrc-env.yml\" INPUT_CONFS=\"tstech28-tools.yml tstech28.yml design.yml\" tech_name=tstech28 USE_SRAM_COMPILER=1 BINARY=/users/vighnesh.iyer/riscv-1.4/target/share/riscv-tests/benchmarks/dhrystone.riscv"
    ```
 
    Use the `redo-sim-rtl` target to rerun simulation with a different `BINARY`.
