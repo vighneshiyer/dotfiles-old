@@ -34,7 +34,7 @@ alias ll 'exa -lF'
 alias la 'exa -a'
 alias lla 'exa -laF'
 alias las 'exa -laF'
-set -gx LS_COLORS 'rs=0:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:di=01;34:ln=01;36:ex=01;32:*.bak=37:*.cache=37:*.dist=37:*.lock=37:*.log=37:*.old=37:*.orig=37:*.temp=37:*.tmp=37:*.swp=37:*.o=37:*.d=37:*.aux=37:*.bbl=37:*.blg=37:*.lof=37:*.lot=37:*.toc=37:*.class=37:*.pyc=37:*.jpg=31:*.jpeg=31:*.JPG=31:*.png=31:*.PNG=31:*.bmp=31:*.gif=31:*.jfif=31:*.tif=31:*.tiff=31:*.svg=31:*.webp=31:*.dng=31:*.mp4=31:*.mpg=31:*.mpeg=31:*.mkv=31:*.webm=31:*.mov=31:*.MTS=31:*.mp3=31:*.flac=31:*.ogg=31:*.wav=31:*.opus=31:*.oga=31:*.m4a=31:*.wmv=31:*.txt=33:*.doc=33:*.xls=33:*.xlsx=33:*.docx=33:*.ppt=33:*.pptx=33:*.odt=33:*.ods=33:*.md=33:*.adoc=33:*.pdf=33:*.epub=33:*.djvu=33:*.json=33:*.yaml=33:*.yml=33:*.c=32:*.cpp=32:*.cc=32:*.scala=32:*.rs=32:*.py=32:*.go=32:*.tex=32:*.js=32:*.html=32:*.sbt=01;04;32:*Makefrag=01;04;32:*Makefile=01;04;32:*.mk=01;04;32:*.sc=01;04;32:*README=01;04;32:*README.md=01;04;32:*.properties=01;04;32:*Cargo.toml=01;04;32:*.iso=35:*.deb=35:*.jar=35:*.a=35:*.so=35:*.7z=35:*.gz=35:*.bz=35:*.bz2=35:*.lzma=35:*.rar=35:*.zip=35:*.rpm=35:*.tar=35:*.xml=35:'
+set -gx LS_COLORS 'rs=0:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:di=01;34:ln=01;36:ex=01;32:*.bak=37:*.cache=37:*.dist=37:*.lock=37:*.log=37:*.old=37:*.orig=37:*.temp=37:*.tmp=37:*.swp=37:*.o=37:*.d=37:*.aux=37:*.bbl=37:*.blg=37:*.lof=37:*.lot=37:*.toc=37:*.class=37:*.pyc=37:*.jpg=38;5;167:*.jpeg=38;5;167:*.JPG=38;5;167:*.png=38;5;167:*.PNG=38;5;167:*.bmp=38;5;167:*.gif=38;5;167:*.jfif=38;5;167:*.tif=38;5;167:*.tiff=38;5;167:*.svg=38;5;167:*.webp=38;5;167:*.dng=38;5;167:*.mp4=38;5;167:*.mpg=38;5;167:*.mpeg=38;5;167:*.mkv=38;5;167:*.webm=38;5;167:*.mov=38;5;167:*.MTS=38;5;167:*.mp3=38;5;167:*.flac=38;5;167:*.ogg=38;5;167:*.wav=38;5;167:*.opus=38;5;167:*.oga=38;5;167:*.m4a=38;5;167:*.wmv=38;5;167:*.txt=33:*.doc=33:*.xls=33:*.xlsx=33:*.docx=33:*.ppt=33:*.pptx=33:*.odt=33:*.ods=33:*.md=33:*.adoc=33:*.pdf=33:*.epub=33:*.djvu=33:*.json=33:*.yaml=33:*.yml=33:*.csv=33:*.c=32:*.cpp=32:*.cc=32:*.scala=32:*.rs=32:*.py=32:*.go=32:*.tex=32:*.js=32:*.html=32:*.sbt=01;04;32:*Makefrag=01;04;32:*Makefile=01;04;32:*.mk=01;04;32:*.sc=01;04;32:*README=01;04;32:*README.md=01;04;32:*.properties=01;04;32:*Cargo.toml=01;04;32:*.iso=35:*.deb=35:*.jar=35:*.a=35:*.so=35:*.7z=35:*.gz=35:*.bz=35:*.bz2=35:*.lzma=35:*.rar=35:*.zip=35:*.rpm=35:*.tar=35:*.xml=35:'
 
 ## cd
 alias .. 'cd ..'
@@ -75,6 +75,7 @@ end
 ## Tool Aliases
 alias diff 'diff --color=auto'
 alias grep 'grep --color=auto'
+alias lsblk 'lsblk -f'
 alias newterm 'silent termite -d (pwd)'
 alias vivado 'vivado -nolog -nojournal'
 alias sbt 'sbt -Dsbt.supershell=false'
@@ -96,8 +97,8 @@ abbr -a rsync_remote rsync -chavzP --stats user@remote:~/path
 abbr -a yt-audio "youtube-dl -f \"bestaudio\" -o \" %(title)s.%(ext)s\" --user-agent \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\""
 abbr -a yt-video "youtube-dl -f \"bestvideo+bestaudio\" -o \" %(title)s.%(ext)s\" --user-agent \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\""
 function borgstatus
-    echo (ls -lt *.log | head -n 1 | rev | cut -d ' ' -f 1 | rev)
-    grep 'status, ' (ls -lt *.log | head -n 1 | rev | cut -d ' ' -f 1 | rev)
+    echo (/usr/bin/ls -lt *.log | head -n 1 | rev | cut -d ' ' -f 1 | rev)
+    grep 'status, ' (/usr/bin/ls -lt *.log | head -n 1 | rev | cut -d ' ' -f 1 | rev)
 end
 
 function fix_perms
@@ -231,8 +232,8 @@ function vnc_tunnel_close
     ssh -S vnc-tunnel-socket -O exit bwrcrdsl-4.eecs.berkeley.edu
 end
 
-alias mount_exfat 'sudo mount -t exfat /dev/sdb1 /mnt/wd -o rw,uid=(id -u),gid=(id -g)'
-alias mount_vfat 'sudo mount -t vfat /dev/sdb1 /mnt/wd -o rw,uid=(id -u),gid=(id -g)'
+alias mount_exfat 'sudo mount -t exfat /dev/sdb1 /mnt/usb -o rw,uid=(id -u),gid=(id -g)'
+alias mount_vfat 'sudo mount -t vfat /dev/sdb1 /mnt/usb -o rw,uid=(id -u),gid=(id -g)'
 
 function mount_bwrc
     if mount | grep /mnt/bwrc > /dev/null;

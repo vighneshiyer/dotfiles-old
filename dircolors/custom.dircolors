@@ -91,38 +91,38 @@ EXEC 01;32 # execute permission: (green bold)
 
 # Media files (red)
 ## images
-.jpg   31
-.jpeg  31
-.JPG   31
-.png   31
-.PNG   31
-.bmp   31
-.gif   31
-.jfif  31
-.tif   31
-.tiff  31
-.svg   31
-.webp  31
-.dng   31
+.jpg   38;5;167
+.jpeg  38;5;167
+.JPG   38;5;167
+.png   38;5;167
+.PNG   38;5;167
+.bmp   38;5;167
+.gif   38;5;167
+.jfif  38;5;167
+.tif   38;5;167
+.tiff  38;5;167
+.svg   38;5;167
+.webp  38;5;167
+.dng   38;5;167
 
 ## videos
-.mp4   31
-.mpg   31
-.mpeg  31
-.mkv   31
-.webm  31
-.mov   31
-.MTS   31
+.mp4   38;5;167
+.mpg   38;5;167
+.mpeg  38;5;167
+.mkv   38;5;167
+.webm  38;5;167
+.mov   38;5;167
+.MTS   38;5;167
 
 ## music
-.mp3   31
-.flac  31
-.ogg   31
-.wav   31
-.opus  31
-.oga   31
-.m4a   31
-.wmv   31
+.mp3   38;5;167
+.flac  38;5;167
+.ogg   38;5;167
+.wav   38;5;167
+.opus  38;5;167
+.oga   38;5;167
+.m4a   38;5;167
+.wmv   38;5;167
 
 # Documents (yellow)
 .txt   33
@@ -142,6 +142,7 @@ EXEC 01;32 # execute permission: (green bold)
 .json  33
 .yaml  33
 .yml   33
+.csv   33
 
 # Source Code (green)
 .c     32

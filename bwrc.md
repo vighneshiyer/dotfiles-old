@@ -530,12 +530,13 @@ export PATH="$RISCV/bin:$PATH"
 
    Create the HAMMER Makefile fragment (which builds a Chipyard SoC in `generated-src`, sets up the SRAM compiler, and generates a Makefile fragment in `build/chipyard.TestHarness.RocketConfig-ChipTop/hammer.d`).
    ```bash
-   bsub -Is "make buildfile ENV_YML=\"bwrc-env.yml\" INPUT_CONFS=\"tstech28-tools.yml tstech28.yml design.yml\" tech_name=tstech28 USE_SRAM_COMPILER=1"
+   make buildfile ENV_YML="bwrc-env.yml" INPUT_CONFS="tstech28-tools.yml tstech28.yml design.yml" tech_name=tstech28 USE_SRAM_COMPILER=1
    ```
 
    Build an RTL simulator and run a binary.
    ```bash
-   bsub -Is "make sim-rtl ENV_YML=\"bwrc-env.yml\" INPUT_CONFS=\"tstech28-tools.yml tstech28.yml design.yml\" tech_name=tstech28 USE_SRAM_COMPILER=1 BINARY=/users/vighnesh.iyer/riscv-1.4/target/share/riscv-tests/benchmarks/dhrystone.riscv"
+   make sim-rtl ENV_YML="bwrc-env.yml" INPUT_CONFS="tstech28-tools.yml tstech28.yml design.yml" tech_name=tstech28 USE_SRAM_COMPILER=1 BINARY=/users/vighnesh.iyer/riscv-1.4/target/share/riscv-tests/benchmarks/dhrystone.riscv
    ```
 
-   Use the `redo-sim-rtl` target to rerun simulation with a different `BINARY`.
+   Use the `redo-sim-rtl` target to rerun simulation with a different `BINARY` (the entire simulator is still rebuilt however).
+   Use the `syn` target to synthesize the design and the `sim-syn-debug` target to build a post-syn simulator.
