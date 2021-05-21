@@ -29,3 +29,7 @@
 
 2/24/2021
 08:33:08 up 11 days, 16:42,  2 users,  load average: 0.16, 0.43, 0.42
+
+5/5/2021 - RAMNODE VPS
+vighnesh@vighneshiyer-ramnode:~$ uptime
+ 10:30:00 up 510 days, 19:29,  1 user,  load average: 0.03, 0.08, 0.07

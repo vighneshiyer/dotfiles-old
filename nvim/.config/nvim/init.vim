@@ -17,6 +17,7 @@ Plug 'bohlender/vim-smt2'
 Plug 'easymotion/vim-easymotion'
 autocmd FileType markdown let b:coc_suggest_disable = 1
 autocmd FileType tex let b:coc_suggest_disable = 1
+autocmd FileType tex setlocal indentexpr=
 
 "autocmd BufNew,BufEnter *.vim execute "silent! CocEnable"
 "autocmd BufLeave *.vim execute "silent! CocDisable"
