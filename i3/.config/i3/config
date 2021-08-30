@@ -21,7 +21,7 @@ set $darkgray #1d2021
 
 set $mod Mod1
 
-font pango:Source Code Pro Regular 8
+font pango:Source Code Pro Regular 7
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -36,7 +36,7 @@ bindsym $mod+Return exec termite
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run
+bindsym $mod+d exec dmenu_run -fn "Source Code Pro:regular:pixelsize=24"
 
 # change focus
 bindsym $mod+h focus left
@@ -163,7 +163,7 @@ bindsym XF86MonBrightnessUp exec xbacklight -inc 10
 bindsym XF86MonBrightnessDown exec xbacklight -dec 10
 
 # Force DPI for certain programs (e.g. Vivado)
-exec_always --no-startup-id "xrandr --dpi 170"
+exec_always --no-startup-id "xrandr --dpi 192"
 # Map CapsLock to Escape
 exec_always --no-startup-id "/usr/bin/xmodmap /home/vighnesh/.Xmodmap"
 # Disable screensaver

@@ -30,6 +30,7 @@ alias cp 'cp -i'
 alias sl 'exa'
 alias l 'exa'
 alias ls 'exa'
+alias lsl 'exa'
 alias ll 'exa -lF'
 alias la 'exa -a'
 alias lla 'exa -laF'
@@ -49,6 +50,11 @@ alias u4 'cd ../../../..'
 alias u5 'cd ../../../../..'
 alias scd 'cd'
 alias dc 'cd'
+
+alias 151 'cd /home/vighnesh/10-school/12-secondary/19-eecs151'
+alias labs 'cd /home/vighnesh/10-school/12-secondary/19-eecs151/labs_skeleton/fpga_labs_fa21'
+alias labs_ref 'cd /home/vighnesh/10-school/12-secondary/19-eecs151/labs_reference/fpga_labs_fa21_reference'
+alias website 'cd /home/vighnesh/10-school/12-secondary/19-eecs151/website_fa21'
 
 ## bash/fish
 alias s 'source ~/.config/fish/config.fish'
@@ -75,6 +81,7 @@ end
 ## Tool Aliases
 alias diff 'diff --color=auto'
 alias grep 'grep --color=auto'
+alias rg 'rg --smart-case'
 alias lsblk 'lsblk -f'
 alias newterm 'silent termite -d (pwd)'
 alias vivado 'vivado -nolog -nojournal'
@@ -136,11 +143,12 @@ xset r rate 250 60
 function tp
     xinput set-prop "TPPS/2 IBM TrackPoint" "libinput Accel Speed" 1;
     xinput set-prop "Synaptics TM3276-022" "libinput Natural Scrolling Enabled" 1
+    xinput set-prop "Synaptics TM3276-022" "libinput Accel Speed" 0.5
     echo 255 | sudo tee /sys/devices/platform/i8042/serio1/driver/serio2/sensitivity
     echo 200 | sudo tee /sys/devices/platform/i8042/serio1/driver/serio2/speed
 end
-alias touchpad_on 'xinput set-prop "13" "Device Enabled" 1'
-alias touchpad_off 'xinput set-prop "13" "Device Enabled" 0'
+alias touchpad_on 'xinput set-prop "Synaptics TM3276-022" "Device Enabled" 1'
+alias touchpad_off 'xinput set-prop "Synaptics TM3276-022" "Device Enabled" 0'
 alias hdmi_left 'xrandr --output eDP-1 --auto --output HDMI-2 --auto --primary --left-of eDP-1'
 alias hdmi_right 'xrandr --output eDP-1 --auto --output HDMI-2 --auto --primary --right-of eDP-1'
 alias hdmi_above 'xrandr --output eDP-1 --auto --output HDMI-2 --auto --primary --above eDP-1'
@@ -156,6 +164,8 @@ alias nvidia_auto 'echo auto | sudo tee /sys/bus/pci/devices/0000:01:00.0/power/
 function ext_brightness
     ddcutil setvcp --model "DELL U2515HX" 0x10 $argv > /dev/null 2>&1
 end
+alias dropdown 'silent termite --name dropdown'
+alias dropdown_arith 'silent termite --name arithmetic --exec /usr/bin/python'
 
 ## VNC
 function vnc
@@ -291,6 +301,7 @@ set -gx PATH \
     /usr/bin/vendor_perl \
     /usr/bin/core_perl \
     $HOME/.local/share/coursier/bin \
+    /opt/vivado/Vivado/2021.1/bin \
     #/home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/bin
 
 #set -gx SYMBIOTIC_LICENSE /home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/symbiotic.lic
@@ -301,3 +312,10 @@ set -gx PATH \
 function dostuff --on-event fish_prompt
     pwd > /tmp/whereami
 end
+
+# https://www.reddit.com/r/linux/comments/72mfv8/psa_for_firefox_users_set_moz_use_xinput21_to/
+# Enable firefox smooth scrolling with trackpad and trackpoint
+set -gx MOZ_USE_XINPUT2 1
+
+# HiDPI settings: https://wiki.archlinux.org/title/HiDPI
+set -gx QT_AUTO_SCREEN_SCALE_FACTOR 1

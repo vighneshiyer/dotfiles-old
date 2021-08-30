@@ -138,6 +138,27 @@ nmcli> quit
 nmcli con up EECS-Secure --ask # Enter your password once and nmcli will store it without it showing up in shell history
 ```
 
+### Connecting to eduroam
+```
+nmcli connection add \
+        type wifi con-name "eduroam" ifname wlp3s0 ssid "eduroam" -- \
+        wifi-sec.key-mgmt wpa-eap 802-1x.eap ttls \
+        802-1x.phase2-auth mschapv2 802-1x.identity "vighnesh.iyer@berkeley.edu"
+nmcli con up "eduroam" --ask
+# Enter the password
+# Now you're good to go, password saved in NetworkManager keychain
+```
+
+### Connecting to the BSSID with the highest power
+- https://unix.stackexchange.com/questions/612290/nmcli-select-bssid-when-two-access-points-have-the-same-ssid
+- Connect to the SSID you want `nmcli con up eduroam`
+- Search for the BSSID with the best connection `nmcli d wifi list` - keep it in mind
+- `sudo wpa_cli list_networks` - find our connection
+- `sudo wpa_cli bssid 0 <the best bssid>`
+- `sudo wpa_cli reassociate`
+- `sudo wpa_cli list_networks` - make sure we're connected to the right bssid
+- `nmcli d wifi list` - make sure again using NetworkManager
+
 # Displays
 The DPI for the T480 laptop display should be around 184.
 
@@ -155,16 +176,16 @@ External display: (52x33 cm) (1920x1200)
 The best match seems to be a native DPI of 184, and scaling by 2x2 for the external monitor.
 
 ## Implementation
-To set the DPI for Xorg apps and most Gtk+ apps, add this line in `~/.Xresources`
+To set the DPI for Xorg apps and most Gtk+ apps, add this line in `~/.Xresources` (should be multiple of 96)
 
 ```
-Xft.dpi: 184
+Xft.dpi: 192
 ```
 
 Then add an exec line in your i3 config to set it also using `xrandr`:
 
 ```
-exec --no-startup-id "xrandr --dpi 184"
+exec --no-startup-id "xrandr --dpi 192"
 ```
 
 Logout and back in and verify the DPI is set correctly:
@@ -172,6 +193,8 @@ Logout and back in and verify the DPI is set correctly:
 xrdb -query
 xdpyinfo | grep -B 1 resolution
 ```
+
+- In Firefox, adjust the setting `layout.css.devPixelsPerPx` to further refine the scaling
 
 Now when I added an external monitor which wasn't HiDPI, I had to scale up its internal framebuffer resolution, and then scale down the framebuffer delivered to the output. The issue is that the resampling uses bilinear filtering: see `xrandr --verbose` (look for transforms). This causes slightly blurry text.
 
