@@ -153,8 +153,8 @@ nmcli con up "eduroam" --ask
 - https://unix.stackexchange.com/questions/612290/nmcli-select-bssid-when-two-access-points-have-the-same-ssid
 - Connect to the SSID you want `nmcli con up eduroam`
 - Search for the BSSID with the best connection `nmcli d wifi list` - keep it in mind
-- `sudo wpa_cli list_networks` - find our connection
-- `sudo wpa_cli bssid 0 <the best bssid>`
+- `sudo wpa_cli -i wlp3s0 list_networks` - find our connection
+- `sudo wpa_cli -i wlp3s0 bssid 0 <the best bssid>`
 - `sudo wpa_cli reassociate`
 - `sudo wpa_cli list_networks` - make sure we're connected to the right bssid
 - `nmcli d wifi list` - make sure again using NetworkManager
