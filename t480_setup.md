@@ -133,6 +133,14 @@ nmcli> set 802-1x.phase2-auth mschapv2
 nmcli> quit
 ```
 
+#### One Shot
+```shell
+nmcli connection add
+   type wifi con-name "EECS-Secure" ifname wlp3s0 ssid "EECS-Secure" -- \
+   wifi-sec.key-mgmt wpa-eap 802-1x.eap peap \
+   802-1x.phase2-auth mschapv2 802-1x.identity "vighnesh.iyer"
+```
+
 ### Using the connection
 ```
 nmcli con up EECS-Secure --ask # Enter your password once and nmcli will store it without it showing up in shell history
