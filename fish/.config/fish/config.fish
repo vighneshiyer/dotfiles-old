@@ -54,6 +54,8 @@ alias dc 'cd'
 alias 151 'cd /home/vighnesh/10-school/12-secondary/19-eecs151'
 alias labs 'cd /home/vighnesh/10-school/12-secondary/19-eecs151/labs_skeleton/fpga_labs_fa21'
 alias labs_ref 'cd /home/vighnesh/10-school/12-secondary/19-eecs151/labs_reference/fpga_labs_fa21_reference'
+alias prj 'cd /home/vighnesh/10-school/12-secondary/19-eecs151/project_skeleton/project_skeleton_fa21'
+alias prj_ref 'cd /home/vighnesh/10-school/12-secondary/19-eecs151/project_reference/project_reference_fa21'
 alias website 'cd /home/vighnesh/10-school/12-secondary/19-eecs151/website_fa21'
 
 ## bash/fish
@@ -99,6 +101,7 @@ alias pdf 'silent zathura'
 alias qpdf 'silent qpdfview'
 alias opdf 'silent okular'
 alias office 'silent libreoffice'
+alias gtkwave 'silent gtkwave'
 abbr -a cpr rsync -ah --progress
 abbr -a rsync_remote rsync -chavzP --stats user@remote:~/path
 abbr -a yt-audio "youtube-dl -f \"bestaudio\" -o \" %(title)s.%(ext)s\" --user-agent \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\""
@@ -285,7 +288,7 @@ function unmount_eda
 end
 
 # PATH manipulation
-set -gx RISCV /opt/riscv-1.4
+set -gx RISCV /opt/riscv-gcc-10-sifive
 set -gx LD_LIBRARY_PATH \
     $RISCV/lib \
     /usr/local/lib

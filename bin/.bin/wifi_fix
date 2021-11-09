@@ -19,7 +19,8 @@ good_aps.remove(current_ap)
 current_ap_split = current_ap.split()
 print("Current AP strength: {}".format(current_ap_split[7]))
 
-ap_strengths = [x.split()[6] for x in good_aps]
+ap_strengths = [int(x.split()[6]) for x in good_aps]
+print("Alternative AP strengths: {}".format(ap_strengths))
 best_ap = [good_aps[i] for (i, x) in enumerate(ap_strengths) if x == max(ap_strengths)][0]
 print("Best alternate AP strength {}".format(best_ap.split()[6]))
 if int(best_ap.split()[6]) > int(current_ap_split[7]) + 5:  # Must be at least 5 points better
