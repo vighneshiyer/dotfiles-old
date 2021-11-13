@@ -30,7 +30,7 @@ floating_minimum_size 75x75
 floating_maximum_size 1900x1200
 
 # start a terminal
-bindsym $mod+Return exec termite
+bindsym $mod+Return exec alacritty
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -182,7 +182,7 @@ for_window [instance="dropdown"] floating enable
 for_window [instance="dropdown"] resize set 2000 1500
 for_window [instance="dropdown"] move scratchpad
 for_window [instance="dropdown"] border pixel 5
-exec --no-startup-id termite --name dropdown
+exec --no-startup-id alacritty --name dropdown
 bindsym $mod+u [instance="dropdown"] scratchpad show; [instance="dropdown"] move position center
 
 # Arithmetic (Python) terminal
@@ -190,10 +190,10 @@ for_window [instance="arithmetic"] floating enable
 for_window [instance="arithmetic"] resize set 2000 1500
 for_window [instance="arithmetic"] move scratchpad
 for_window [instance="arithmetic"] border pixel 5
-exec --no-startup-id termite --name arithmetic --exec /usr/bin/python
+exec --no-startup-id alacritty --name arithmetic --exec /usr/bin/python
 bindsym $mod+a [instance="arithmetic"] scratchpad show; [instance="arithmetic"] move position center
 
 exec --no-startup-id "feh --bg-fill ~/40-media/42-photos/03-pol/wallpapers/wallpaper4.jpg"
-bindsym $mod+Shift+Return exec termite -d "$(cat /tmp/whereami)"
+bindsym $mod+Shift+Return exec alacritty --working-directory "$(cat /tmp/whereami)"
 bindsym $mod+Shift+p bar mode toggle
 exec --no-startup-id /usr/bin/dunst

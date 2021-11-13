@@ -85,7 +85,7 @@ alias diff 'diff --color=auto'
 alias grep 'grep --color=auto'
 alias rg 'rg --smart-case'
 alias lsblk 'lsblk -f'
-alias newterm 'silent termite -d (pwd)'
+alias newterm 'silent alacritty -d (pwd)'
 alias vivado 'vivado -nolog -nojournal'
 alias sbt 'sbt -Dsbt.supershell=false'
 set -gx SBT_OPTS
@@ -167,8 +167,8 @@ alias nvidia_auto 'echo auto | sudo tee /sys/bus/pci/devices/0000:01:00.0/power/
 function ext_brightness
     ddcutil setvcp --model "DELL U2515HX" 0x10 $argv > /dev/null 2>&1
 end
-alias dropdown 'silent termite --name dropdown'
-alias dropdown_arith 'silent termite --name arithmetic --exec /usr/bin/python'
+alias dropdown 'silent alacritty --class dropdown'
+alias dropdown_arith 'silent alacritty --class arithmetic -e /usr/bin/python'
 
 ## VNC
 function vnc
