@@ -165,10 +165,20 @@ alias dp_right_scale2 'xrandr --fb 6720x4000 --output eDP-1 --mode 2560x1440 --p
 alias dp_off 'xrandr --output DP-1 --off'
 alias nvidia_auto 'echo auto | sudo tee /sys/bus/pci/devices/0000:01:00.0/power/control'
 function ext_brightness
-    ddcutil setvcp --model "DELL U2515HX" 0x10 $argv > /dev/null 2>&1
+    #ddcutil setvcp --model "DELL U2515HX" 0x10 $argv > /dev/null 2>&1
+    ddcutil setvcp --display 1 0x10 $argv > /dev/null 2>&1
 end
 alias dropdown 'silent alacritty --class dropdown'
 alias dropdown_arith 'silent alacritty --class arithmetic -e /usr/bin/python'
+function brightness
+    if test (count $argv) -eq 0 -o (count $argv) -gt 1
+        echo "Wrong number of arguments"
+        return 1
+    end
+    set max_brightness (cat /sys/class/backlight/intel_backlight/max_brightness)
+    set value (math "min(ceil(($argv[1] + 1) / 100 * $max_brightness), $max_brightness)")
+    echo $value | sudo tee /sys/class/backlight/intel_backlight/brightness
+end
 
 ## VNC
 function vnc
@@ -203,6 +213,7 @@ alias yesemail "set -gx LSB_JOB_REPORT_MAIL y"
 ## Directory Aliases
 alias records='silent libreoffice /home/vighnesh/90-notes/personal/Records.ods'
 alias log='silent libreoffice /home/vighnesh/90-notes/maxxing/Log.ods'
+alias food='vim /home/vighnesh/90-notes/planning/food.md'
 alias tl 'pdf /home/vighnesh/30-references/31-engineering/specs/tilelink-spec-1.8.0.pdf'
 
 # Hurricane ZC706 Aliases (converted from hurricane-zc706 repo to fish compatiable version)

@@ -77,6 +77,9 @@ bindsym $mod+space focus mode_toggle
 #bindsym $mod+d focus child
 
 # switch to workspace
+set $ws_browser "10:browser"
+set $ws_org "11:org"
+set $ws_extra "12:extra"
 #bindsym $mod+grave workspace 0
 bindsym $mod+1 workspace 1
 bindsym $mod+2 workspace 2
@@ -87,8 +90,9 @@ bindsym $mod+6 workspace 6
 bindsym $mod+7 workspace 7
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
-bindsym $mod+0 workspace 10
-bindsym $mod+minus workspace 11
+bindsym $mod+0 workspace $ws_browser
+bindsym $mod+minus workspace $ws_org
+bindsym $mod+equal workspace $ws_extra
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1
@@ -100,8 +104,9 @@ bindsym $mod+Shift+6 move container to workspace 6
 bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
-bindsym $mod+Shift+0 move container to workspace 10
-bindsym $mod+Shift+minus move container to workspace 11
+bindsym $mod+Shift+0 move container to workspace $ws_browser
+bindsym $mod+Shift+minus move container to workspace $ws_org
+bindsym $mod+Shift+equal move container to workspace $ws_extra
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -182,7 +187,7 @@ for_window [instance="dropdown"] floating enable
 for_window [instance="dropdown"] resize set 2000 1500
 for_window [instance="dropdown"] move scratchpad
 for_window [instance="dropdown"] border pixel 5
-exec --no-startup-id alacritty --name dropdown
+exec --no-startup-id alacritty --class dropdown
 bindsym $mod+u [instance="dropdown"] scratchpad show; [instance="dropdown"] move position center
 
 # Arithmetic (Python) terminal
@@ -190,7 +195,7 @@ for_window [instance="arithmetic"] floating enable
 for_window [instance="arithmetic"] resize set 2000 1500
 for_window [instance="arithmetic"] move scratchpad
 for_window [instance="arithmetic"] border pixel 5
-exec --no-startup-id alacritty --name arithmetic --exec /usr/bin/python
+exec --no-startup-id alacritty --class arithmetic --command /usr/bin/python
 bindsym $mod+a [instance="arithmetic"] scratchpad show; [instance="arithmetic"] move position center
 
 exec --no-startup-id "feh --bg-fill ~/40-media/42-photos/03-pol/wallpapers/wallpaper4.jpg"

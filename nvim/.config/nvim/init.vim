@@ -31,7 +31,6 @@ let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_user_command = {
   \ 'types': {
     \ 1: ['.git', 'cd %s && git ls-files . -co --exclude-standard'],
-    \ 2: ['.rc18', 'find -O3 cmod vmod fpga vlib stand_sim/RC18_CHIP_TOP'],
     \ },
   \ 'fallback': 'find %s -type f'
   \ }
@@ -181,6 +180,12 @@ set foldnestmax=10
 set nofoldenable " don't enable folds after opening a file
 set foldlevel=2
 let g:markdown_folding = 1
+
+"Remove all trailing whitespace by pressing F5
+nnoremap <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
+
+" disable ex mode
+nnoremap Q <Nop>
 
 " coc
 " https://scalameta.org/metals/docs/editors/vim.html
