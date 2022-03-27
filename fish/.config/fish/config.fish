@@ -263,7 +263,7 @@ function mount_bwrc
     if mount | grep /mnt/bwrc > /dev/null;
         fusermount -u /mnt/bwrc
     end
-    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa vighnesh.iyer@bwrcrdsl-4.eecs.berkeley.edu:/tools/B/vighneshiyer/ /mnt/bwrc
+    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa rdsl6:/tools/C/vighneshiyer/ /mnt/bwrc
 end
 
 function unmount_bwrc
@@ -305,7 +305,6 @@ set -gx LD_LIBRARY_PATH \
     /usr/local/lib
 set -gx PATH \
     $RISCV/bin \
-    #/opt/miniconda/bin \
     /home/vighnesh/.bin \
     /home/vighnesh/.local/bin \
     /usr/local/sbin \
@@ -316,6 +315,7 @@ set -gx PATH \
     /usr/bin/core_perl \
     $HOME/.local/share/coursier/bin \
     /opt/vivado/Vivado/2021.1/bin \
+    #/opt/miniconda/bin \
     #/home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/bin
 
 #set -gx SYMBIOTIC_LICENSE /home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/symbiotic.lic
