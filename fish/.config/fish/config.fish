@@ -153,7 +153,7 @@ end
 alias touchpad_on 'xinput set-prop "Synaptics TM3276-022" "Device Enabled" 1'
 alias touchpad_off 'xinput set-prop "Synaptics TM3276-022" "Device Enabled" 0'
 alias hdmi_left 'xrandr --output eDP-1 --auto --output HDMI-2 --auto --primary --left-of eDP-1'
-alias hdmi_right 'xrandr --output eDP-1 --auto --output HDMI-2 --auto --primary --right-of eDP-1'
+alias hdmi_right 'xrandr --output eDP-1 --auto --output HDMI-2 --auto --primary --right-of eDP-1; xmodmap ~/.Xmodmap'
 alias hdmi_above 'xrandr --output eDP-1 --auto --output HDMI-2 --auto --primary --above eDP-1'
 alias hdmi_dup 'xrandr --output eDP-1 --auto --output HDMI-2 --auto --same-as eDP-1'
 alias hdmi_off 'xrandr --output HDMI-2 --off'
@@ -164,6 +164,11 @@ alias dp_right_scale 'xrandr --fb 5824x2400 --output eDP-1 --mode 2560x1440 --po
 alias dp_right_scale2 'xrandr --fb 6720x4000 --output eDP-1 --mode 2560x1440 --pos 0x0 --output DP-1 --primary --mode 1920x1200 --pos 3840x0 --scale 1.5x1.5'
 alias dp_off 'xrandr --output DP-1 --off'
 alias nvidia_auto 'echo auto | sudo tee /sys/bus/pci/devices/0000:01:00.0/power/control'
+
+alias dock_on 'xrandr --output eDP-1 --auto; xrandr --output DP-1-2 --auto --primary --left-of eDP-1; xrandr --output DP-1-2 --set "Broadcast RGB" "Full";'
+alias kb 'xset r rate 250 60; xmodmap ~/.Xmodmap'
+alias dock_off 'xrandr --output DP-1-2 --off'
+
 function ext_brightness
     #ddcutil setvcp --model "DELL U2515HX" 0x10 $argv > /dev/null 2>&1
     ddcutil setvcp --display 1 0x10 $argv > /dev/null 2>&1
@@ -305,6 +310,7 @@ set -gx LD_LIBRARY_PATH \
     /usr/local/lib
 set -gx PATH \
     $RISCV/bin \
+    #/opt/verilator/bin \
     /home/vighnesh/.bin \
     /home/vighnesh/.local/bin \
     /usr/local/sbin \

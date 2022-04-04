@@ -15,6 +15,7 @@ Plug 'mkitt/tabline.vim'
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'bohlender/vim-smt2'
 Plug 'easymotion/vim-easymotion'
+Plug 'ActivityWatch/aw-watcher-vim'
 autocmd FileType markdown let b:coc_suggest_disable = 1
 autocmd FileType tex let b:coc_suggest_disable = 1
 autocmd FileType tex setlocal indentexpr=
