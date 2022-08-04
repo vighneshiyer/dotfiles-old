@@ -278,3 +278,8 @@ systemctl --user enable redshift # to enable autostart on boot
 - Use `vpn.berkeley.edu`
 - Enter credentials and 2FA as usual in the popup browser
 - Connected, ignore the error message
+
+## Systemd DBUS issues
+systemctl start user@1000.service
+systemctl --user import-environment DISPLAY
+systemctl --user start redshift

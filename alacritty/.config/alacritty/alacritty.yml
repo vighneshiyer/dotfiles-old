@@ -73,5 +73,8 @@ window:
   padding:
     x: 1
     y: 0
+  dimensions:
+    columns: 150
+    lines: 70
 scrolling:
   history: 10000

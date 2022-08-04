@@ -16,6 +16,7 @@ Plug 'mkitt/tabline.vim'
 Plug 'bohlender/vim-smt2'
 Plug 'easymotion/vim-easymotion'
 Plug 'ActivityWatch/aw-watcher-vim'
+Plug 'Glench/Vim-Jinja2-Syntax'
 autocmd FileType markdown let b:coc_suggest_disable = 1
 autocmd FileType tex let b:coc_suggest_disable = 1
 autocmd FileType tex setlocal indentexpr=
@@ -314,3 +315,5 @@ nnoremap Q <Nop>
 "nnoremap <silent> <space>tb :<C-u>CocCommand metals.tvp metalsBuild<CR>
 "" Reveal current current class (trait or object) in Tree View 'metalsPackages'
 "nnoremap <silent> <space>tf :<C-u>CocCommand metals.revealInTreeView metalsPackages<CR>
+
+autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"
