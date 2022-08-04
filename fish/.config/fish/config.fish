@@ -37,6 +37,8 @@ alias lla 'exa -laFhg'
 alias las 'exa -laFhg'
 set -gx LS_COLORS 'rs=0:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:di=01;34:ln=01;36:ex=01;32:*.bak=37:*.cache=37:*.dist=37:*.lock=37:*.log=37:*.old=37:*.orig=37:*.temp=37:*.tmp=37:*.swp=37:*.o=37:*.d=37:*.aux=37:*.bbl=37:*.blg=37:*.lof=37:*.lot=37:*.toc=37:*.class=37:*.pyc=37:*.jpg=38;5;167:*.jpeg=38;5;167:*.JPG=38;5;167:*.png=38;5;167:*.PNG=38;5;167:*.bmp=38;5;167:*.gif=38;5;167:*.jfif=38;5;167:*.tif=38;5;167:*.tiff=38;5;167:*.svg=38;5;167:*.webp=38;5;167:*.dng=38;5;167:*.mp4=38;5;167:*.mpg=38;5;167:*.mpeg=38;5;167:*.mkv=38;5;167:*.webm=38;5;167:*.mov=38;5;167:*.MTS=38;5;167:*.mp3=38;5;167:*.flac=38;5;167:*.ogg=38;5;167:*.wav=38;5;167:*.opus=38;5;167:*.oga=38;5;167:*.m4a=38;5;167:*.wmv=38;5;167:*.txt=33:*.doc=33:*.xls=33:*.xlsx=33:*.docx=33:*.ppt=33:*.pptx=33:*.odt=33:*.ods=33:*.md=33:*.adoc=33:*.pdf=33:*.epub=33:*.djvu=33:*.json=33:*.yaml=33:*.yml=33:*.csv=33:*.c=32:*.cpp=32:*.cc=32:*.scala=32:*.rs=32:*.py=32:*.go=32:*.tex=32:*.js=32:*.html=32:*.sbt=01;04;32:*Makefrag=01;04;32:*Makefile=01;04;32:*.mk=01;04;32:*.sc=01;04;32:*README=01;04;32:*README.md=01;04;32:*.properties=01;04;32:*Cargo.toml=01;04;32:*.iso=35:*.deb=35:*.jar=35:*.a=35:*.so=35:*.7z=35:*.gz=35:*.bz=35:*.bz2=35:*.lzma=35:*.rar=35:*.zip=35:*.rpm=35:*.tar=35:*.xml=35:'
 
+alias p 'pwd'
+
 ## cd
 alias .. 'cd ..'
 alias ... 'cd ../..'
@@ -212,7 +214,6 @@ alias yesemail "set -gx LSB_JOB_REPORT_MAIL y"
 ## Directory Aliases
 alias records='silent libreoffice /home/vighnesh/90-notes/personal/Records.ods'
 alias log='silent libreoffice /home/vighnesh/90-notes/maxxing/Log.ods'
-alias food='vim /home/vighnesh/90-notes/planning/food.md'
 alias tl 'pdf /home/vighnesh/30-references/31-engineering/specs/tilelink-spec-1.8.0.pdf'
 alias 151 'cd /home/vighnesh/10-school/12-secondary/19-eecs151'
 alias labs 'cd /home/vighnesh/10-school/12-secondary/19-eecs151/labs_skeleton/fpga_labs_fa21'
@@ -264,44 +265,27 @@ end
 alias mount_exfat 'sudo mount -t exfat /dev/sdb1 /mnt/usb -o rw,uid=(id -u),gid=(id -g)'
 alias mount_vfat 'sudo mount -t vfat /dev/sdb1 /mnt/usb -o rw,uid=(id -u),gid=(id -g)'
 
-function mount_bwrc
-    if mount | grep /mnt/bwrc > /dev/null;
-        fusermount -u /mnt/bwrc
+function mount_remote -a dir remote remote_dir
+    if mount | grep /mnt/$dir > /dev/null;
+        fusermount -u /mnt/$dir
     end
-    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa rdsl6:/tools/C/vighneshiyer/ /mnt/bwrc
+    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa $remote:$remote_dir /mnt/$dir
 end
 
-function unmount_bwrc
-    if mount | grep /mnt/bwrc > /dev/null;
-        fusermount -u /mnt/bwrc
-    end
-end
-
-function mount_hpse
-    if mount | grep /mnt/hpse > /dev/null;
-        fusermount -u /mnt/hpse
-    end
-    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa cs199-ban@hpse-11.eecs.berkeley.edu:/home/cc/cs199/fa13/class/cs199-ban /mnt/hpse
-end
-
-function unmount_hpse
-    if mount | grep /mnt/hpse > /dev/null;
-        fusermount -u /mnt/hpse
+function unmount_remote -a dir
+    if mount | grep /mnt/$dir > /dev/null;
+        fusermount -u /mnt/$dir
     end
 end
 
-function mount_eda
-    if mount | grep /mnt/eda > /dev/null;
-        fusermount -u /mnt/eda
-    end
-    sshfs -o allow_other,uid=1000,gid=1000,IdentityFile=/home/vighnesh/.ssh/id_rsa cs199-ban@eda-1.eecs.berkeley.edu:/scratch/cs199-ban /mnt/eda
-end
+alias mount_bwrc 'mount_remote bwrc rdsl6 /tools/C/vighneshiyer/'
+alias unmount_bwrc 'unmount_remote bwrc'
 
-function unmount_eda
-    if mount | grep /mnt/eda > /dev/null;
-        fusermount -u /mnt/eda
-    end
-end
+alias mount_a 'mount_remote a a6 /nscratch/vighneshiyer'
+alias unmount_a 'unmount_remote a'
+
+alias mount_eda 'mount_remote eda eda-1 /scratch/cs199-ban'
+alias unmount_eda 'unmount_remote eda'
 
 # PATH manipulation
 set -gx RISCV /opt/riscv-gcc-10-sifive
@@ -310,7 +294,7 @@ set -gx LD_LIBRARY_PATH \
     /usr/local/lib
 set -gx PATH \
     $RISCV/bin \
-    #/opt/verilator/bin \
+    /opt/verilator_bisect/bin \
     /home/vighnesh/.bin \
     /home/vighnesh/.local/bin \
     /usr/local/sbin \
@@ -321,6 +305,7 @@ set -gx PATH \
     /usr/bin/core_perl \
     $HOME/.local/share/coursier/bin \
     /opt/vivado/Vivado/2021.1/bin \
+    $HOME/.npm-packages/bin \
     #/opt/miniconda/bin \
     #/home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/bin
 
