@@ -54,7 +54,7 @@ alias scd 'cd'
 alias dc 'cd'
 
 ## bash/fish
-alias s 'source ~/.config/fish/config.fish'
+alias ss 'source ~/.config/fish/config.fish'
 alias rc 'vim ~/.config/fish/config.fish'
 alias vi 'vim'
 alias vim 'nvim'
@@ -100,8 +100,8 @@ alias office 'silent libreoffice'
 alias gtkwave 'silent gtkwave'
 abbr -a cpr rsync -ah --progress
 abbr -a rsync_remote rsync -chavzP --stats user@remote:~/path
-abbr -a yt-audio "youtube-dl -f \"bestaudio\" -o \" %(title)s.%(ext)s\" --user-agent \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\""
-abbr -a yt-video "youtube-dl -f \"bestvideo+bestaudio\" -o \" %(title)s.%(ext)s\" --user-agent \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\""
+abbr -a yt-audio "yt-dlp -f \"bestaudio\" -o \"%(title)s.%(ext)s\" --user-agent \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\""
+abbr -a yt-video "yt-dlp -f \"bestvideo+bestaudio\" -o \"%(title)s.%(ext)s\" --user-agent \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\""
 function borgstatus
     echo (/usr/bin/ls -lt *.log | head -n 1 | rev | cut -d ' ' -f 1 | rev)
     grep 'status, ' (/usr/bin/ls -lt *.log | head -n 1 | rev | cut -d ' ' -f 1 | rev)
@@ -206,14 +206,13 @@ alias ssh_240 'ssh root@192.168.192.240'
 alias ssh_151 'ssh eecs151-taa@c125m-12.eecs.berkeley.edu'
 alias ssh_151_master 'ssh eecs151@c125m-12.eecs.berkeley.edu'
 alias ssh_290 'ssh ee290-2-aav@eda-1.eecs.berkeley.edu'
+abbr -a jupyter-tunnel "ssh -N -f -L localhost:8888:localhost:8888 a10"
 
 ## LSF Aliases
 alias noemail "set -gx LSB_JOB_REPORT_MAIL n"
 alias yesemail "set -gx LSB_JOB_REPORT_MAIL y"
 
 ## Directory Aliases
-alias records='silent libreoffice /home/vighnesh/90-notes/personal/Records.ods'
-alias log='silent libreoffice /home/vighnesh/90-notes/maxxing/Log.ods'
 alias tl 'pdf /home/vighnesh/30-references/31-engineering/specs/tilelink-spec-1.8.0.pdf'
 alias 151 'cd /home/vighnesh/10-school/12-secondary/19-eecs151'
 alias labs 'cd /home/vighnesh/10-school/12-secondary/19-eecs151/labs_skeleton/fpga_labs_fa21'
@@ -289,12 +288,15 @@ alias unmount_eda 'unmount_remote eda'
 
 # PATH manipulation
 set -gx RISCV /opt/riscv-gcc-10-sifive
+set -Ux PYENV_ROOT $HOME/.pyenv
 set -gx LD_LIBRARY_PATH \
     $RISCV/lib \
     /usr/local/lib
 set -gx PATH \
+    /home/vighnesh/80-temp/sic-artifact/ext/verilator-4.034/bin \
     $RISCV/bin \
-    /opt/verilator_bisect/bin \
+    $HOME/.n/bin \
+    #/opt/verilator_bisect/bin \
     /home/vighnesh/.bin \
     /home/vighnesh/.local/bin \
     /usr/local/sbin \
@@ -307,10 +309,19 @@ set -gx PATH \
     /opt/vivado/Vivado/2021.1/bin \
     $HOME/.npm-packages/bin \
     #/opt/miniconda/bin \
-    #/home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/bin
+    #/home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/bin \
+    $HOME/80-temp/circt-release/bin \
+    $PYENV_ROOT/bin \
+    /home/vighnesh/.cache/scalacli/local-repo/bin/scala-cli \
+    /home/vighnesh/80-temp/blarney/Scripts \
+    $HOME/.cargo/bin \
+    /opt/unisonlanguage \
+set -gx BLARNEY_ROOT /home/vighnesh/80-temp/blarney
+
 
 #set -gx SYMBIOTIC_LICENSE /home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/symbiotic.lic
 #source /opt/miniconda3/etc/fish/conf.d/conda.fish
+#source /opt/miniforge/install/etc/fish/conf.d/conda.fish
 
 # This function is called every time Enter is hit when in a terminal
 # The working directory is written to a tempfile, which is read by i3 if you want a new terminal with the same working directory
@@ -324,3 +335,18 @@ set -gx MOZ_USE_XINPUT2 1
 
 # HiDPI settings: https://wiki.archlinux.org/title/HiDPI
 set -gx QT_AUTO_SCREEN_SCALE_FACTOR 1
+
+pyenv init - | source
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+#eval /opt/miniforge/install/bin/conda "shell.fish" "hook" $argv | source
+# <<< conda initialize <<<
+
+source /home/vighnesh/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
+
+set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /home/vighnesh/.ghcup/bin $PATH # ghcup-env
+set -gx N_PREFIX $HOME/.n
+
+alias t 'today --dir $HOME/90-notes/today'
+alias s 'start --dir $HOME/90-notes/today'

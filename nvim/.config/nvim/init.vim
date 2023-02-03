@@ -15,7 +15,7 @@ Plug 'mkitt/tabline.vim'
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'bohlender/vim-smt2'
 Plug 'easymotion/vim-easymotion'
-Plug 'ActivityWatch/aw-watcher-vim'
+"Plug 'ActivityWatch/aw-watcher-vim'
 Plug 'Glench/Vim-Jinja2-Syntax'
 autocmd FileType markdown let b:coc_suggest_disable = 1
 autocmd FileType tex let b:coc_suggest_disable = 1
