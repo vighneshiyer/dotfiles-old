@@ -287,7 +287,7 @@ alias mount_eda 'mount_remote eda eda-1 /scratch/cs199-ban'
 alias unmount_eda 'unmount_remote eda'
 
 # PATH manipulation
-set -gx RISCV /opt/riscv-gcc-10-sifive
+set -gx RISCV /opt/riscv-gcc-12
 set -Ux PYENV_ROOT $HOME/.pyenv
 set -gx LD_LIBRARY_PATH \
     $RISCV/lib \
@@ -296,7 +296,6 @@ set -gx PATH \
     /home/vighnesh/80-temp/sic-artifact/ext/verilator-4.034/bin \
     $RISCV/bin \
     $HOME/.n/bin \
-    #/opt/verilator_bisect/bin \
     /home/vighnesh/.bin \
     /home/vighnesh/.local/bin \
     /usr/local/sbin \
@@ -308,16 +307,19 @@ set -gx PATH \
     $HOME/.local/share/coursier/bin \
     /opt/vivado/Vivado/2021.1/bin \
     $HOME/.npm-packages/bin \
-    #/opt/miniconda/bin \
-    #/home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/bin \
     $HOME/80-temp/circt-release/bin \
     $PYENV_ROOT/bin \
     /home/vighnesh/.cache/scalacli/local-repo/bin/scala-cli \
-    /home/vighnesh/80-temp/blarney/Scripts \
     $HOME/.cargo/bin \
     /opt/unisonlanguage \
-set -gx BLARNEY_ROOT /home/vighnesh/80-temp/blarney
-
+    $HOME/.opam/default/bin \
+    /opt/oss-cad-suite/bin
+    #/opt/VSCode-linux-x64/bin \
+    #/opt/miniconda/bin \
+    #/home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/bin \
+    #/home/vighnesh/80-temp/blarney/Scripts \
+#set -gx BLARNEY_ROOT /home/vighnesh/80-temp/blarney
+set -gx JAVA_HOME /usr/lib/jvm/java-20-openjdk
 
 #set -gx SYMBIOTIC_LICENSE /home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/symbiotic.lic
 #source /opt/miniconda3/etc/fish/conf.d/conda.fish
@@ -340,10 +342,14 @@ pyenv init - | source
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-#eval /opt/miniforge/install/bin/conda "shell.fish" "hook" $argv | source
+# eval /opt/miniforge/install/bin/conda "shell.fish" "hook" $argv | source
 # <<< conda initialize <<<
 
 source /home/vighnesh/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
+set -gx OPAM_SWITCH_PREFIX '/home/vighnesh/.opam/default';
+set -gx CAML_LD_LIBRARY_PATH '/home/vighnesh/.opam/default/lib/stublibs:/home/vighnesh/.opam/default/lib/ocaml/stublibs:/home/vighnesh/.opam/default/lib/ocaml';
+set -gx OCAML_TOPLEVEL_PATH '/home/vighnesh/.opam/default/lib/toplevel';
+builtin -n | /bin/sh -c 'grep -q \'^argparse$\'' 1>/dev/null 2>/dev/null; and set -gx MANPATH ':/home/vighnesh/.opam/default/man';
 
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /home/vighnesh/.ghcup/bin $PATH # ghcup-env
 set -gx N_PREFIX $HOME/.n

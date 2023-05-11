@@ -25,7 +25,7 @@ order += "cpu_temperature 0"
 order += "cpu_temperature 1"
 order += "cpu_temperature 2"
 order += "cpu_temperature 3"
-order += "battery all"
+order += "battery 1"
 #order += "load"
 order += "tztime local"
 
@@ -52,10 +52,11 @@ volume master {
     format = "♪ %volume"
 }
 
-battery all {
+battery 1 {
     format = "%status %percentage %remaining"
     integer_battery_capacity = true
     hide_seconds = true
+    path = "/sys/class/power_supply/BAT%d/uevent"
 }
 # get status: upower -i /org/freedesktop/UPower/devices/battery_BAT1 | grep "state:" | tr -s ' ' | cut -d ' ' -f 3
 
@@ -69,25 +70,25 @@ cpu_usage {
 
 cpu_temperature 0 {
     format = "%degrees°"
-    path = "/sys/devices/platform/coretemp.0/hwmon/hwmon8/temp2_input"
+    path = "/sys/devices/platform/coretemp.0/hwmon/hwmon6/temp2_input"
     max_threshold = 95
 }
 
 cpu_temperature 1 {
     format = "%degrees°"
-    path = "/sys/devices/platform/coretemp.0/hwmon/hwmon8/temp3_input"
+    path = "/sys/devices/platform/coretemp.0/hwmon/hwmon6/temp3_input"
     max_threshold = 95
 }
 
 cpu_temperature 2 {
     format = "%degrees°"
-    path = "/sys/devices/platform/coretemp.0/hwmon/hwmon8/temp4_input"
+    path = "/sys/devices/platform/coretemp.0/hwmon/hwmon6/temp4_input"
     max_threshold = 95
 }
 
 cpu_temperature 3 {
     format = "%degrees°"
-    path = "/sys/devices/platform/coretemp.0/hwmon/hwmon8/temp5_input"
+    path = "/sys/devices/platform/coretemp.0/hwmon/hwmon6/temp5_input"
     max_threshold = 95
 }
 

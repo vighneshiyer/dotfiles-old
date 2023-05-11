@@ -20,6 +20,7 @@ Plug 'Glench/Vim-Jinja2-Syntax'
 autocmd FileType markdown let b:coc_suggest_disable = 1
 autocmd FileType tex let b:coc_suggest_disable = 1
 autocmd FileType tex setlocal indentexpr=
+autocmd FileType html,htmldjango,jinja setlocal indentexpr=
 
 "autocmd BufNew,BufEnter *.vim execute "silent! CocEnable"
 "autocmd BufLeave *.vim execute "silent! CocDisable"
