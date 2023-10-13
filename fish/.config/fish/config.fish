@@ -137,7 +137,7 @@ end
 
 ## t480 specific
 set -gx TERMINFO /lib/terminfo
-xset r rate 250 60
+# xset r rate 250 60
 # Fix settings on trackpoint for ideal sensitivity, enable natural scrolling on touchpad
 function tp
     xinput set-prop "TPPS/2 IBM TrackPoint" "libinput Accel Speed" 1;
@@ -287,43 +287,43 @@ alias mount_eda 'mount_remote eda eda-1 /scratch/cs199-ban'
 alias unmount_eda 'unmount_remote eda'
 
 # PATH manipulation
-set -gx RISCV /opt/riscv-gcc-12
-set -Ux PYENV_ROOT $HOME/.pyenv
-set -gx LD_LIBRARY_PATH \
-    $RISCV/lib \
-    /usr/local/lib
+set -gx SYNOPSYS_ROOT /ecad/tools/synopsys
+# set -gx VCS_HOME $SYNOPSYS_ROOT/vcs/S-2021.09-SP1-1
+set -gx VCS_HOME $SYNOPSYS_ROOT/vcs/P-2019.06-SP1
+set -gx SNPSLMD_LICENSE_FILE 1709@flex-lic.millennium.berkeley.edu:1701@bwrcflex-1.eecs.berkeley.edu:1701@bwrcflex-2.eecs.berkeley.edu
+export MGLS_LICENSE_FILE=1717@bwrcflex-1.eecs.berkeley.edu:1717@bwrcflex-2.eecs.berkeley.edu
+export LM_PROJECT=bwrc_users
+set -gx VERDI_HOME $SYNOPSYS_ROOT/verdi/P-2019.06-SP2-2
+
+#set -gx RISCV /nscratch/vighneshiyer/sifive-tools-dec-2020
+# for riscv-dv
+#set -gx RISCV_TOOLCHAIN /nscratch/vighneshiyer/sifive-tools-dec-2020
+#set -gx RISCV_GCC $RISCV_TOOLCHAIN/bin/riscv64-unknown-elf-gcc
+#set -gx RISCV_OBJCOPY $RISCV_TOOLCHAIN/bin/riscv64-unknown-elf-objcopy
+#set -gx SPIKE_PATH $RISCV_TOOLCHAIN/bin
+
+# set -gx LD_LIBRARY_PATH \
+#    $RISCV/lib \
+#    /usr/local/lib
+
 set -gx PATH \
-    /home/vighnesh/80-temp/sic-artifact/ext/verilator-4.034/bin \
     $RISCV/bin \
     $HOME/.n/bin \
-    /home/vighnesh/.bin \
-    /home/vighnesh/.local/bin \
+    $HOME/.bin \
+    $HOME/.local/bin \
     /usr/local/sbin \
     /usr/local/bin \
     /usr/bin \
-    /usr/bin/site_perl \
-    /usr/bin/vendor_perl \
-    /usr/bin/core_perl \
-    $HOME/.local/share/coursier/bin \
-    /opt/vivado/Vivado/2021.1/bin \
-    $HOME/.npm-packages/bin \
-    $HOME/80-temp/circt-release/bin \
-    $PYENV_ROOT/bin \
-    /home/vighnesh/.cache/scalacli/local-repo/bin/scala-cli \
-    $HOME/.cargo/bin \
-    /opt/unisonlanguage \
-    $HOME/.opam/default/bin \
-    /opt/oss-cad-suite/bin
-    #/opt/VSCode-linux-x64/bin \
-    #/opt/miniconda/bin \
-    #/home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/bin \
-    #/home/vighnesh/80-temp/blarney/Scripts \
-#set -gx BLARNEY_ROOT /home/vighnesh/80-temp/blarney
-set -gx JAVA_HOME /usr/lib/jvm/java-20-openjdk
+    $VCS_HOME/bin \
+    /nscratch/vighneshiyer/verilator_4106/bin \
+    /nscratch/vighneshiyer/sifive-tools-dec-2020/bin \
+    /nscratch/vighneshiyer/.cargo/bin \
+    /ecad/tools/xilinx/Vivado/2021.1/bin \
+    /ecad/tools/cadence/XCELIUM/XCELIUM2103/tools/bin/64bit \
+    /ecad/tools/cadence/XCELIUM/XCELIUM2103/tools/bin \
 
-#set -gx SYMBIOTIC_LICENSE /home/vighnesh/20-research/23-projects/17-formal/symbiotic_intro_course/symbiotic.lic
-#source /opt/miniconda3/etc/fish/conf.d/conda.fish
-#source /opt/miniforge/install/etc/fish/conf.d/conda.fish
+# /nscratch/vighneshiyer/miniconda3/bin
+# source /nscratch/vighneshiyer/miniconda3/etc/fish/conf.d/conda.fish
 
 # This function is called every time Enter is hit when in a terminal
 # The working directory is written to a tempfile, which is read by i3 if you want a new terminal with the same working directory
@@ -338,21 +338,10 @@ set -gx MOZ_USE_XINPUT2 1
 # HiDPI settings: https://wiki.archlinux.org/title/HiDPI
 set -gx QT_AUTO_SCREEN_SCALE_FACTOR 1
 
-pyenv init - | source
-
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-# eval /opt/miniforge/install/bin/conda "shell.fish" "hook" $argv | source
+# eval /nscratch/vighneshiyer/miniconda3/bin/conda "shell.fish" "hook" $argv | source
 # <<< conda initialize <<<
 
-source /home/vighnesh/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
-set -gx OPAM_SWITCH_PREFIX '/home/vighnesh/.opam/default';
-set -gx CAML_LD_LIBRARY_PATH '/home/vighnesh/.opam/default/lib/stublibs:/home/vighnesh/.opam/default/lib/ocaml/stublibs:/home/vighnesh/.opam/default/lib/ocaml';
-set -gx OCAML_TOPLEVEL_PATH '/home/vighnesh/.opam/default/lib/toplevel';
-builtin -n | /bin/sh -c 'grep -q \'^argparse$\'' 1>/dev/null 2>/dev/null; and set -gx MANPATH ':/home/vighnesh/.opam/default/man';
-
-set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /home/vighnesh/.ghcup/bin $PATH # ghcup-env
-set -gx N_PREFIX $HOME/.n
-
-alias t 'today --dir $HOME/90-notes/today'
-alias s 'start --dir $HOME/90-notes/today'
+set -gx CARGO_HOME /nscratch/vighneshiyer/.cargo
+set -gx RUSTUP_HOME /nscratch/vighneshiyer/.rustup
