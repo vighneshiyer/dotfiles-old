@@ -287,43 +287,23 @@ alias mount_eda 'mount_remote eda eda-1 /scratch/cs199-ban'
 alias unmount_eda 'unmount_remote eda'
 
 # PATH manipulation
-set -gx SYNOPSYS_ROOT /ecad/tools/synopsys
+# set -gx SYNOPSYS_ROOT /ecad/tools/synopsys
 # set -gx VCS_HOME $SYNOPSYS_ROOT/vcs/S-2021.09-SP1-1
-set -gx VCS_HOME $SYNOPSYS_ROOT/vcs/P-2019.06-SP1
-set -gx SNPSLMD_LICENSE_FILE 1709@flex-lic.millennium.berkeley.edu:1701@bwrcflex-1.eecs.berkeley.edu:1701@bwrcflex-2.eecs.berkeley.edu
-export MGLS_LICENSE_FILE=1717@bwrcflex-1.eecs.berkeley.edu:1717@bwrcflex-2.eecs.berkeley.edu
-export LM_PROJECT=bwrc_users
-set -gx VERDI_HOME $SYNOPSYS_ROOT/verdi/P-2019.06-SP2-2
-
-#set -gx RISCV /nscratch/vighneshiyer/sifive-tools-dec-2020
-# for riscv-dv
-#set -gx RISCV_TOOLCHAIN /nscratch/vighneshiyer/sifive-tools-dec-2020
-#set -gx RISCV_GCC $RISCV_TOOLCHAIN/bin/riscv64-unknown-elf-gcc
-#set -gx RISCV_OBJCOPY $RISCV_TOOLCHAIN/bin/riscv64-unknown-elf-objcopy
-#set -gx SPIKE_PATH $RISCV_TOOLCHAIN/bin
-
-# set -gx LD_LIBRARY_PATH \
-#    $RISCV/lib \
-#    /usr/local/lib
+# set -gx VCS_HOME $SYNOPSYS_ROOT/vcs/P-2019.06-SP1
+# set -gx SNPSLMD_LICENSE_FILE 1709@flex-lic.millennium.berkeley.edu:1701@bwrcflex-1.eecs.berkeley.edu:1701@bwrcflex-2.eecs.berkeley.edu
+# export MGLS_LICENSE_FILE=1717@bwrcflex-1.eecs.berkeley.edu:1717@bwrcflex-2.eecs.berkeley.edu
+# export LM_PROJECT=bwrc_users
+# set -gx VERDI_HOME $SYNOPSYS_ROOT/verdi/P-2019.06-SP2-2
 
 set -gx PATH \
-    $RISCV/bin \
-    $HOME/.n/bin \
     $HOME/.bin \
     $HOME/.local/bin \
-    /usr/local/sbin \
-    /usr/local/bin \
     /usr/bin \
-    $VCS_HOME/bin \
-    /nscratch/vighneshiyer/verilator_4106/bin \
-    /nscratch/vighneshiyer/sifive-tools-dec-2020/bin \
-    /nscratch/vighneshiyer/.cargo/bin \
-    /ecad/tools/xilinx/Vivado/2021.1/bin \
-    /ecad/tools/cadence/XCELIUM/XCELIUM2103/tools/bin/64bit \
-    /ecad/tools/cadence/XCELIUM/XCELIUM2103/tools/bin \
-
-# /nscratch/vighneshiyer/miniconda3/bin
-# source /nscratch/vighneshiyer/miniconda3/etc/fish/conf.d/conda.fish
+    /nscratch/vighneshiyer/sysroot/bin \
+    /nscratch/vighneshiyer/poetry/bin
+    # $VCS_HOME/bin \
+    # /ecad/tools/cadence/XCELIUM/XCELIUM2103/tools/bin/64bit \
+    # /ecad/tools/cadence/XCELIUM/XCELIUM2103/tools/bin \
 
 # This function is called every time Enter is hit when in a terminal
 # The working directory is written to a tempfile, which is read by i3 if you want a new terminal with the same working directory
@@ -338,10 +318,18 @@ set -gx MOZ_USE_XINPUT2 1
 # HiDPI settings: https://wiki.archlinux.org/title/HiDPI
 set -gx QT_AUTO_SCREEN_SCALE_FACTOR 1
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-# eval /nscratch/vighneshiyer/miniconda3/bin/conda "shell.fish" "hook" $argv | source
-# <<< conda initialize <<<
+eval /scratch/vighneshiyer/miniforge3/bin/conda "shell.fish" "hook" $argv | source
+conda config --set auto_activate_base false
 
-set -gx CARGO_HOME /nscratch/vighneshiyer/.cargo
-set -gx RUSTUP_HOME /nscratch/vighneshiyer/.rustup
+# This function does all the stuff that the bash version of env.sh + conda activate does
+function chipyard_act
+    conda activate ./.conda-env
+    ulimit -Sn 1048576
+    set -gx RISCV $CONDA_PREFIX/riscv-tools
+    set -gx PATH $PATH $RISCV/bin
+    set -gx LD_LIBRARY_PATH $RISCV/lib $LD_LIBRARY_PATH
+    set -gx JAVA_HOME $CONDA_PREFIX/lib/jvm
+    set -gx JAVA_LD_LIBRARY_PATH $JAVA_HOME/lib/server
+end
+
+bass source /ecad/tools/vlsi.bashrc

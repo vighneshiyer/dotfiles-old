@@ -30,12 +30,14 @@ let mapleader="\<SPACE>"
 " Don't clear Ctrl-P cache between vim sessions (use F5 to refresh cache)
 let g:ctrlp_clear_cache_on_exit = 0
 " Ctrl-p should ignore files/folders specified in the repo's .gitignore
-let g:ctrlp_user_command = {
-  \ 'types': {
-    \ 1: ['.git', 'cd %s && git ls-files . -co --exclude-standard'],
-    \ },
-  \ 'fallback': 'find %s -type f'
-  \ }
+" let g:ctrlp_user_command = {
+"   \ 'types': {
+"     \ 1: ['.git', 'cd %s && git ls-files . -co --exclude-standard'],
+"     \ },
+"   \ 'fallback': 'find %s -type f'
+"   \ }
+let g:ctrlp_user_command =
+  \ ['.git', 'cd %s && git ls-files --cached --recurse-submodules --exclude-standard']
 " Use Latex indenting style
 let g:tex_flavor='latex'
 set nocompatible
