@@ -280,7 +280,7 @@ end
 alias mount_bwrc 'mount_remote bwrc rdsl6 /tools/C/vighneshiyer/'
 alias unmount_bwrc 'unmount_remote bwrc'
 
-alias mount_a 'mount_remote a a6 /nscratch/vighneshiyer'
+alias mount_a 'mount_remote a a10 /scratch/vighneshiyer'
 alias unmount_a 'unmount_remote a'
 
 alias mount_eda 'mount_remote eda eda-1 /scratch/cs199-ban'
